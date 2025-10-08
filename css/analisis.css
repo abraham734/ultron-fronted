@@ -1,0 +1,200 @@
+/* === analisis.css actualizado === */
+
+/* === Contenedor principal en grid === */
+.ultron-bloque {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem; /* Reducción del espacio horizontal entre bloques */
+  padding: 1rem 1.5rem; /* Menos aire interno */
+  background-color: #0a0f1c;
+  border-radius: 12px;
+  max-width: 80%; /* Puedes ajustar a 90% si lo quieres más ancho */
+  margin: 1rem auto;
+}
+
+/* === Tarjeta de Señal Activa === */
+.tarjeta-senal {
+  background-color: #131a2b;
+  padding: 0.8rem 1.5rem;
+  border-radius: 10px;
+  border-left: 5px solid #FFD700;
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.15);
+  color: #ffffff;
+  font-size: 0.95rem;
+}
+
+.tarjeta-senal h3 {
+  color: #FFD700;
+  font-size: 1.1rem;
+  margin-bottom: 0.8rem;
+}
+
+/* === Análisis Estratégico ULTRON === */
+.decision-ultron {
+  background-color: #101828;
+  padding: 0.8rem 1.5rem;
+  border-left: 4px solid #00ffff;
+  border-radius: 10px;
+  box-shadow: 0 0 6px rgba(0, 255, 255, 0.08);
+  color: #ffffff;
+  font-size: 0.95rem;
+}
+
+.decision-ultron h3 {
+  color: #00ffff;
+  font-size: 1.1rem;
+  margin-bottom: 0.8rem;
+}
+
+.decision-ultron p {
+  margin: 0.2rem 0;
+  line-height: 1.4;
+}
+
+.decision-ultron ul {
+  margin-top: 0.6rem;
+  padding-left: 1.2rem;
+}
+
+.decision-ultron li {
+  list-style: none;
+  margin-bottom: 0.3rem;
+  font-size: 0.95rem;
+  position: relative;
+  padding-left: 1.2rem;
+}
+
+.decision-ultron li::before {
+  content: "⚪";
+  position: absolute;
+  left: 0;
+  color: #00ffff;
+  font-size: 0.7rem;
+  top: 0.1rem;
+}
+
+.decision-ultron li:first-child::before {
+  content: "🟢";
+}
+
+.decision-ultron li:last-child::before {
+  content: "⚠️";
+}
+
+/* === Configuración Rápida (parte inferior, centrada) === */
+.configuracion-rapida {
+  grid-column: 1 / span 2;
+  background-color: #131a2b;
+  padding: 1.2rem 1.5rem;
+  border-radius: 10px;
+  border: 1px solid #2c3242;
+  box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.03);
+  color: #ffffff;
+  font-size: 0.95rem;
+}
+
+.configuracion-rapida h3 {
+  color: #00ffff;
+  font-size: 1.1rem;
+  margin-bottom: 0.8rem;
+}
+
+.configuracion-rapida label {
+  display: block;
+  margin-top: 0.6rem;
+  margin-bottom: 0.2rem;
+  color: #ddd;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.configuracion-rapida input {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  border: none;
+  background-color: #1d2636;
+  color: #ffffff;
+  font-size: 0.95rem;
+}
+
+.configuracion-rapida input:focus {
+  border: 1px solid #00ffff;
+  background-color: #222d44;
+  outline: none;
+}
+
+#btn-calcular-lote {
+  margin-top: 1.5rem;
+  padding: 0.8rem 1.5rem;
+  background-color: #FFD700;
+  border: none;
+  border-radius: 8px;
+  color: #000000;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+  width: 100%;
+  font-size: 0.95rem;
+}
+
+#btn-calcular-lote:hover {
+  background-color: #ffe15a;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+}
+
+/* === Resultado del cálculo === */
+.resultado-lote {
+  flex-basis: 100%;
+  margin-top: 2rem;
+  font-size: 1rem;
+  background-color: #101828;
+  padding: 1rem;
+  border-radius: 8px;
+  color: #ffffff;
+  border-left: 4px solid #00ffff;
+  box-shadow: 0 0 8px rgba(0, 255, 255, 0.15);
+}
+
+/* === Error === */
+.error {
+  color: #ff6060;
+  font-weight: bold;
+}
+
+/* === Botones de activos === */
+.btn-activo {
+  margin: 0.5rem;
+  padding: 0.7rem 1.4rem;
+  background-color: #1d2636;
+  color: #ffffff;
+  border: 1px solid #2c3242;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.btn-activo:hover {
+  background-color: #00ffff;
+  color: #000000;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
+}
+
+/* === Responsive para pantallas más pequeñas === */
+@media screen and (max-width: 1200px) {
+  .ultron-bloque {
+    grid-template-columns: 1fr;
+    max-width: 95%;
+    margin: 2rem auto;
+  }
+
+  .configuracion-rapida {
+    grid-column: 1;
+  }
+}
+
+
+
+
+

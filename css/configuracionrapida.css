@@ -1,0 +1,86 @@
+/* === Estilo del bloque Configuración Rápida === */
+.bloque-config {
+  background-color: #0b0f1a;
+  border: 1px dashed #444;
+  border-radius: 12px;
+  padding: 10px;
+  margin-top: 10px;
+  color: #fff;
+  font-size: 14px;
+  line-height: 1.2;
+  box-shadow: 0 0 5px #00000033;
+}
+
+.bloque-config h4 {
+  font-size: 14px;
+  color: #ffc107;
+  margin-bottom: 12px;
+}
+
+.campo,
+.campo-dinamico {
+  margin-bottom: 10px;
+}
+
+.campo label,
+.campo-dinamico label {
+  display: block;
+  margin-bottom: 3px;
+  font-weight: bold;
+  color: #f8f9fa;
+  font-size: 13px;
+}
+
+.campo input {
+  width: 100%;
+  padding: 4px 7px;
+  font-size: 10px;
+  background-color: #181d2a;
+  color: #fff;
+  border: 1px solid #333;
+  border-radius: 6px;
+  outline: none;
+}
+
+.campo input::placeholder {
+  color: #888;
+}
+
+.campo-dinamico p {
+  margin: 2px 0;
+  padding: 2px 6px;
+  background-color: #111520;
+  border-radius: 4px;
+  font-size: 13px;
+  color: #ccc;
+  font-style: italic;
+}
+
+#boton-calcular-lote {
+  width: 100%;
+  margin-top: 10px;
+  padding: 6px 0;
+  background-color: #ffc107;
+  color: #000;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 14px;
+}
+
+#boton-calcular-lote:hover {
+  background-color: #e0a800;
+}
+
+.resultado-config {
+  margin-top: 10px;
+  font-size: 13px;
+  background-color: #111;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px dashed #ffc107;
+  color: #ccc;
+}
+

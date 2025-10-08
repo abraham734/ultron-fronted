@@ -1,0 +1,88 @@
+/* === watchlist.css === */
+.watchlist-panel {
+  position: fixed;
+  top: 70px;
+  right: 0;
+  width: 230px;
+  height: calc(100vh - 70px);
+  overflow-y: auto;
+  background-color: #0d1117;
+  border-left: 1px solid #2a2f38;
+  box-shadow: -4px 0 8px rgba(0, 0, 0, 0.3);
+  padding: 15px 10px;
+  z-index: 10;
+}
+
+.main-content {
+  margin-left: 250px; /* por sidebar */
+  margin-right: 230px; /* por watchlist */
+}
+
+
+.watchlist-seccion {
+  margin-bottom: 10px;
+}
+
+.watchlist-titulo {
+  font-size: 13px;
+  font-weight: bold;
+  color: #58a6ff;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  border-bottom: 1px solid #2a2f36;
+  padding-bottom: 2px;
+}
+
+
+.watchlist-boton {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background-color: transparent;
+  border: none;
+  color: #c9d1d9;
+  padding: 4px 6px;
+  margin: 2px 0;
+  font-size: 11px;
+  border-radius: 5px;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.watchlist-boton:hover {
+  background-color: #21262d;
+  color: #ffffff;
+}
+
+/* === ADAPTACIÓN MÓVIL === */
+@media (max-width: 500px) {
+  .watchlist-panel {
+    position: relative;
+    width: 100%;
+    height: auto;
+    top: 0;
+    right: 0;
+    border-left: none;
+    border-top: 1px solid #30363d;
+    padding: 10px;
+    margin-top: 20px;
+    z-index: 1;
+  }
+
+  .watchlist-seccion {
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .watchlist-titulo {
+    font-size: 13px;
+    text-align: center;
+    border-bottom: none;
+  }
+
+  .watchlist-boton {
+    display: inline-block;
+    margin-right: 6px;
+    min-width: 100px;
+  }
+}
