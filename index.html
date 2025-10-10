@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Ultrón - Asistente de Trading</title>
 
-  <!-- Estilos -->
+  <!-- === ESTILOS === -->
   <link rel="stylesheet" href="css/ultron.css">
   <link rel="stylesheet" href="css/analisis.css">
   <link rel="stylesheet" href="css/watchlist.css">
@@ -35,7 +35,7 @@
   <!-- === CONTENIDO PRINCIPAL === -->
   <main class="main-content">
     
-    <!-- Encabezado -->
+    <!-- Encabezado principal -->
     <header class="main-header">
       <h2>Análisis Estratégico en Tiempo Real</h2>
       <div id="indicador-vivo" class="indicador-vivo">
@@ -43,28 +43,37 @@
       </div>
     </header>
 
-    <!-- Barra de estrategias -->
+    <!-- Barra de estrategias (se llena con switches.js) -->
     <nav id="barra-estrategias"></nav>
 
-
+    <!-- Estado de escaneo -->
     <div id="estado-escaneo" class="mensaje-escaneo"></div>
     
-    <!-- Contenedor de activos -->
+    <!-- Contenedor dinámico de activos -->
     <section class="contenedor-activos">
       <div id="activos-container"></div>
     </section>
   </main>
 
-
-  <!-- === WATCHLIST PANEL === -->
+  <!-- === PANEL DE WATCHLIST === -->
   <div class="watchlist-panel">
     <!-- Este contenido se genera dinámicamente con JS -->
   </div>
 
   <!-- === SCRIPTS === -->
+  <!-- Núcleo principal -->
   <script type="module" src="js/ultron.js"></script>
+
+  <!-- Módulos funcionales -->
+  <script type="module" src="js/api_twelvedata.js"></script>
+  <script type="module" src="js/configuracionrapida.js"></script>
+  <script type="module" src="js/data.js"></script>
+  <script type="module" src="js/historial.js"></script>
+  <script type="module" src="js/switches.js"></script>
   <script type="module" src="js/watchlist.js"></script>
-  <script type="module" src="js/keepalive.js"></script> <!-- Agregado aquí -->
+
+  <!-- Mantiene activo el backend en Render -->
+  <script type="module" src="js/keepalive.js"></script>
 
 </body>
 </html>
