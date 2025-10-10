@@ -11,15 +11,16 @@ import {
 import { verificarInicioDeSesion } from "./sesionesbot.js";
 import { iniciarEscaneoAutomatico } from "./escaneoautomatico.js";
 import { renderSwitches } from "./switches.js";
-import { actualizarIndicadorEstado } from "./utils/estadosistema.js";
+import { verificarEstadoSistema } from "./utils/estadosistema.js";
 import "./escaneoentradas.js";
 
 
 
 // Evento principal al cargar el DOM
 document.addEventListener("DOMContentLoaded", () => {
-  actualizarIndicadorEstado("verde", "ULTRÓN OPERATIVO"); // 🟢 Estado inicial
-   renderSwitches(); // 🔛 Activa switches al cargar la app
+  verificarEstadoSistema(); // 🟢 Verifica estado real del backend al iniciar
+
+  renderSwitches(); // 🔛 Activa switches al cargar la app
   const botonAnalisis = document.getElementById("boton-iniciar-analisis");
 
   if (botonAnalisis) {
@@ -180,6 +181,9 @@ function renderDecisionUltron(decision) {
 
 export { obtenerPrecioDesdeAPI };
 
+setInterval(() => {
+  verificarEstadoSistema();
+}, 1000 * 60 * 5); // Cada 5 minutos
 
 
 

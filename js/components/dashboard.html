@@ -1,0 +1,39 @@
+<div class="dashboard-grid">
+
+  <!-- SECCIÓN IZQUIERDA: Señal Activa -->
+  <div class="seccion-senal-activa">
+    <div class="bloque-dashboard">
+      <h3 class="titulo-seccion">📈 Señal Activa</h3>
+      <p><strong>Activo:</strong> <span class="activo">XAUUSD</span></p>
+      <p><strong>Entrada:</strong> 3,212.50</p>
+      <p><strong>Stop Loss:</strong> <span class="rojo">3,118.03</span></p>
+      <p><strong>TP1:</strong> <span class="verde">3,275.80</span></p>
+      <p><strong>TP2:</strong> <span class="verde">3,339.10</span></p>
+      <p><strong>Final:</strong> <span class="verde">3,450.00</span></p>
+      <div class="etiqueta verde">TP1 Alcanzado</div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN DERECHA: Configuración Rápida -->
+  <div class="seccion-configuracion">
+    <div class="bloque-dashboard">
+      <h3 class="titulo-seccion">⚙️ Configuración Rápida</h3>
+      <label for="capital">Capital Total ($)</label>
+      <input type="number" id="capital" class="input-dashboard" value="10000">
+
+      <label for="riesgo">Riesgo por operación (%)</label>
+      <input type="number" id="riesgo" class="input-dashboard" value="2">
+
+      <label for="apalancamiento">Apalancamiento</label>
+      <select id="apalancamiento" class="input-dashboard">
+        <option>1:50</option>
+        <option selected>1:100</option>
+        <option>1:200</option>
+        <option>1:500</option>
+      </select>
+
+      <button class="boton-analizar">Analizar</button>
+    </div>
+  </div>
+
+</div>
