@@ -1,11 +1,14 @@
 // === keepalive.js ===
-// Realiza un llamado periódico al backend para mantenerlo activo en Render
+// Mantiene vivo el backend de Ultron en Render
 
-const URL_BACKEND = "https://ultron-backend-nestor6601.onrender.com"; // ← reemplaza con tu dominio real de Render
+const URL_BACKEND = "https://ultron-backend-zvtm.onrender.com"; // ✅ dominio correcto
 
 function pingBackend() {
   fetch(URL_BACKEND)
-    .then(response => console.log("✅ Backend ping exitoso:", response.status))
+    .then(response => {
+      if (!response.ok) throw new Error(`Estado HTTP: ${response.status}`);
+      console.log("✅ Backend ping exitoso:", response.status);
+    })
     .catch(error => console.warn("⚠️ Error al hacer ping al backend:", error));
 }
 
