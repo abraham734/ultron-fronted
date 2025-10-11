@@ -2,17 +2,17 @@
 // Lógica principal del asistente ULTRÓN – Análisis Estratégico
 
 import { activos } from "./data.js";
-import { motorDecisionUltron } from "./motor.js";
+//import { motorDecisionUltron } from "./motor.js";//
 import { obtenerDatosOHLC } from "./api_twelvedata.js";
 import {
   renderConfiguracionRapida,
   configurarEventoCalculo,
 } from "./configuracionrapida.js";
-import { verificarInicioDeSesion } from "./sesionesbot.js";
-import { iniciarEscaneoAutomatico } from "./escaneoautomatico.js";
+//import { verificarInicioDeSesion } from "./sesionesbot.js";//
+//import { iniciarEscaneoAutomatico } from "./escaneoautomatico.js";//
 import { renderSwitches } from "./switches.js";
-import { verificarEstadoSistema } from "./utils/estadosistema.js";
-import "./escaneoentradas.js";
+//import { verificarEstadoSistema } from "./utils/estadosistema.js";//
+//import "./escaneoentradas.js";//
 
 
 
