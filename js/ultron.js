@@ -2,45 +2,29 @@
 // Lógica principal del asistente ULTRÓN – Análisis Estratégico
 
 import { activos } from "./data.js";
-//import { motorDecisionUltron } from "./motor.js";//
 import { obtenerDatosOHLC } from "./api_twelvedata.js";
 import {
   renderConfiguracionRapida,
   configurarEventoCalculo,
 } from "./configuracionrapida.js";
-//import { verificarInicioDeSesion } from "./sesionesbot.js";//
-//import { iniciarEscaneoAutomatico } from "./escaneoautomatico.js";//
 import { renderSwitches } from "./switches.js";
-//import { verificarEstadoSistema } from "./utils/estadosistema.js";//
-//import "./escaneoentradas.js";//
 
-
-
-// Evento principal al cargar el DOM
+// === Evento principal al cargar el DOM ===
 document.addEventListener("DOMContentLoaded", () => {
-  verificarEstadoSistema(); // 🟢 Verifica estado real del backend al iniciar
+  console.log("✅ Interfaz ULTRÓN cargada correctamente.");
 
-  renderSwitches(); // 🔛 Activa switches al cargar la app
+  // Activa los switches de estrategias
+  renderSwitches();
+
   const botonAnalisis = document.getElementById("boton-iniciar-analisis");
-
   if (botonAnalisis) {
     botonAnalisis.addEventListener("click", () => {
       renderListaActivos("forex");
     });
   }
-
-  iniciarEscaneoAutomatico(); // ✅ Escaneo automático
 });
-// Verificación periódica de sesión
-setInterval(() => {
-  verificarInicioDeSesion();
-}, 1000 * 60 * 5); // Cada 5 minutos
 
-
-
-
-
-// === Renderiza la lista de activos de una categoría ===
+// === Renderiza la lista de activos por categoría ===
 function renderListaActivos(categoria) {
   const lista = activos[categoria];
   const contenedor = document.getElementById("activos-container");
@@ -69,7 +53,7 @@ function renderListaActivos(categoria) {
   });
 }
 
-// === Obtener precio desde la API
+// === Obtener precio desde la API ===
 async function obtenerPrecioDesdeAPI(simbolo) {
   const contenedor = document.getElementById("activos-container");
   contenedor.innerHTML = `<p>🔄 Obteniendo datos de mercado...</p>`;
@@ -89,22 +73,15 @@ async function obtenerPrecioDesdeAPI(simbolo) {
       return;
     }
 
+    // Renderiza análisis con precio actual
     renderSeccionAnalisisConPrecio(simbolo, datos.ultimoCierre);
-    const decision = motorDecisionUltron(simbolo, datos);
-
-    if (!decision) {
-      contenedor.innerHTML += `<p class="error">⚠️ No se pudo calcular la decisión estratégica.</p>`;
-      return;
-    }
-
-    renderDecisionUltron(decision);
   } catch (error) {
     contenedor.innerHTML = `<p class="error">❌ Error al obtener datos: ${error.message}</p>`;
     console.error("❌ Error inesperado:", error);
   }
 }
 
-// === Renderiza análisis con precio real
+// === Renderiza sección principal con análisis ===
 function renderSeccionAnalisisConPrecio(simbolo, precio) {
   const contenedor = document.getElementById("activos-container");
   if (!contenedor) return;
@@ -112,15 +89,14 @@ function renderSeccionAnalisisConPrecio(simbolo, precio) {
   contenedor.innerHTML = `
     <div class="ultron-bloque">
       ${renderTarjetaSenalActiva(simbolo, precio)}
-      <div id="bloque-decision-placeholder"></div>
-      ${renderConfiguracionRapida()}
+      ${renderConfiguracionRapida(simbolo, precio)}
     </div>
   `;
 
   configurarEventoCalculo(simbolo, precio);
 }
 
-// === Tarjeta de señal activa
+// === Tarjeta con información de la señal actual ===
 function renderTarjetaSenalActiva(simbolo, precio = 1.00000) {
   const pipSize = getPipSize(simbolo);
   const precioNum = parseFloat(precio);
@@ -144,7 +120,7 @@ function renderTarjetaSenalActiva(simbolo, precio = 1.00000) {
   `;
 }
 
-// === Formateo de símbolo
+// === Formateo visual del símbolo ===
 function formatearSimbolo(simbolo) {
   if (simbolo.length === 6) {
     return `${simbolo.slice(0, 3)}/${simbolo.slice(3, 6)}`;
@@ -152,7 +128,7 @@ function formatearSimbolo(simbolo) {
   return simbolo;
 }
 
-// === Detectar tamaño del pip
+// === Detectar tamaño del pip según el activo ===
 function getPipSize(simbolo) {
   simbolo = simbolo.toUpperCase();
   if (simbolo.includes("JPY")) return 0.01;
@@ -161,29 +137,7 @@ function getPipSize(simbolo) {
   return 0.0001;
 }
 
-// === Mostrar decisión de Ultron
-function renderDecisionUltron(decision) {
-  const placeholder = document.getElementById("bloque-decision-placeholder");
-  if (!placeholder) return;
-
-  const razonesHTML = decision.razones.map(r => `<li>${r}</li>`).join("");
-
-  placeholder.outerHTML = `
-    <div class="decision-ultron">
-      <h3>🧠 Análisis Estratégico ULTRON</h3>
-      <p><strong>Decisión:</strong> ${decision.decision}</p>
-      <p><strong>Tipo de Entrada:</strong> ${decision.tipoEntrada ?? "N/A"}</p>
-      <p><strong>Riesgo:</strong> ${decision.riesgo}</p>
-      <ul>${razonesHTML}</ul>
-    </div>
-  `;
-}
-
 export { obtenerPrecioDesdeAPI };
-
-setInterval(() => {
-  verificarEstadoSistema();
-}, 1000 * 60 * 5); // Cada 5 minutos
 
 
 
