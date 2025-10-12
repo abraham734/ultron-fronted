@@ -10,3 +10,5 @@
     { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
+
+// ajuste menor para forzar redeploy
