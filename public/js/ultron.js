@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // === Renderiza la lista de activos por categoría ===
 function renderListaActivos(categoria) {
   const lista = activos[categoria];
-  const contenedor = document.getElementById("activos-container");
+  const contenedor = document.getElementById("contenedor-activos");
   if (!lista || !contenedor) return;
 
   contenedor.innerHTML = `
@@ -55,7 +55,7 @@ function renderListaActivos(categoria) {
 
 // === Obtener precio desde la API ===
 async function obtenerPrecioDesdeAPI(simbolo) {
-  const contenedor = document.getElementById("activos-container");
+  const contenedor = document.getElementById("contenedor-activos");
   contenedor.innerHTML = `<p>🔄 Obteniendo datos de mercado...</p>`;
 
   try {
@@ -83,7 +83,7 @@ async function obtenerPrecioDesdeAPI(simbolo) {
 
 // === Renderiza sección principal con análisis ===
 function renderSeccionAnalisisConPrecio(simbolo, precio) {
-  const contenedor = document.getElementById("activos-container");
+  const contenedor = document.getElementById("contenedor-activos");
   if (!contenedor) return;
 
   contenedor.innerHTML = `
@@ -138,6 +138,4 @@ function getPipSize(simbolo) {
 }
 
 export { obtenerPrecioDesdeAPI };
-
-
 
