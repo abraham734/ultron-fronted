@@ -6,12 +6,12 @@
   <title>Ultrón - Asistente de Trading</title>
 
   <!-- === ESTILOS === -->
-  <link rel="stylesheet" href="./css/ultron.css">
-  <link rel="stylesheet" href="./css/analisis.css">
-  <link rel="stylesheet" href="./css/watchlist.css">
-  <link rel="stylesheet" href="./css/configuracionrapida.css" />
-  <link rel="stylesheet" href="./css/historial.css" />
-  <link rel="stylesheet" href="./css/switches.css" />
+  <link rel="stylesheet" href="./public/css/ultron.css">
+  <link rel="stylesheet" href="./public/css/analisis.css">
+  <link rel="stylesheet" href="./public/css/watchlist.css">
+  <link rel="stylesheet" href="./public/css/configuracionrapida.css" />
+  <link rel="stylesheet" href="./public/css/historial.css" />
+  <link rel="stylesheet" href="./public/css/switches.css" />
 </head>
 
 <body>
@@ -20,7 +20,7 @@
   <aside class="sidebar">
     <div class="sidebar-header simple">
       <div class="ultron-title">Ultrón</div>
-      <img src="./activos/ultron-logo.png" alt="Ultrón Logo" class="ultron-logo" />
+      <img src="./public/assets/ultron-logo.png" alt="Ultrón Logo" class="ultron-logo" />
     </div>
 
     <div id="historial-entradas" class="sidebar-section">
@@ -61,20 +61,16 @@
   </div>
 
   <!-- === SCRIPTS === -->
-  <!-- Núcleo principal -->
-  <script type="module" src="./js/ultron.js"></script>
-
-  <!-- Módulos funcionales -->
-  <script type="module" src="./js/api_twelvedata.js"></script>
-  <script type="module" src="./js/configuracionrapida.js"></script>
-  <script type="module" src="./js/data.js"></script>
-  <script type="module" src="./js/historial.js"></script>
-  <script type="module" src="./js/switches.js"></script>
-  <script type="module" src="./js/watchlist.js"></script>
-
-  <!-- Mantiene activo el backend en Render -->
-  <script type="module" src="./js/keepalive.js"></script>
+  <script type="module" src="./public/js/ultron.js"></script>
+  <script type="module" src="./public/js/api_twelvedata.js"></script>
+  <script type="module" src="./public/js/configuracionrapida.js"></script>
+  <script type="module" src="./public/js/data.js"></script>
+  <script type="module" src="./public/js/historial.js"></script>
+  <script type="module" src="./public/js/switches.js"></script>
+  <script type="module" src="./public/js/watchlist.js"></script>
+  <script type="module" src="./public/js/keepalive.js"></script>
 
 </body>
 </html>
+
 
