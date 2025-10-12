@@ -45,9 +45,11 @@ function renderListaActivos(categoria) {
     </div>
   `;
 
+  // Escucha clics en los botones de activos
   document.querySelectorAll(".btn-activo").forEach((btn) => {
     btn.addEventListener("click", () => {
       const simbolo = btn.dataset.simbolo;
+      console.log("🧩 Símbolo seleccionado:", simbolo);
       obtenerPrecioDesdeAPI(simbolo);
     });
   });
@@ -55,8 +57,23 @@ function renderListaActivos(categoria) {
 
 // === Obtener precio desde la API ===
 async function obtenerPrecioDesdeAPI(simbolo) {
-  const contenedor = document.getElementById("contenedor-activos");
-  contenedor.innerHTML = `<p>🔄 Obteniendo datos de mercado...</p>`;
+  // 🧩 Validación de símbolo
+  if (!simbolo || simbolo.trim() === "") {
+    console.warn("⚠️ No se recibió un símbolo válido:", simbolo);
+    return;
+  }
+
+  // 🔧 Garantizar que el contenedor exista
+  let contenedor = document.getElementById("contenedor-activos");
+  if (!contenedor) {
+    const nuevo = document.createElement("div");
+    nuevo.id = "contenedor-activos";
+    document.body.appendChild(nuevo);
+    contenedor = nuevo;
+    console.log("🧱 Contenedor creado dinámicamente (Vercel delay fix).");
+  }
+
+  contenedor.innerHTML = `<p>🔄 Obteniendo datos de mercado para <strong>${simbolo}</strong>...</p>`;
 
   try {
     const datos = await obtenerDatosOHLC(simbolo);
