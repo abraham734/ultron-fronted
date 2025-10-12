@@ -1,15 +1,15 @@
 {
   "version": 2,
   "builds": [
-    {
-      "src": "index.html",
-      "use": "@vercel/static"
-    }
+    { "src": "index.html", "use": "@vercel/static" },
+    { "src": "js/(.*)", "use": "@vercel/static" },
+    { "src": "CSS/(.*)", "use": "@vercel/static" },
+    { "src": "activos/(.*)", "use": "@vercel/static" }
   ],
   "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
+    { "src": "/js/(.*)", "dest": "/js/$1" },
+    { "src": "/CSS/(.*)", "dest": "/CSS/$1" },
+    { "src": "/activos/(.*)", "dest": "/activos/$1" },
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
