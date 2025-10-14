@@ -538,4 +538,46 @@ body {
   margin: 0 auto;
 }
 
-  
+  /* === CORRECCIÓN ESTRUCTURAL DE DISTRIBUCIÓN === */
+
+/* El contenedor principal debe ocupar todo el ancho restante del sidebar */
+.main-content {
+  margin-left: 250px;        /* espacio del sidebar */
+  margin-right: 250px;       /* espacio para la watchlist */
+  width: calc(100% - 500px); /* 100% menos sidebar y watchlist */
+  padding: 20px 30px;
+  box-sizing: border-box;
+}
+
+/* El área central donde van los módulos dinámicos */
+.contenedor-activos {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+  width: 100%;
+  min-height: 500px;
+  padding: 20px 0;
+}
+
+/* El grupo de tarjetas (bloques principales) */
+#activos-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 25px;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* Tarjetas individuales */
+.tarjeta-senal,
+.tarjeta-analisis,
+.bloque-config {
+  flex: 1 1 340px;
+  max-width: 360px;
+  min-width: 280px;
+  margin: 0 auto;
+}
