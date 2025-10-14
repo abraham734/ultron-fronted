@@ -407,6 +407,22 @@ body {
 
 
 
+/* === REAJUSTE DE BLOQUES EN PANTALLA === */
+.ultron-bloque {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 30px;
+  flex-wrap: wrap;
+  margin-top: 25px;
+}
+
+.tarjeta-senal,
+.tarjeta-analisis,
+.bloque-configuracion {
+  flex: 1 1 300px;
+  max-width: 420px;
+}
 
 
 
