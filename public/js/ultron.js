@@ -46,7 +46,7 @@ async function verificarConexionBackend() {
 // === Renderiza la lista de activos por categoría ===
 function renderListaActivos(categoria) {
   const lista = activos[categoria];
-  const contenedor = document.getElementById("contenedor-activos");
+  const contenedor = document.getElementById("activos-container");
   if (!lista || !contenedor) return;
 
   contenedor.innerHTML = `
