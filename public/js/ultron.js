@@ -9,6 +9,11 @@ import {
 } from "./configuracionrapida.js";
 import { renderSwitches } from "./switches.js";
 
+// === URL dinámica del backend ===
+const BACKEND_URL = window.location.hostname.includes("vercel.app")
+  ? "https://ultron-backend-zvtm.onrender.com"
+  : "http://127.0.0.1:3000";
+
 // === Evento principal al cargar el DOM ===
 document.addEventListener("DOMContentLoaded", () => {
   console.log("✅ Interfaz ULTRÓN cargada correctamente.");
@@ -22,7 +27,21 @@ document.addEventListener("DOMContentLoaded", () => {
       renderListaActivos("forex");
     });
   }
+
+  // Verifica conexión con backend
+  verificarConexionBackend();
 });
+
+// === Verifica conexión con el backend (ping test) ===
+async function verificarConexionBackend() {
+  try {
+    const res = await fetch(`${BACKEND_URL}`);
+    if (res.ok) console.log("🟢 Backend ping exitoso:", res.status);
+    else console.warn("⚠️ Backend no responde:", res.status);
+  } catch (error) {
+    console.error("❌ Error al hacer ping al backend:", error.message);
+  }
+}
 
 // === Renderiza la lista de activos por categoría ===
 function renderListaActivos(categoria) {
@@ -45,7 +64,6 @@ function renderListaActivos(categoria) {
     </div>
   `;
 
-  // Escucha clics en los botones de activos
   document.querySelectorAll(".btn-activo").forEach((btn) => {
     btn.addEventListener("click", () => {
       const simbolo = btn.dataset.simbolo;
@@ -57,13 +75,11 @@ function renderListaActivos(categoria) {
 
 // === Obtener precio desde la API ===
 async function obtenerPrecioDesdeAPI(simbolo) {
-  // 🧩 Validación de símbolo
   if (!simbolo || simbolo.trim() === "") {
     console.warn("⚠️ No se recibió un símbolo válido:", simbolo);
     return;
   }
 
-  // 🔧 Garantizar que el contenedor exista
   let contenedor = document.getElementById("contenedor-activos");
   if (!contenedor) {
     const nuevo = document.createElement("div");
@@ -73,51 +89,46 @@ async function obtenerPrecioDesdeAPI(simbolo) {
     console.log("🧱 Contenedor creado dinámicamente (Vercel delay fix).");
   }
 
-  contenedor.innerHTML = `<p>🔄 Obteniendo datos de mercado para <strong>${simbolo}</strong>...</p>`;
+  contenedor.innerHTML = `<p>🔄 Escaneando <strong>${simbolo}</strong>...</p>`;
 
   try {
-    const datos = await obtenerDatosOHLC(simbolo);
+    // === Llamado al backend Render ===
+    const res = await fetch(`${BACKEND_URL}/api/analisis?simbolo=${simbolo}`);
 
-    if (
-      !datos ||
-      !datos.ultimoCierre ||
-      !datos.simbolo ||
-      !Array.isArray(datos.datos) ||
-      datos.datos.length === 0
-    ) {
+    if (!res.ok) {
+      throw new Error(`Error HTTP ${res.status} al conectar con backend`);
+    }
+
+    const resultado = await res.json();
+
+    // === Validación de datos del backend ===
+    if (!resultado || !resultado.simbolo) {
       contenedor.innerHTML = `<p class="error">⚠️ No se encontraron datos válidos para ${simbolo}</p>`;
-      console.warn("❗ Objeto de datos incompleto o inválido:", datos);
+      console.warn("❗ Objeto de datos incompleto o inválido:", resultado);
       return;
     }
 
-    // Renderiza análisis con precio actual
-    renderSeccionAnalisisConPrecio(simbolo, datos.ultimoCierre);
+    // === Renderiza bloques principales ===
+    contenedor.innerHTML = `
+      <div class="barra-escaneo">🔍 Escaneando: ${resultado.simbolo} – Estrategia: ${resultado.tipoEntrada || "Sin estrategia activa"}</div>
+      <div class="ultron-bloque">
+        ${renderTarjetaSenalActiva(resultado.simbolo, resultado.entry || "1.0000")}
+        ${renderAnalisisEstrategico(resultado)}
+        ${renderConfiguracionRapida(resultado.simbolo, resultado.entry || "1.0000")}
+      </div>
+    `;
+
+    configurarEventoCalculo(resultado.simbolo, resultado.entry || "1.0000");
   } catch (error) {
-    contenedor.innerHTML = `<p class="error">❌ Error al obtener datos: ${error.message}</p>`;
-    console.error("❌ Error inesperado:", error);
+    contenedor.innerHTML = `<p class="error">❌ Error al obtener datos desde backend: ${error.message}</p>`;
+    console.error("❌ Error al obtener datos backend:", error);
   }
 }
 
-// === Renderiza sección principal con análisis ===
-function renderSeccionAnalisisConPrecio(simbolo, precio) {
-  const contenedor = document.getElementById("contenedor-activos");
-  if (!contenedor) return;
-
-  contenedor.innerHTML = `
-    <div class="ultron-bloque">
-      ${renderTarjetaSenalActiva(simbolo, precio)}
-      ${renderConfiguracionRapida(simbolo, precio)}
-    </div>
-  `;
-
-  configurarEventoCalculo(simbolo, precio);
-}
-
-// === Tarjeta con información de la señal actual ===
-function renderTarjetaSenalActiva(simbolo, precio = 1.00000) {
+// === Renderiza la tarjeta de señal activa ===
+function renderTarjetaSenalActiva(simbolo, precio = 1.0) {
   const pipSize = getPipSize(simbolo);
   const precioNum = parseFloat(precio);
-
   const sl = (precioNum - 50 * pipSize).toFixed(5);
   const tp1 = (precioNum + 50 * pipSize).toFixed(5);
   const tp2 = (precioNum + 80 * pipSize).toFixed(5);
@@ -137,15 +148,29 @@ function renderTarjetaSenalActiva(simbolo, precio = 1.00000) {
   `;
 }
 
-// === Formateo visual del símbolo ===
+// === Renderiza la tarjeta de análisis estratégico ===
+function renderAnalisisEstrategico(resultado) {
+  return `
+    <div class="tarjeta-analisis">
+      <h3>🧠 Análisis Estratégico ULTRÓN</h3>
+      <p><strong>Decisión:</strong> ${resultado.decision}</p>
+      <p><strong>Tipo de Entrada:</strong> ${resultado.tipoEntrada || "N/A"}</p>
+      <p><strong>Riesgo:</strong> ${resultado.riesgo || "bajo"}</p>
+      ${
+        resultado.razones && resultado.razones.length > 0
+          ? `<ul>${resultado.razones.map((r) => `<li>${r}</li>`).join("")}</ul>`
+          : `<p>⚠️ Sin razones disponibles.</p>`
+      }
+    </div>
+  `;
+}
+
+// === Utilidades ===
 function formatearSimbolo(simbolo) {
-  if (simbolo.length === 6) {
-    return `${simbolo.slice(0, 3)}/${simbolo.slice(3, 6)}`;
-  }
+  if (simbolo.length === 6) return `${simbolo.slice(0, 3)}/${simbolo.slice(3, 6)}`;
   return simbolo;
 }
 
-// === Detectar tamaño del pip según el activo ===
 function getPipSize(simbolo) {
   simbolo = simbolo.toUpperCase();
   if (simbolo.includes("JPY")) return 0.01;
@@ -155,4 +180,3 @@ function getPipSize(simbolo) {
 }
 
 export { obtenerPrecioDesdeAPI };
-
