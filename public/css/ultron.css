@@ -414,19 +414,49 @@ body {
   align-items: flex-start;
   gap: 30px;
   flex-wrap: wrap;
-  margin-top: 25px;
+  margin: 30px auto;
+  max-width: 1200px; /* centra el conjunto */
+  width: 100%;
+  padding: 10px;
 }
 
+/* Cada tarjeta mantiene proporciones coherentes */
 .tarjeta-senal,
 .tarjeta-analisis,
-.bloque-configuracion {
-  flex: 1 1 300px;
-  max-width: 420px;
+.bloque-configuracion,
+.bloque-config {
+  flex: 1 1 350px;
+  max-width: 380px;
+  min-width: 300px;
+  background-color: #0b0f1a;
+  border: 1px solid #2e2e2e;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  padding: 16px;
+  color: #fff;
 }
 
+/* Asegura que Configuración Rápida se alinee correctamente */
+.bloque-configuracion,
+.bloque-config {
+  align-self: flex-start;
+}
 
+/* Ajuste responsive para pantallas pequeñas */
+@media (max-width: 900px) {
+  .ultron-bloque {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
 
-
+  .tarjeta-senal,
+  .tarjeta-analisis,
+  .bloque-configuracion,
+  .bloque-config {
+    max-width: 90%;
+  }
+}
 
 
 
