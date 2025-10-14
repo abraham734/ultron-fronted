@@ -13,11 +13,6 @@
   z-index: 10;
 }
 
-.main-content {
-  margin-left: 250px; /* por sidebar */
-  margin-right: 230px; /* por watchlist */
-}
-
 
 .watchlist-seccion {
   margin-bottom: 10px;
@@ -85,4 +80,30 @@
     margin-right: 6px;
     min-width: 100px;
   }
+}
+
+/* === CORRECCIÓN DE DISTRIBUCIÓN GLOBAL === */
+body {
+  padding-right: 230px; /* deja espacio real para la watchlist fija */
+  padding-left: 250px;  /* deja espacio real para el sidebar */
+  overflow-x: hidden;
+}
+
+.main-content {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 30px 20px;
+  box-sizing: border-box;
+}
+
+#activos-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 25px;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
 }
