@@ -458,6 +458,31 @@ body {
   }
 }
 
+/* === AJUSTE FINAL DE ALINEACIÓN === */
+.main-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ultron-bloque {
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 25px;
+}
+
+.tarjeta-senal,
+.tarjeta-analisis,
+.bloque-config {
+  flex: 1 1 360px;
+  max-width: 380px;
+  min-width: 300px;
+  margin: 0 auto;
+}
+
 
 
   
