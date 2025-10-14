@@ -109,14 +109,21 @@ async function obtenerPrecioDesdeAPI(simbolo) {
     }
 
     // === Renderiza bloques principales ===
-    contenedor.innerHTML = `
-      <div class="barra-escaneo">🔍 Escaneando: ${resultado.simbolo} – Estrategia: ${resultado.tipoEntrada || "Sin estrategia activa"}</div>
-      <div class="ultron-bloque">
-        ${renderTarjetaSenalActiva(resultado.simbolo, resultado.entry || "1.0000")}
-        ${renderAnalisisEstrategico(resultado)}
-        ${renderConfiguracionRapida(resultado.simbolo, resultado.entry || "1.0000")}
-      </div>
-    `;
+   // === Renderiza bloques principales ===
+contenedor.innerHTML = `
+  <div class="barra-escaneo">
+    🔍 Escaneando: ${resultado.simbolo} – Estrategia: ${resultado.tipoEntrada || "Sin estrategia activa"}
+  </div>
+  
+  <div class="ultron-bloque-wrapper">
+    <div class="ultron-bloque">
+      ${renderTarjetaSenalActiva(resultado.simbolo, resultado.entry || "1.0000")}
+      ${renderAnalisisEstrategico(resultado)}
+      ${renderConfiguracionRapida(resultado.simbolo, resultado.entry || "1.0000")}
+    </div>
+  </div>
+`;
+
 
     configurarEventoCalculo(resultado.simbolo, resultado.entry || "1.0000");
   } catch (error) {
