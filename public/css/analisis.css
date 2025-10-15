@@ -185,16 +185,44 @@
   box-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
 }
 
-/* === Responsive para pantallas más pequeñas === */
-@media screen and (max-width: 1200px) {
+
+
+/* === Ajuste fino de alineación general (Vercel) === */
+
+/* Barra de escaneo: separarla visualmente del encabezado */
+.barra-escaneo {
+  margin-top: 12px;
+  margin-bottom: 18px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Reajuste del contenedor principal respecto a la watchlist */
+.ultron-bloque {
+  max-width: calc(100% - 280px); /* evita que se meta detrás de la watchlist */
+  margin: 2rem auto;
+  padding: 0 2rem;
+  box-sizing: border-box;
+}
+
+/* Centrar y reposicionar Configuración Rápida */
+.configuracion-rapida {
+  margin: 0 auto;
+  max-width: 420px;
+  position: relative;
+  left: -20px; /* pequeño movimiento hacia la izquierda */
+}
+
+/* Ajuste responsivo: se centra de nuevo cuando la pantalla es más pequeña */
+@media (max-width: 1200px) {
   .ultron-bloque {
-    grid-template-columns: 1fr;
     max-width: 95%;
-    margin: 2rem auto;
+    padding: 0 1rem;
   }
 
   .configuracion-rapida {
-    grid-column: 1;
+    left: 0;
+    max-width: 100%;
   }
 }
 
