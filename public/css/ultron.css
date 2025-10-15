@@ -581,3 +581,20 @@ body {
   min-width: 280px;
   margin: 0 auto;
 }
+
+/* === Corrección global: separación entre barra de estrategias y análisis === */
+.main-content {
+  padding-top: 1rem; /* espacio superior general */
+}
+
+#estado-escaneo {
+  margin-top: 10px;
+}
+
+#contenedor-activos {
+  margin-top: 50px; /* fuerza que los bloques aparezcan debajo de la barra de estrategias */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
