@@ -108,24 +108,25 @@ async function obtenerPrecioDesdeAPI(simbolo) {
       return;
     }
 
-    // === Renderiza bloques principales ===
-   // === Renderiza bloques principales ===
-contenedor.innerHTML = `
-  <div class="barra-escaneo">
-    🔍 Escaneando: ${resultado.simbolo} – Estrategia: ${resultado.tipoEntrada || "Sin estrategia activa"}
-  </div>
-  
-  <div class="ultron-bloque-wrapper">
-    <div class="ultron-bloque">
-      ${renderTarjetaSenalActiva(resultado.simbolo, resultado.entry || "1.0000")}
-      ${renderAnalisisEstrategico(resultado)}
-      ${renderConfiguracionRapida(resultado.simbolo, resultado.entry || "1.0000")}
-    </div>
-  </div>
-`;
+    // === Actualiza solo el texto de la barra ya existente ===
+    const barra = document.querySelector(".barra-escaneo");
+    if (barra) {
+      barra.textContent = `🔍 Escaneando: ${resultado.simbolo} – Estrategia: ${resultado.tipoEntrada || "Sin estrategia activa"}`;
+    }
 
+    // === Renderiza los módulos principales ===
+    contenedor.innerHTML += `
+      <div class="ultron-bloque-wrapper">
+        <div class="ultron-bloque">
+          ${renderTarjetaSenalActiva(resultado.simbolo, resultado.entry || "1.0000")}
+          ${renderAnalisisEstrategico(resultado)}
+          ${renderConfiguracionRapida(resultado.simbolo, resultado.entry || "1.0000")}
+        </div>
+      </div>
+    `;
 
     configurarEventoCalculo(resultado.simbolo, resultado.entry || "1.0000");
+
   } catch (error) {
     contenedor.innerHTML = `<p class="error">❌ Error al obtener datos desde backend: ${error.message}</p>`;
     console.error("❌ Error al obtener datos backend:", error);
