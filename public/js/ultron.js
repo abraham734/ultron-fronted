@@ -15,6 +15,8 @@ const BACKEND_URL = window.location.hostname.includes("vercel.app")
   : "http://127.0.0.1:3000";
 
 // === Evento principal al cargar el DOM ===
+import { iniciarCiclo } from "./cicloescaneo.js";
+
 document.addEventListener("DOMContentLoaded", () => {
   console.log("✅ Interfaz ULTRÓN cargada correctamente.");
 
@@ -30,7 +32,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Verifica conexión con backend
   verificarConexionBackend();
+
+  // 🔁 Inicia escaneo automático continuo cada minuto
+  iniciarCiclo();
 });
+
 
 // === Verifica conexión con el backend (ping test) ===
 async function verificarConexionBackend() {
