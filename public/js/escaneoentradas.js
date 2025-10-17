@@ -1,13 +1,10 @@
-// === escaneoentradas.js (frontend) ===
-// Escaneo automático secuencial en interfaz – versión visual
+// === escaneoentradas.js (frontend – solo visual) ===
+// Muestra visualmente el estado del escaneo secuencial sin lógica de análisis
 
-import { obtenerDatosOHLC } from "./api_twelvedata.js";
-import { motorDecisionUltron } from "./motor.js";
-import { esHorarioDeMercadoAbierto } from "./utils/sesionmercado.js";
 import { activosPorCategoria } from "./watchlist.js";
-import { obtenerEstadoEstrategias } from "./switches.js"; // ⚠️ frontend
+import { obtenerEstadoEstrategias } from "./switches.js";
 
-// 🧩 Lista combinada de activos de la watchlist
+// 🧩 Unifica todos los activos por categoría
 const activosSecuenciales = [
   ...(activosPorCategoria.Forex || []),
   ...(activosPorCategoria.Acciones || []),
@@ -18,18 +15,13 @@ const activosSecuenciales = [
 let indiceActivoActual = 0;
 const intervaloMinutos = 1;
 
-// 🔁 Función principal: escanea un activo cada ciclo
-async function escanearSiguienteActivo() {
-  const { abierto, session } = esHorarioDeMercadoAbierto();
-
-  if (!abierto) {
-    const msg = `⏸️ Mercado cerrado (${session}) – esperando próxima sesión.`;
-    actualizarVisual(msg);
-    console.log(msg);
+// 🔁 Función principal visual: solo recorre y actualiza barra
+function escanearVisualmenteSiguienteActivo() {
+  if (activosSecuenciales.length === 0) {
+    console.warn("⚠️ No hay activos disponibles en la watchlist.");
+    actualizarVisual("⚠️ Sin activos en la lista.");
     return;
   }
-
-  if (activosSecuenciales.length === 0) return;
 
   const activo = activosSecuenciales[indiceActivoActual];
   const simbolo = activo.simbolo;
@@ -48,31 +40,19 @@ async function escanearSiguienteActivo() {
     : "Sin estrategia activa";
 
   const mensaje = `📊 Escaneando: ${simbolo} – ${estrategiaTexto}`;
-  actualizarVisual(mensaje);
   console.log(mensaje);
+  actualizarVisual(mensaje);
 
-  // 🔍 Obtener datos y aplicar motor
-  try {
-    const datos = await obtenerDatosOHLC(simbolo);
-    if (!datos) {
-      console.warn(`⚠️ Sin datos para ${simbolo}`);
-    } else {
-      motorDecisionUltron(simbolo, datos);
-    }
-  } catch (error) {
-    console.error(`❌ Error escaneando ${simbolo}:`, error.message);
-  }
-
-  // Avanzar al siguiente activo en la lista
+  // Avanza al siguiente activo
   indiceActivoActual = (indiceActivoActual + 1) % activosSecuenciales.length;
 }
 
-// 🔧 Actualizar mensaje en pantalla
+// 🔧 Actualiza visualmente el DOM
 function actualizarVisual(texto) {
   const contenedor = document.getElementById("estado-escaneo");
   if (contenedor) contenedor.textContent = texto;
 }
 
-// 🚀 Iniciar ciclo de escaneo automático
-escanearSiguienteActivo();
-setInterval(escanearSiguienteActivo, intervaloMinutos * 60 * 1000);
+// 🚀 Iniciar escaneo visual cada minuto
+escanearVisualmenteSiguienteActivo();
+setInterval(escanearVisualmenteSiguienteActivo, intervaloMinutos * 60 * 1000);
