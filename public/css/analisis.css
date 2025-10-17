@@ -2,18 +2,16 @@
 
 /* === Contenedor principal en grid === */
 .ultron-bloque {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-  background-color: transparent;
-  border-radius: 0;
-  width: 100%;
-  max-width: 1100px;
-  margin: 2rem auto 0 auto;
-  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background-color: #0a0f1c;
+  border-radius: 12px;
+  max-width: 80%;
+  margin: 1rem auto;
 }
+
 
 
 /* === Tarjeta de Señal Activa === */
