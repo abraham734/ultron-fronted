@@ -127,7 +127,7 @@ async function obtenerPrecioDesdeAPI(simbolo) {
         document.body.prepend(barra);
       }
     }
-    barra.textContent = `🔍 Escaneando: ${resultado.simbolo} – Estrategia: ${resultado.tipoEntrada || "Sin estrategia activa"}`;
+   // barra.textContent = `🔍 Escaneando: ${resultado.simbolo} – Estrategia: ${resultado.tipoEntrada || "Sin estrategia activa"}`;//
 
     // === Renderiza los módulos principales ===
     contenedor.innerHTML += `
