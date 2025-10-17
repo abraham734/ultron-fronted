@@ -8,13 +8,14 @@ import { obtenerPrecioDesdeAPI } from "./ultron.js";
 let indiceActual = 0;
 const intervaloMinutos = 1;
 
-// Crea la barra de escaneo si no existe
-function crearBarraEscaneo() {
+// Crea o actualiza la barra de escaneo
+function actualizarBarraEscaneo(simbolo, estrategiasActivas = []) {
   let barra = document.querySelector(".barra-escaneo");
+
+  // Si no existe, la crea
   if (!barra) {
     barra = document.createElement("div");
     barra.classList.add("barra-escaneo");
-    barra.textContent = "⏳ Iniciando escaneo automático...";
     const main = document.getElementById("contenedor-activos");
     if (main) {
       main.insertAdjacentElement("beforebegin", barra);
@@ -22,6 +23,30 @@ function crearBarraEscaneo() {
       document.body.prepend(barra);
     }
   }
+
+  // Actualiza el contenido
+  const estrategiasTexto = estrategiasActivas.length > 0
+    ? estrategiasActivas.join(" + ")
+    : "Sin estrategias activas";
+
+  barra.textContent = `🔍 Escaneando: ${simbolo} | Estrategias: ${estrategiasTexto}`;
+}
+
+// Obtiene estrategias activas desde los switches
+function obtenerEstrategiasSeleccionadas() {
+  const estrategias = [];
+  const switches = document.querySelectorAll(".switch-estrategia input[type='checkbox']");
+
+  switches.forEach((checkbox) => {
+    if (checkbox.checked) {
+      const label = checkbox.closest(".switch-estrategia")?.querySelector("label");
+      if (label) {
+        estrategias.push(label.textContent.trim());
+      }
+    }
+  });
+
+  return estrategias;
 }
 
 // Ejecuta escaneo secuencial de un activo
@@ -43,7 +68,10 @@ async function escanearSiguiente() {
 
   const activo = activosSecuenciales[indiceActual];
   const simbolo = activo.simbolo;
+  const estrategiasActivas = obtenerEstrategiasSeleccionadas();
+
   console.log(`🔁 Escaneando automáticamente: ${simbolo}`);
+  actualizarBarraEscaneo(simbolo, estrategiasActivas);
   await obtenerPrecioDesdeAPI(simbolo);
 
   indiceActual = (indiceActual + 1) % activosSecuenciales.length;
@@ -51,10 +79,8 @@ async function escanearSiguiente() {
 
 // Inicia el ciclo automático
 function iniciarCiclo() {
-  crearBarraEscaneo();
   escanearSiguiente(); // Ejecuta el primero al inicio
   setInterval(escanearSiguiente, intervaloMinutos * 60 * 1000);
 }
 
-// Export para usar en ultron.js o directamente en el index
 export { iniciarCiclo };
