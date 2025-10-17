@@ -108,11 +108,19 @@ async function obtenerPrecioDesdeAPI(simbolo) {
       return;
     }
 
-    // === Actualiza solo el texto de la barra ya existente ===
-    const barra = document.querySelector(".barra-escaneo");
-    if (barra) {
-      barra.textContent = `🔍 Escaneando: ${resultado.simbolo} – Estrategia: ${resultado.tipoEntrada || "Sin estrategia activa"}`;
+    // === Crea o actualiza la barra de escaneo ===
+    let barra = document.querySelector(".barra-escaneo");
+    if (!barra) {
+      barra = document.createElement("div");
+      barra.classList.add("barra-escaneo");
+      const main = document.getElementById("contenedor-activos");
+      if (main) {
+        main.insertAdjacentElement("beforebegin", barra);
+      } else {
+        document.body.prepend(barra);
+      }
     }
+    barra.textContent = `🔍 Escaneando: ${resultado.simbolo} – Estrategia: ${resultado.tipoEntrada || "Sin estrategia activa"}`;
 
     // === Renderiza los módulos principales ===
     contenedor.innerHTML += `
