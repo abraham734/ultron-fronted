@@ -96,7 +96,7 @@ async function obtenerPrecioDesdeAPI(simbolo) {
     console.log("🧱 Contenedor creado dinámicamente (Vercel delay fix).");
   }
 
-  contenedor.innerHTML = `<p>🔄 Escaneando <strong>${simbolo}</strong>...</p>`;
+  //contenedor.innerHTML = `<p>🔄 Escaneando <strong>${simbolo}</strong>...</p>`;//
 
   try {
     // === Llamado al backend Render ===
@@ -127,7 +127,7 @@ async function obtenerPrecioDesdeAPI(simbolo) {
         document.body.prepend(barra);
       }
     }
-   // barra.textContent = `🔍 Escaneando: ${resultado.simbolo} – Estrategia: ${resultado.tipoEntrada || "Sin estrategia activa"}`;//
+    barra.textContent = `🔍 Escaneando: ${resultado.simbolo} – Estrategia: ${resultado.tipoEntrada || "Sin estrategia activa"}`;
 
     // === Renderiza los módulos principales ===
     contenedor.innerHTML += `
