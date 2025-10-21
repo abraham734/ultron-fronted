@@ -2,13 +2,8 @@
 // Lógica principal del asistente ULTRÓN – Análisis Estratégico
 
 import { activos } from "./data.js";
-import { obtenerDatosOHLC } from "./api_twelvedata.js";
-import {
-  renderConfiguracionRapida,
-  configurarEventoCalculo,
-} from "./configuracionrapida.js";
-import { renderSwitches } from "./switches.js";
-
+import { renderConfiguracionRapida, configurarEventoCalculo } from "./configuracionrapida.js";
+import { renderSwitches, obtenerEstadoEstrategias } from "./switches.js";
 
 // === URL dinámica del backend ===
 const BACKEND_URL = window.location.hostname.includes("vercel.app")
@@ -16,12 +11,9 @@ const BACKEND_URL = window.location.hostname.includes("vercel.app")
   : "http://127.0.0.1:3000";
 
 // === Evento principal al cargar el DOM ===
-
-
 document.addEventListener("DOMContentLoaded", () => {
   console.log("✅ Interfaz ULTRÓN cargada correctamente.");
 
-  // Activa los switches de estrategias
   renderSwitches();
 
   const botonAnalisis = document.getElementById("boton-iniciar-analisis");
@@ -31,15 +23,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Verifica conexión con backend
   verificarConexionBackend();
-
-  // 🔁 Inicia escaneo automático continuo cada minuto
-    
 });
 
-
-// === Verifica conexión con el backend (ping test) ===
+// === Verifica conexión con el backend ===
 async function verificarConexionBackend() {
   try {
     const res = await fetch(`${BACKEND_URL}`);
@@ -50,7 +37,7 @@ async function verificarConexionBackend() {
   }
 }
 
-// === Renderiza la lista de activos por categoría ===
+// === Renderiza lista de activos por categoría ===
 function renderListaActivos(categoria) {
   const lista = activos[categoria];
   const contenedor = document.getElementById("activos-container");
@@ -75,62 +62,57 @@ function renderListaActivos(categoria) {
     btn.addEventListener("click", () => {
       const simbolo = btn.dataset.simbolo;
       console.log("🧩 Símbolo seleccionado:", simbolo);
-      obtenerPrecioDesdeAPI(simbolo);
+      realizarAnalisis(simbolo); // 👈 Se llama a la nueva función POST
     });
   });
 }
 
-// === Obtener precio desde la API ===
-async function obtenerPrecioDesdeAPI(simbolo) {
-  if (!simbolo || simbolo.trim() === "") {
-    console.warn("⚠️ No se recibió un símbolo válido:", simbolo);
-    return;
-  }
+// === Realiza análisis enviando estrategias activas ===
+async function realizarAnalisis(simbolo) {
+  const estrategiasActivas = obtenerEstadoEstrategias();
 
   let contenedor = document.getElementById("contenedor-activos");
   if (!contenedor) {
-    const nuevo = document.createElement("div");
-    nuevo.id = "contenedor-activos";
-    document.body.appendChild(nuevo);
-    contenedor = nuevo;
+    contenedor = document.createElement("div");
+    contenedor.id = "contenedor-activos";
+    document.body.appendChild(contenedor);
     console.log("🧱 Contenedor creado dinámicamente (Vercel delay fix).");
   }
 
-  //contenedor.innerHTML = `<p>🔄 Escaneando <strong>${simbolo}</strong>...</p>`;//
-
   try {
-    // === Llamado al backend Render ===
-    const res = await fetch(`${BACKEND_URL}/api/analisis?simbolo=${simbolo}`);
+    const res = await fetch(`${BACKEND_URL}/api/analisis`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ simbolo, estrategiasActivas })
+    });
 
     if (!res.ok) {
-      throw new Error(`Error HTTP ${res.status} al conectar con backend`);
+      throw new Error(`Error HTTP ${res.status}`);
     }
 
     const resultado = await res.json();
 
-    // === Validación de datos del backend ===
     if (!resultado || !resultado.simbolo) {
       contenedor.innerHTML = `<p class="error">⚠️ No se encontraron datos válidos para ${simbolo}</p>`;
-      console.warn("❗ Objeto de datos incompleto o inválido:", resultado);
       return;
     }
 
-    // === Crea o actualiza la barra de escaneo ===
+    // === Actualiza barra de escaneo ===
     let barra = document.querySelector(".barra-escaneo");
     if (!barra) {
       barra = document.createElement("div");
       barra.classList.add("barra-escaneo");
       const main = document.getElementById("contenedor-activos");
-      if (main) {
-        main.insertAdjacentElement("beforebegin", barra);
-      } else {
-        document.body.prepend(barra);
-      }
+      if (main) main.insertAdjacentElement("beforebegin", barra);
+      else document.body.prepend(barra);
     }
+
     barra.textContent = `🔍 Escaneando: ${resultado.simbolo} – Estrategia: ${resultado.tipoEntrada || "Sin estrategia activa"}`;
 
-    // === Renderiza los módulos principales ===
-    contenedor.innerHTML += `
+    // === Renderiza módulos principales ===
+    contenedor.innerHTML = `
       <div class="ultron-bloque-wrapper">
         <div class="ultron-bloque">
           ${renderTarjetaSenalActiva(resultado.simbolo, resultado.entry || "1.0000")}
@@ -144,7 +126,7 @@ async function obtenerPrecioDesdeAPI(simbolo) {
 
   } catch (error) {
     contenedor.innerHTML = `<p class="error">❌ Error al obtener datos desde backend: ${error.message}</p>`;
-    console.error("❌ Error al obtener datos backend:", error);
+    console.error("❌ Error en análisis:", error);
   }
 }
 
@@ -176,12 +158,12 @@ function renderAnalisisEstrategico(resultado) {
   return `
     <div class="tarjeta-analisis">
       <h3>🧠 Análisis Estratégico ULTRÓN</h3>
-      <p><strong>Decisión:</strong> ${resultado.decision}</p>
+      <p><strong>Decisión:</strong> ${resultado.decision?.tipoEntrada || "N/A"}</p>
       <p><strong>Tipo de Entrada:</strong> ${resultado.tipoEntrada || "N/A"}</p>
-      <p><strong>Riesgo:</strong> ${resultado.riesgo || "bajo"}</p>
+      <p><strong>Riesgo:</strong> ${resultado.decision?.riesgo || "bajo"}</p>
       ${
-        resultado.razones && resultado.razones.length > 0
-          ? `<ul>${resultado.razones.map((r) => `<li>${r}</li>`).join("")}</ul>`
+        resultado.decision?.razones?.length
+          ? `<ul>${resultado.decision.razones.map((r) => `<li>${r}</li>`).join("")}</ul>`
           : `<p>⚠️ Sin razones disponibles.</p>`
       }
     </div>
