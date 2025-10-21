@@ -1,6 +1,6 @@
 // === watchlist.js ===
 
-import { obtenerPrecioDesdeAPI } from './ultron.js'; // ✅ Export desde ultron.js
+//import { obtenerPrecioDesdeAPI } from './ultron.js'; // ✅ Export desde ultron.js//
 
 export const activosPorCategoria = {
   Forex: [

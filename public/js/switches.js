@@ -1,5 +1,5 @@
 // === switches.js ===
-// Control de encendido/apagado de estrategias Ultron (Frontend + sincronización con backend)
+// Control de encendido/apagado de estrategias Ultron (Frontend)
 
 const BACKEND_URL = window.location.hostname.includes("vercel.app")
   ? "https://ultron-backend-zvtm.onrender.com"
@@ -50,35 +50,8 @@ export function renderSwitches() {
 
     toggle.addEventListener("change", () => {
       localStorage.setItem(id, toggle.checked);
-      actualizarSwitchesBackend(); // 🚀 sincronizar con backend
     });
   });
-
-  // Enviar al backend al cargar la página también (opcional)
-  actualizarSwitchesBackend();
-}
-
-// === Sincroniza los estados con el backend ===
-async function actualizarSwitchesBackend() {
-  const estado = obtenerEstadoEstrategias();
-
-  try {
-    const response = await fetch(`${BACKEND_URL}/api/configurar-estrategias`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(estado)
-    });
-
-    if (!response.ok) {
-      console.warn("⚠️ Error al actualizar estrategias en backend:", await response.text());
-    } else {
-      console.log("✅ Estrategias sincronizadas con backend:", estado);
-    }
-  } catch (error) {
-    console.error("❌ Error al sincronizar estrategias con backend:", error.message);
-  }
 }
 
 // === Consulta los estados actualizados desde la interfaz ===
