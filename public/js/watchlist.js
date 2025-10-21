@@ -56,7 +56,8 @@ export function renderWatchlist() {
 
   btn.addEventListener("click", async () => {
   try {
-    const datos = await obtenerDatosOHLC(activo.simbolo);
+    const datos = await obtenerDatosOHLC(encodeURIComponent(activo.simbolo));
+
 
     if (datos && datos.datos && datos.datos.length > 0) {
       const precio = parseFloat(datos.datos[0].close);
