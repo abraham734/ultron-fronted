@@ -5,7 +5,7 @@ const BACKEND_URL = "https://ultron-backend-zvtm.onrender.com";
 
 export async function obtenerDatosOHLC(simbolo) {
   try {
-    const response = await fetch(`${BACKEND_URL}/api/analisis?simbolo=${simbolo}`);
+    const response = await fetch(`${BACKEND_URL}/api/analisis?simbolo=${encodeURIComponent(simbolo)}`);
     if (!response.ok) throw new Error(`Error ${response.status}`);
 
     const data = await response.json();
