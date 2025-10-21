@@ -185,3 +185,6 @@ function getPipSize(simbolo) {
 }
 
 //export { obtenerPrecioDesdeAPI };//
+
+export { realizarAnalisis as ejecutarAnalisisEstrategico };
+
