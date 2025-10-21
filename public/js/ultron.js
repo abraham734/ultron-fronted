@@ -184,4 +184,4 @@ function getPipSize(simbolo) {
   return 0.0001;
 }
 
-export { obtenerPrecioDesdeAPI };
+//export { obtenerPrecioDesdeAPI };//
