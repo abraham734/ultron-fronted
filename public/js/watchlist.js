@@ -54,14 +54,16 @@ export function renderWatchlist() {
       btn.textContent = activo.nombre;
       btn.dataset.simbolo = activo.simbolo;
 
-      btn.addEventListener("click", async () => {
-        const datos = await obtenerDatosOHLC(activo.simbolo);
-        if (datos && datos.precio) {
-          ejecutarAnalisisEstrategico(activo.simbolo, datos.precio);
-        } else {
-          console.warn(`⚠️ No se pudo obtener datos de ${activo.simbolo}`);
-        }
-      });
+     btn.addEventListener("click", async () => {
+  const datos = await obtenerDatosOHLC(activo.simbolo);
+  if (datos && datos.datos && datos.datos.length > 0) {
+    const precio = parseFloat(datos.datos[0].close);
+    ejecutarAnalisisEstrategico(activo.simbolo, precio);
+  } else {
+    console.warn(`⚠️ No se pudo obtener datos de ${activo.simbolo}`);
+  }
+});
+
 
       seccion.appendChild(btn);
     });
