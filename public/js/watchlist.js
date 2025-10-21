@@ -1,6 +1,7 @@
 // === watchlist.js ===
 
-//import { obtenerPrecioDesdeAPI } from './ultron.js'; // ✅ Export desde ultron.js//
+import { obtenerDatosOHLC } from "./api_twelvedata.js";
+import { ejecutarAnalisisEstrategico } from "./ultron.js"; // para análisis automático
 
 export const activosPorCategoria = {
   Forex: [
@@ -53,8 +54,13 @@ export function renderWatchlist() {
       btn.textContent = activo.nombre;
       btn.dataset.simbolo = activo.simbolo;
 
-      btn.addEventListener("click", () => {
-        obtenerPrecioDesdeAPI(activo.simbolo);
+      btn.addEventListener("click", async () => {
+        const datos = await obtenerDatosOHLC(activo.simbolo);
+        if (datos && datos.precio) {
+          ejecutarAnalisisEstrategico(activo.simbolo, datos.precio);
+        } else {
+          console.warn(`⚠️ No se pudo obtener datos de ${activo.simbolo}`);
+        }
       });
 
       seccion.appendChild(btn);
