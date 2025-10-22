@@ -186,5 +186,7 @@ function getPipSize(simbolo) {
 
 //export { obtenerPrecioDesdeAPI };//
 
-export { realizarAnalisis as ejecutarAnalisisEstrategico };
+// === Exportaciones para uso externo ===
+// Permite que la watchlist y otros módulos llamen al flujo de análisis completo
+export { realizarAnalisis, realizarAnalisis as ejecutarAnalisisEstrategico };
 

@@ -1,8 +1,9 @@
 // === watchlist.js ===
+// Panel lateral de activos (tipo TradingView) con conexión directa al flujo de análisis principal
 
-import { obtenerDatosOHLC } from "./api_twelvedata.js";
-import { ejecutarAnalisisEstrategico } from "./ultron.js"; // para análisis automático
+import { realizarAnalisis } from "./ultron.js"; // ✅ usa el mismo flujo POST oficial
 
+// === Categorías y activos ===
 export const activosPorCategoria = {
   Forex: [
     { nombre: "Euro / Dólar", simbolo: "EUR/USD" },
@@ -35,6 +36,7 @@ export const activosPorCategoria = {
   ]
 };
 
+// === Render principal ===
 export function renderWatchlist() {
   const panel = document.createElement("div");
   panel.className = "watchlist-panel";
@@ -48,24 +50,21 @@ export function renderWatchlist() {
     titulo.className = "watchlist-titulo";
     seccion.appendChild(titulo);
 
+    // === Renderiza cada botón de activo ===
     activosPorCategoria[categoria].forEach((activo) => {
       const btn = document.createElement("button");
       btn.className = "watchlist-boton";
       btn.textContent = activo.nombre;
       btn.dataset.simbolo = activo.simbolo;
 
+      // === Nuevo flujo: análisis completo vía POST ===
       btn.addEventListener("click", async () => {
         try {
-          const datos = await obtenerDatosOHLC(activo.simbolo);
-
-          if (datos && datos.datos && datos.datos.length > 0) {
-            const precio = parseFloat(datos.datos[0].close);
-            ejecutarAnalisisEstrategico(activo.simbolo, precio);
-          } else {
-            console.warn(`⚠️ No se pudo obtener datos de ${activo.simbolo}`);
-          }
+          console.log(`🧭 Analizando activo manual: ${activo.simbolo}`);
+          await realizarAnalisis(activo.simbolo); // 🔁 usa el flujo oficial de ultron.js
         } catch (error) {
-          console.error(`❌ Error al obtener datos de ${activo.simbolo}:`, error);
+          console.error(`❌ Error al ejecutar análisis manual de ${activo.simbolo}:`, error);
+          alert(`Error al analizar ${activo.nombre}. Revisa conexión o backend.`);
         }
       });
 
@@ -78,4 +77,5 @@ export function renderWatchlist() {
   document.body.appendChild(panel);
 }
 
+// === Inicialización automática ===
 renderWatchlist();
