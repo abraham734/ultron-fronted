@@ -178,9 +178,15 @@ function renderAnalisisEstrategico(resultado) {
           ? `<ul>${resultado.razones.map((r) => `<li>${r}</li>`).join("")}</ul>`
           : `<p>⚠️ Sin razones disponibles.</p>`
       }
+
+      <div class="footer-analisis">
+        <p>📊 <strong>Sesión:</strong> ${resultado.session || "Desconocida"}</p>
+        <p>🕒 <strong>Hora local:</strong> ${resultado.horaLocal || "No disponible"}</p>
+      </div>
     </div>
   `;
 }
+
 
 // === Utilidades ===
 function formatearSimbolo(simbolo) {
