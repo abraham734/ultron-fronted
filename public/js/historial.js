@@ -1,16 +1,17 @@
 // === historial.js ===
-// Renderiza el historial de entradas detectadas por ULTRON
+// Sistema de notificaciones expandibles (acordeón) para Ultron
+// Se conecta al motorDecisionUltron y guarda señales en localStorage
 
 const contenedorHistorial = document.getElementById("historial-entradas");
 
-// Cargar historial desde localStorage al iniciar
+// === Inicialización automática ===
 export function cargarHistorialDesdeStorage() {
   const entradas = JSON.parse(localStorage.getItem("ultronHistorial")) || [];
   entradas.forEach((entrada) => renderEntrada(entrada));
   renderBotonBorrarTodo();
 }
 
-// Agregar nueva entrada al historial y guardar en localStorage
+// === Registrar nueva señal ===
 export function registrarEntradaUltron(entrada) {
   renderEntrada(entrada);
 
@@ -19,19 +20,24 @@ export function registrarEntradaUltron(entrada) {
   localStorage.setItem("ultronHistorial", JSON.stringify(historial));
 }
 
-// Renderiza una entrada visualmente en el historial lateral
+// === Render visual de una entrada tipo acordeón ===
 function renderEntrada({ activo, tipoEntrada, sl, tp1, tp2, tp3, fechaHora }) {
   const tarjeta = document.createElement("div");
   tarjeta.className = "entrada-tarjeta";
 
   tarjeta.innerHTML = `
     <div class="entrada-cabecera">
-      <strong>📈 ${activo}</strong>
-      <button class="btn-borrar" title="Eliminar entrada">❌</button>
+      <div class="entrada-info">
+        <strong>📈 ${activo}</strong>
+        <span class="entrada-tipo">${tipoEntrada}</span>
+        <span class="entrada-fecha">${fechaHora}</span>
+      </div>
+      <div class="entrada-acciones">
+        <button class="btn-toggle">▼</button>
+        <button class="btn-borrar" title="Eliminar entrada">❌</button>
+      </div>
     </div>
-    <div class="entrada-detalle">
-      <p>🧠 <b>Tipo:</b> ${tipoEntrada}</p>
-      <p>📆 <b>Fecha:</b> ${fechaHora}</p>
+    <div class="entrada-detalle oculto">
       <p>🛑 <b>SL:</b> ${sl}</p>
       <p>🎯 <b>TP1:</b> ${tp1}</p>
       <p>🎯 <b>TP2:</b> ${tp2}</p>
@@ -39,13 +45,30 @@ function renderEntrada({ activo, tipoEntrada, sl, tp1, tp2, tp3, fechaHora }) {
     </div>
   `;
 
+  // === Botón desplegar/ocultar detalle ===
+  const btnToggle = tarjeta.querySelector(".btn-toggle");
+  const detalle = tarjeta.querySelector(".entrada-detalle");
+ btnToggle.addEventListener("click", () => {
+  const estaOculto = detalle.classList.contains("oculto");
+  document.querySelectorAll(".entrada-detalle").forEach((d) => d.classList.add("oculto"));
+  document.querySelectorAll(".btn-toggle").forEach((b) => b.classList.remove("abierto"));
+  if (estaOculto) {
+    detalle.classList.remove("oculto");
+    btnToggle.classList.add("abierto"); // 🔄 cambia ▶ a ▼
+  }
+});
+
+
+  // === Botón eliminar entrada ===
   const btnBorrar = tarjeta.querySelector(".btn-borrar");
-  btnBorrar.addEventListener("click", () => eliminarEntrada(activo, fechaHora, tarjeta));
+  btnBorrar.addEventListener("click", () =>
+    eliminarEntrada(activo, fechaHora, tarjeta)
+  );
 
   contenedorHistorial.appendChild(tarjeta);
 }
 
-// Elimina una entrada del DOM y de localStorage
+// === Eliminar una entrada ===
 function eliminarEntrada(activo, fechaHora, tarjetaDOM) {
   const historial = JSON.parse(localStorage.getItem("ultronHistorial")) || [];
   const actualizado = historial.filter(
@@ -55,14 +78,14 @@ function eliminarEntrada(activo, fechaHora, tarjetaDOM) {
   tarjetaDOM.remove();
 }
 
-// Botón para borrar TODO el historial
+// === Borrar todo el historial ===
 function renderBotonBorrarTodo() {
   const boton = document.createElement("button");
   boton.textContent = "🧹 Borrar Todo el Historial";
   boton.className = "btn-borrar-todo";
 
   boton.addEventListener("click", () => {
-    if (confirm("¿Estás seguro de eliminar todo el historial?")) {
+    if (confirm("¿Seguro que quieres borrar todo el historial?")) {
       localStorage.removeItem("ultronHistorial");
       contenedorHistorial.innerHTML = '<h3>📘 Historial de Entradas</h3>';
       renderBotonBorrarTodo();
@@ -70,4 +93,4 @@ function renderBotonBorrarTodo() {
   });
 
   contenedorHistorial.appendChild(boton);
-} 
+}

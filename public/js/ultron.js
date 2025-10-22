@@ -4,6 +4,7 @@
 import { activos } from "./data.js";
 import { renderConfiguracionRapida, configurarEventoCalculo } from "./configuracionrapida.js";
 import { renderSwitches, obtenerEstadoEstrategias } from "./switches.js";
+import { cargarHistorialDesdeStorage, registrarEntradaUltron } from "./historial.js"; // ✅ Integración historial
 
 // === URL dinámica del backend ===
 const BACKEND_URL = window.location.hostname.includes("vercel.app")
@@ -15,6 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log("✅ Interfaz ULTRÓN cargada correctamente.");
 
   renderSwitches();
+  cargarHistorialDesdeStorage(); // ✅ Carga historial guardado
 
   const botonAnalisis = document.getElementById("boton-iniciar-analisis");
   if (botonAnalisis) {
@@ -62,7 +64,7 @@ function renderListaActivos(categoria) {
     btn.addEventListener("click", () => {
       const simbolo = btn.dataset.simbolo;
       console.log("🧩 Símbolo seleccionado:", simbolo);
-      realizarAnalisis(simbolo); // 👈 Se llama a la nueva función POST
+      realizarAnalisis(simbolo); // 👈 Llama al flujo principal
     });
   });
 }
@@ -82,15 +84,11 @@ async function realizarAnalisis(simbolo) {
   try {
     const res = await fetch(`${BACKEND_URL}/api/analisis`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ simbolo, estrategiasActivas })
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ simbolo, estrategiasActivas }),
     });
 
-    if (!res.ok) {
-      throw new Error(`Error HTTP ${res.status}`);
-    }
+    if (!res.ok) throw new Error(`Error HTTP ${res.status}`);
 
     const resultado = await res.json();
 
@@ -123,6 +121,20 @@ async function realizarAnalisis(simbolo) {
     `;
 
     configurarEventoCalculo(resultado.simbolo, resultado.entry || "1.0000");
+
+    // === 🧠 Registrar entrada válida en historial ===
+    if (resultado.decision === "OPERAR" || resultado.tipoEntrada) {
+      registrarEntradaUltron({
+        activo: resultado.simbolo,
+        tipoEntrada: resultado.tipoEntrada || "Desconocido",
+        sl: resultado.stop || "-",
+        tp1: resultado.tp1 || "-",
+        tp2: resultado.tp2 || "-",
+        tp3: resultado.tp3 || "-",
+        fechaHora: new Date().toLocaleString("es-MX", { timeZone: "America/Mexico_City" }),
+      });
+      console.log("🗃️ Entrada registrada en historial:", resultado.simbolo);
+    }
 
   } catch (error) {
     contenedor.innerHTML = `<p class="error">❌ Error al obtener datos desde backend: ${error.message}</p>`;
@@ -158,12 +170,12 @@ function renderAnalisisEstrategico(resultado) {
   return `
     <div class="tarjeta-analisis">
       <h3>🧠 Análisis Estratégico ULTRÓN</h3>
-      <p><strong>Decisión:</strong> ${resultado.decision?.tipoEntrada || "N/A"}</p>
+      <p><strong>Decisión:</strong> ${resultado.decision || "N/A"}</p>
       <p><strong>Tipo de Entrada:</strong> ${resultado.tipoEntrada || "N/A"}</p>
-      <p><strong>Riesgo:</strong> ${resultado.decision?.riesgo || "bajo"}</p>
+      <p><strong>Riesgo:</strong> ${resultado.riesgo || "bajo"}</p>
       ${
-        resultado.decision?.razones?.length
-          ? `<ul>${resultado.decision.razones.map((r) => `<li>${r}</li>`).join("")}</ul>`
+        resultado.razones?.length
+          ? `<ul>${resultado.razones.map((r) => `<li>${r}</li>`).join("")}</ul>`
           : `<p>⚠️ Sin razones disponibles.</p>`
       }
     </div>
@@ -184,9 +196,5 @@ function getPipSize(simbolo) {
   return 0.0001;
 }
 
-//export { obtenerPrecioDesdeAPI };//
-
-// === Exportaciones para uso externo ===
-// Permite que la watchlist y otros módulos llamen al flujo de análisis completo
+// === Exportaciones ===
 export { realizarAnalisis, realizarAnalisis as ejecutarAnalisisEstrategico };
-

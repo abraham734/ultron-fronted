@@ -1,11 +1,13 @@
 /* === historial.css === */
-/* Estilo visual para el historial lateral de entradas de Ultron */
+/* Estilo visual mejorado con ícono dinámico para acordeón (Ultron) */
 
 #historial-entradas {
   padding: 1rem;
   overflow-y: auto;
   max-height: 90vh;
   border-top: 1px solid #2c2f36;
+  color: #ffd700;
+  font-family: "Roboto", sans-serif;
 }
 
 #historial-entradas h3 {
@@ -13,54 +15,132 @@
   font-size: 1rem;
   margin-bottom: 1rem;
   text-transform: uppercase;
+  letter-spacing: 1px;
+  text-align: center;
 }
 
-/* Tarjeta visual tipo señal */
+/* === Tarjeta principal === */
 .entrada-tarjeta {
-  background-color: #161a20;
+  background-color: #10141d;
   border-left: 4px solid #ffc107;
   border-radius: 6px;
   margin-bottom: 1rem;
-  padding: 0.75rem;
+  padding: 0.6rem 0.75rem;
   box-shadow: inset 0 0 4px rgba(255, 193, 7, 0.2);
-  transition: background 0.2s;
+  transition: all 0.25s ease;
 }
 
 .entrada-tarjeta:hover {
-  background-color: #1e222a;
+  background-color: #1a1e27;
+  transform: scale(1.01);
 }
 
-/* Cabecera con botón eliminar */
+/* === Cabecera de entrada === */
 .entrada-cabecera {
   display: flex;
   justify-content: space-between;
   align-items: center;
   color: #ffffff;
-  font-weight: bold;
   font-size: 0.95rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
+  user-select: none;
+}
+
+.entrada-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.entrada-info strong {
+  color: #ffd700;
+  font-size: 0.95rem;
+}
+
+.entrada-tipo {
+  color: #aaa;
+  font-size: 0.8rem;
+}
+
+.entrada-fecha {
+  color: #888;
+  font-size: 0.75rem;
+}
+
+/* === Botones (desplegar / borrar) === */
+.entrada-acciones {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.btn-toggle,
+.btn-borrar {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: transform 0.25s, color 0.2s;
+}
+
+.btn-toggle {
+  color: #ffd700;
+  transform: rotate(0deg);
+}
+
+.btn-toggle.abierto {
+  transform: rotate(90deg); /* ▶ → ▼ */
+  color: #fff;
+}
+
+.btn-toggle:hover {
+  color: #ffffff;
+  transform: scale(1.2);
+}
+
+.btn-borrar {
+  color: #ff5555;
+}
+
+.btn-borrar:hover {
+  color: #ff2a2a;
+  transform: scale(1.1);
+}
+
+/* === Detalle (acordeón) === */
+.entrada-detalle {
+  background-color: #0c0f18;
+  border-radius: 5px;
+  padding: 0.5rem;
+  margin-top: 0.4rem;
+  animation: fadeIn 0.25s ease-in-out;
 }
 
 .entrada-detalle p {
   font-size: 0.85rem;
   color: #cccccc;
-  margin: 0.2rem 0;
+  margin: 0.25rem 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-/* Botón de eliminar individual */
-.btn-borrar {
-  background: none;
-  border: none;
-  color: #ff5c5c;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: color 0.2s;
+.oculto {
+  display: none;
 }
 
-.btn-borrar:hover {
-  color: #ff2a2a;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
+/* === Botón global: limpiar historial === */
 .btn-borrar-todo {
   width: 100%;
   padding: 0.5rem;
@@ -71,9 +151,12 @@
   font-weight: bold;
   border-radius: 4px;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
 }
 
 .btn-borrar-todo:hover {
   background-color: #3a3f48;
+  color: #fff;
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
 }
