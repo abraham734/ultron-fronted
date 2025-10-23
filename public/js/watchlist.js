@@ -36,10 +36,12 @@ export const activosPorCategoria = {
   ]
 };
 
-// === Render principal ===
+// === Render principal (corregido) ===
 export function renderWatchlist() {
-  const panel = document.createElement("div");
-  panel.className = "watchlist-panel";
+  const panel = document.querySelector(".watchlist-panel"); // Usa el existente
+
+  // Limpia el contenido previo (por si se vuelve a renderizar)
+  panel.innerHTML = "";
 
   for (const categoria in activosPorCategoria) {
     const seccion = document.createElement("div");
@@ -57,11 +59,11 @@ export function renderWatchlist() {
       btn.textContent = activo.nombre;
       btn.dataset.simbolo = activo.simbolo;
 
-      // === Nuevo flujo: análisis completo vía POST ===
+      // === Flujo: análisis completo vía POST ===
       btn.addEventListener("click", async () => {
         try {
           console.log(`🧭 Analizando activo manual: ${activo.simbolo}`);
-          await realizarAnalisis(activo.simbolo); // 🔁 usa el flujo oficial de ultron.js
+          await realizarAnalisis(activo.simbolo);
         } catch (error) {
           console.error(`❌ Error al ejecutar análisis manual de ${activo.simbolo}:`, error);
           alert(`Error al analizar ${activo.nombre}. Revisa conexión o backend.`);
@@ -73,9 +75,8 @@ export function renderWatchlist() {
 
     panel.appendChild(seccion);
   }
-
-  document.body.appendChild(panel);
 }
+
 
 // === Inicialización automática ===
 renderWatchlist();
