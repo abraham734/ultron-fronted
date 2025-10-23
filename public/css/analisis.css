@@ -240,40 +240,6 @@
 
 
 
-/* === Alineación horizontal de bloques principales === */
-.ultron-bloque {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  flex-wrap: nowrap;
-  gap: 1.5rem;
-  margin-top: 1.5rem;
-  width: 100%;
-}
 
-/* === Ajuste individual de cada tarjeta === */
-.tarjeta-senal,
-.tarjeta-analisis,
-.bloque-configuracion {
-  flex: 1 1 0;
-  min-width: 0;
-  background-color: #0d1117;
-  border-radius: 10px;
-  padding: 1rem 1.5rem;
-  box-shadow: 0 0 8px rgba(255, 215, 0, 0.15);
-  color: #ffffff;
-}
-
-/* === Corrección del bloque de configuración rápida (ya viene desde configuracionrapida.js) === */
-.bloque-configuracion {
-  border-left: 3px solid #FFD700;
-}
-
-/* === Comportamiento responsivo: en pantallas pequeñas vuelve a formato vertical === */
-@media (max-width: 1100px) {
-  .ultron-bloque {
-    flex-wrap: wrap;
-  }
-}
 
 
