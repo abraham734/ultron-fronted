@@ -1,340 +1,44 @@
-/* === ANALISIS.CSS – versión limpia y optimizada === */
+/* === ANALISIS.CSS – versión limpia y uniforme === */
 
-/* === Contenedor principal === */
-.ultron-bloque {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  padding: 1rem 1.5rem;
-  background-color: #0a0f1c;
-  border-radius: 12px;
-  max-width: calc(100% - 280px); /* evita empalme con watchlist */
-  margin: 2rem auto;
-  box-sizing: border-box;
-}
-
-/* === Tarjeta de Señal Activa === */
-.tarjeta-senal {
-  background-color: #131a2b;
-  padding: 0.8rem 1.5rem;
-  border-radius: 10px;
-  border-left: 5px solid #ffd700;
-  box-shadow: 0 0 8px rgba(255, 215, 0, 0.15);
-  color: #ffffff;
-  font-size: 0.95rem;
-}
-
-.tarjeta-senal h3 {
-  color: #ffd700;
-  font-size: 1.1rem;
-  margin-bottom: 0.8rem;
-}
-
-/* === Análisis Estratégico ULTRÓN === */
-.tarjeta-analisis {
-  background-color: #101828;
-  padding: 0.9rem 1.5rem;
-  border-left: 4px solid #00ffff;
-  border-radius: 10px;
-  box-shadow: 0 0 6px rgba(0, 255, 255, 0.08);
-  color: #ffffff;
-  font-size: 0.95rem;
-  transition: all 0.25s ease;
-}
-
-.tarjeta-analisis:hover {
-  background-color: #161f33;
-  box-shadow: 0 0 10px rgba(0, 255, 255, 0.12);
-}
-
-.tarjeta-analisis h3 {
-  color: #00ffff;
-  font-size: 1.1rem;
-  margin-bottom: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.tarjeta-analisis p {
-  margin: 0.25rem 0;
-  line-height: 1.4;
-}
-
-.tarjeta-analisis ul {
-  margin-top: 0.6rem;
-  padding-left: 1.2rem;
-  list-style: none;
-}
-
-.tarjeta-analisis li {
-  margin-bottom: 0.35rem;
-  font-size: 0.9rem;
-  position: relative;
-  padding-left: 1.2rem;
-  color: #ccc;
-}
-
-.tarjeta-analisis li::before {
-  content: "•";
-  position: absolute;
-  left: 0;
-  top: 0.15rem;
-  color: #00ffff;
-  font-weight: bold;
-}
-
-.tarjeta-analisis li:last-child::before {
-  color: #ffd700;
-}
-
-/* === Configuración Rápida === */
-.configuracion-rapida {
-  grid-column: 1 / span 2;
-  background-color: #131a2b;
-  padding: 1.2rem 1.5rem;
-  border-radius: 10px;
-  border: 1px solid #2c3242;
-  box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.03);
-  color: #ffffff;
-  font-size: 0.95rem;
-  margin: 0 auto;
-  max-width: 420px;
-  position: relative;
-  left: -20px;
-}
-
-.configuracion-rapida h3 {
-  color: #00ffff;
-  font-size: 1.1rem;
-  margin-bottom: 0.8rem;
-}
-
-.configuracion-rapida label {
-  display: block;
-  margin-top: 0.6rem;
-  margin-bottom: 0.2rem;
-  color: #ddd;
-  font-weight: 500;
-  font-size: 0.9rem;
-}
-
-.configuracion-rapida input {
-  width: 100%;
-  padding: 0.6rem 1rem;
-  border-radius: 6px;
-  border: none;
-  background-color: #1d2636;
-  color: #ffffff;
-  font-size: 0.95rem;
-}
-
-.configuracion-rapida input:focus {
-  border: 1px solid #00ffff;
-  background-color: #222d44;
-  outline: none;
-}
-
-/* === Botón de cálculo === */
-#btn-calcular-lote {
-  margin-top: 1.5rem;
-  padding: 0.8rem 1.5rem;
-  background-color: #ffd700;
-  border: none;
-  border-radius: 8px;
-  color: #000000;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.3s;
-  width: 100%;
-  font-size: 0.95rem;
-}
-
-#btn-calcular-lote:hover {
-  background-color: #ffe15a;
-  box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
-}
-
-/* === Resultado del cálculo === */
-.resultado-lote {
-  flex-basis: 100%;
-  margin-top: 2rem;
-  font-size: 1rem;
-  background-color: #101828;
-  padding: 1rem;
-  border-radius: 8px;
-  color: #ffffff;
-  border-left: 4px solid #00ffff;
-  box-shadow: 0 0 8px rgba(0, 255, 255, 0.15);
-}
-
-/* === Errores y botones secundarios === */
-.error {
-  color: #ff6060;
-  font-weight: bold;
-}
-
-.btn-activo {
-  margin: 0.5rem;
-  padding: 0.7rem 1.4rem;
-  background-color: #1d2636;
-  color: #ffffff;
-  border: 1px solid #2c3242;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: 0.25s ease;
-}
-
-.btn-activo:hover {
-  background-color: #00ffff;
-  color: #000000;
-  box-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
-}
-
-/* === Barra de escaneo === */
-.barra-escaneo {
-  margin-top: 12px;
-  margin-bottom: 18px;
-  position: relative;
-  z-index: 2;
-}
-
-/* === Responsivo === */
-@media (max-width: 1200px) {
-  .ultron-bloque {
-    max-width: 95%;
-    padding: 0 1rem;
-  }
-
-  .configuracion-rapida {
-    left: 0;
-    max-width: 100%;
-  }
-}
-
-/* === Footer contextual del análisis === */
-.footer-analisis {
-  margin-top: 1rem;
-  padding-top: 0.6rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  color: #b0b0b0;
-  font-size: 0.85rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-
-.footer-analisis p {
-  margin: 0;
-  line-height: 1.4;
-}
-
-.footer-analisis strong {
-  color: #e0e0e0;
-  font-weight: 600;
-}
-
-
-
-
-
-/* === Alineación horizontal reforzada para los 3 bloques === */
-.ultron-bloque-wrapper .ultron-bloque {
-  display: flex !important;
-  flex-direction: row !important;
-  justify-content: center;
-  align-items: flex-start;
-  flex-wrap: nowrap;
-  gap: 1.5rem;
-  width: 100%;
-  margin-top: 1.5rem;
-}
-
-/* === Tarjetas dentro del bloque === */
-.ultron-bloque .tarjeta-senal,
-.ultron-bloque .tarjeta-analisis,
-.ultron-bloque .bloque-configuracion {
-  flex: 1 1 0;
-  min-width: 0;
-  background-color: #0d1117;
-  border-radius: 10px;
-  padding: 1rem 1.5rem;
-  box-shadow: 0 0 8px rgba(255, 215, 0, 0.15);
-  color: #ffffff;
-}
-
-/* === Igualar alturas visuales === */
-.ultron-bloque .tarjeta-senal,
-.ultron-bloque .tarjeta-analisis,
-.ultron-bloque .bloque-configuracion {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
-}
-
-/* === Responsive === */
-@media (max-width: 1100px) {
-  .ultron-bloque-wrapper .ultron-bloque {
-    flex-wrap: wrap;
-  }
-}
-
-
-/* === Ajuste visual del bloque principal === */
+/* === Contenedor principal de los tres bloques === */
 .ultron-bloque-wrapper {
-  background: transparent !important; /* elimina el fondo azul */
-  max-width: none !important;         /* quita el límite de ancho */
-  width: 100% !important;             /* ocupa todo el ancho del contenedor central */
-  margin: 0 !important;
-  padding: 0 !important;
+  background: transparent;
+  width: 100%;
+  margin: 1.5rem auto;
+  padding: 0;
 }
 
-/* === Ajuste del contenedor interno === */
-.ultron-bloque {
-  background: transparent !important;
-  width: 100% !important;
-  justify-content: space-between; /* separa los 3 bloques */
-  align-items: flex-start;
-  gap: 1.5rem;
-}
-
-/* === Separación visual de cada tarjeta === */
-.tarjeta-senal,
-.tarjeta-analisis,
-.bloque-configuracion {
-  background-color: #0d1117;
-  border-radius: 10px;
-  border: 1px solid #1f2a44;
-  box-shadow: 0 0 10px rgba(0,0,0,0.25);
-}
-
-
-
-/* === Nivelación de proporciones y jerarquía visual === */
 .ultron-bloque {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   gap: 1.5rem;
   width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  background: transparent;
 }
 
 /* === Señal Activa (bloque más compacto) === */
 .tarjeta-senal {
-  flex: 0.7; /* más angosto */
-  max-width: 300px;
+  flex: 0.7;
+  max-width: 280px;
   background-color: #0d1117;
   border: 1px solid #FFD700;
   border-radius: 10px;
-  padding: 1rem 1.5rem;
+  padding: 1rem 1.3rem;
   color: #ffffff;
   box-shadow: 0 0 10px rgba(255, 215, 0, 0.15);
+  height: 370px;
 }
 
-/* === Análisis Estratégico (bloque principal 1) === */
+.tarjeta-senal h3 {
+  color: #FFD700;
+  font-size: 1.1rem;
+  margin-bottom: 0.8rem;
+}
+
+/* === Análisis Estratégico (bloque central principal) === */
 .tarjeta-analisis {
   flex: 1.2;
   min-width: 0;
@@ -344,10 +48,21 @@
   padding: 1rem 1.5rem;
   color: #ffffff;
   box-shadow: 0 0 10px rgba(0, 188, 212, 0.15);
-  height: 100%;
+  height: 440px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-/* === Configuración Rápida (bloque principal 2) === */
+.tarjeta-analisis h3 {
+  color: #00FFFF;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.6rem;
+}
+
+/* === Configuración Rápida (bloque derecho) === */
 .bloque-configuracion {
   flex: 1.2;
   min-width: 0;
@@ -357,28 +72,64 @@
   padding: 1rem 1.5rem;
   color: #ffffff;
   box-shadow: 0 0 10px rgba(255, 215, 0, 0.15);
-  height: 100%;
-}
-
-/* === Altura uniforme entre los dos bloques principales === */
-.tarjeta-analisis,
-.bloque-configuracion {
+  height: 440px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 440px; /* ajusta aquí si deseas más o menos altura */
 }
 
-/* === Compactación del bloque de señal === */
-.tarjeta-senal {
-  height: 360px;
+/* === Estilos internos del análisis === */
+.tarjeta-analisis p {
+  margin: 0.25rem 0;
+  line-height: 1.4;
 }
 
-/* === Adaptación móvil === */
-@media (max-width: 1100px) {
+.tarjeta-analisis ul {
+  list-style: none;
+  padding-left: 1rem;
+}
+
+.tarjeta-analisis li {
+  position: relative;
+  padding-left: 1rem;
+  color: #b5b5b5;
+  margin-bottom: 0.35rem;
+  font-size: 0.9rem;
+}
+
+.tarjeta-analisis li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #00ffff;
+  font-weight: bold;
+}
+
+.footer-analisis {
+  margin-top: 1rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: #b0b0b0;
+  font-size: 0.85rem;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+/* === Barra de escaneo === */
+.barra-escaneo {
+  margin: 12px 0 18px 0;
+  position: relative;
+  z-index: 2;
+}
+
+/* === Responsividad === */
+@media (max-width: 1200px) {
   .ultron-bloque {
     flex-wrap: wrap;
+    justify-content: center;
   }
+
   .tarjeta-senal,
   .tarjeta-analisis,
   .bloque-configuracion {
