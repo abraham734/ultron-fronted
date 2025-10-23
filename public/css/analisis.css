@@ -283,4 +283,33 @@
 }
 
 
+/* === Ajuste visual del bloque principal === */
+.ultron-bloque-wrapper {
+  background: transparent !important; /* elimina el fondo azul */
+  max-width: none !important;         /* quita el límite de ancho */
+  width: 100% !important;             /* ocupa todo el ancho del contenedor central */
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* === Ajuste del contenedor interno === */
+.ultron-bloque {
+  background: transparent !important;
+  width: 100% !important;
+  justify-content: space-between; /* separa los 3 bloques */
+  align-items: flex-start;
+  gap: 1.5rem;
+}
+
+/* === Separación visual de cada tarjeta === */
+.tarjeta-senal,
+.tarjeta-analisis,
+.bloque-configuracion {
+  background-color: #0d1117;
+  border-radius: 10px;
+  border: 1px solid #1f2a44;
+  box-shadow: 0 0 10px rgba(0,0,0,0.25);
+}
+
+
 
