@@ -82,3 +82,26 @@
   }
 }
 
+/* === Layout de tres columnas === */
+.layout-ultron {
+  display: grid;
+  grid-template-columns: 250px 1fr 260px; /* Sidebar / Main / Watchlist */
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* === Scrolls independientes === */
+.sidebar,
+.main-content,
+.watchlist-panel {
+  overflow-y: auto;
+  height: 100vh;
+}
+
+/* === Watchlist === */
+.watchlist-panel {
+  background-color: #0e1423;
+  border-left: 1px solid #1f2a44;
+  padding: 1rem;
+  color: #fff;
+}
