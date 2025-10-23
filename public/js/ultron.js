@@ -165,23 +165,46 @@ function renderTarjetaSenalActiva(simbolo, precio = 1.0) {
   `;
 }
 
-// === Renderiza la tarjeta de análisis estratégico ===
 function renderAnalisisEstrategico(resultado) {
   return `
     <div class="tarjeta-analisis">
       <h3>🧠 Análisis Estratégico ULTRÓN</h3>
-      <p><strong>Decisión:</strong> ${resultado.decision || "N/A"}</p>
-      <p><strong>Tipo de Entrada:</strong> ${resultado.tipoEntrada || "N/A"}</p>
-      <p><strong>Riesgo:</strong> ${resultado.riesgo || "bajo"}</p>
-      ${
-        resultado.razones?.length
-          ? `<ul>${resultado.razones.map((r) => `<li>${r}</li>`).join("")}</ul>`
-          : `<p>⚠️ Sin razones disponibles.</p>`
-      }
+
+      <div class="bloque-diagnostico">
+        <label>Decisión:</label>
+        <div class="campo-valor ${resultado.decision === "OPERAR" ? "verde" : "rojo"}">
+          ${resultado.decision || "N/A"}
+        </div>
+
+        <label>Tipo de Entrada:</label>
+        <div class="campo-valor">${resultado.tipoEntrada || "N/A"}</div>
+
+        <label>Riesgo:</label>
+        <div class="campo-valor">${resultado.riesgo || "Bajo"}</div>
+      </div>
+
+      <div class="bloque-estructura">
+        <h4>📈 Estructura Detectada</h4>
+        <p class="sl">SL: ${resultado.stop || "-"}</p>
+        <p class="tp">TP1: ${resultado.tp1 || "-"}</p>
+        <p class="tp">TP2: ${resultado.tp2 || "-"}</p>
+        <p class="tp">TP3: ${resultado.tp3 || "-"}</p>
+      </div>
+
+      <div class="bloque-razones">
+        <h4>⚙️ Razones del Análisis</h4>
+        <ul>
+          ${
+            resultado.razones?.length
+              ? resultado.razones.map(r => `<li>${r}</li>`).join("")
+              : "<li class='warn'>Sin razones disponibles</li>"
+          }
+        </ul>
+      </div>
 
       <div class="footer-analisis">
-        <p>📊 <strong>Sesión:</strong> ${resultado.session || "Desconocida"}</p>
-        <p>🕒 <strong>Hora local:</strong> ${resultado.horaLocal || "No disponible"}</p>
+        <p><strong>Sesión:</strong> ${resultado.session || "Desconocida"}</p>
+        <p><strong>Hora local:</strong> ${resultado.horaLocal || "No disponible"}</p>
       </div>
     </div>
   `;

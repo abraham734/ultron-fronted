@@ -38,102 +38,138 @@
   margin-bottom: 0.8rem;
 }
 
-/* === Análisis Estratégico (bloque central principal) === */
+/* === BLOQUE ANÁLISIS ESTRATÉGICO ULTRÓN === */
 .tarjeta-analisis {
   flex: 1.2;
   min-width: 0;
-  background-color: #0d1117;
-  border: 1px solid #00bcd4;
-  border-radius: 10px;
-  padding: 1rem 1.5rem;
+  background-color: #0b0f1a;
+  border: 1px dashed #00bcd4;
+  border-radius: 12px;
+  padding: 12px;
   color: #ffffff;
-  box-shadow: 0 0 10px rgba(0, 188, 212, 0.15);
-  height: 440px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.tarjeta-analisis h3 {
-  color: #00FFFF;
-  font-size: 1.1rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 0.6rem;
-}
-
-/* === Configuración Rápida (bloque derecho) === */
-.bloque-configuracion {
-  flex: 1.2;
-  min-width: 0;
-  background-color: #0d1117;
-  border: 1px solid #FFD700;
-  border-radius: 10px;
-  padding: 1rem 1.5rem;
-  color: #ffffff;
-  box-shadow: 0 0 10px rgba(255, 215, 0, 0.15);
-  height: 440px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-/* === Estilos internos del análisis === */
-.tarjeta-analisis p {
-  margin: 0.25rem 0;
+  font-size: 14px;
   line-height: 1.4;
+  box-shadow: 0 0 6px rgba(0, 188, 212, 0.15);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 440px; /* igual altura que Configuración Rápida */
 }
 
-.tarjeta-analisis ul {
+/* === Encabezado / Título === */
+.tarjeta-analisis h3 {
+  font-size: 15px;
+  color: #00ffff;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  border-bottom: 1px solid #00bcd455;
+  padding-bottom: 4px;
+  letter-spacing: 0.5px;
+}
+
+/* === Sección: Diagnóstico === */
+.bloque-diagnostico {
+  margin-bottom: 12px;
+}
+
+.bloque-diagnostico label {
+  display: block;
+  font-weight: bold;
+  font-size: 13px;
+  color: #d0d0d0;
+  margin-top: 6px;
+  margin-bottom: 2px;
+}
+
+.bloque-diagnostico .campo-valor {
+  width: 100%;
+  background-color: #101828;
+  border: 1px solid #1e2b3c;
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 13px;
+  color: #00eaff;
+}
+
+/* Colores condicionales (pueden cambiar dinámicamente vía JS) */
+.campo-valor.verde { color: #00ff88; }
+.campo-valor.rojo { color: #ff6060; }
+.campo-valor.amarillo { color: #ffd700; }
+
+/* === Sección: Estructura Detectada === */
+.bloque-estructura {
+  margin-top: 10px;
+  margin-bottom: 12px;
+  background-color: #0f1422;
+  border: 1px dashed #1e2b3c;
+  border-radius: 6px;
+  padding: 8px;
+}
+
+.bloque-estructura h4 {
+  font-size: 13px;
+  color: #00ffff;
+  margin-bottom: 6px;
+}
+
+.bloque-estructura p {
+  font-size: 13px;
+  margin: 3px 0;
+}
+
+.bloque-estructura .sl { color: #ff5a5a; }
+.bloque-estructura .tp { color: #00ff88; }
+
+/* === Sección: Razones del Análisis === */
+.bloque-razones {
+  margin-top: 10px;
+  background-color: #0f1422;
+  border: 1px dashed #1e2b3c;
+  border-radius: 6px;
+  padding: 8px;
+  flex-grow: 1;
+}
+
+.bloque-razones h4 {
+  font-size: 13px;
+  color: #00ffff;
+  margin-bottom: 6px;
+}
+
+.bloque-razones ul {
   list-style: none;
-  padding-left: 1rem;
+  padding-left: 0;
 }
 
-.tarjeta-analisis li {
-  position: relative;
-  padding-left: 1rem;
-  color: #b5b5b5;
-  margin-bottom: 0.35rem;
-  font-size: 0.9rem;
+.bloque-razones li {
+  font-size: 12.5px;
+  color: #ccc;
+  margin-bottom: 3px;
 }
 
-.tarjeta-analisis li::before {
-  content: "•";
-  position: absolute;
-  left: 0;
+.bloque-razones li::before {
+  content: "• ";
   color: #00ffff;
   font-weight: bold;
 }
 
+.bloque-razones li.ok::before { content: "✅ "; }
+.bloque-razones li.warn::before { content: "⚠️ "; color: #ffd700; }
+.bloque-razones li.err::before { content: "❌ "; color: #ff6060; }
+
+/* === Footer (sesión y hora) === */
 .footer-analisis {
-  margin-top: 1rem;
-  padding-top: 0.6rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  color: #b0b0b0;
-  font-size: 0.85rem;
+  margin-top: 10px;
+  border-top: 1px solid #1e2b3c;
+  padding-top: 6px;
+  font-size: 12px;
+  color: #aaa;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
 }
 
-/* === Barra de escaneo === */
-.barra-escaneo {
-  margin: 12px 0 18px 0;
-  position: relative;
-  z-index: 2;
-}
-
-/* === Responsividad === */
-@media (max-width: 1200px) {
-  .ultron-bloque {
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .tarjeta-senal,
-  .tarjeta-analisis,
-  .bloque-configuracion {
-    max-width: 100%;
-    height: auto;
-  }
+.footer-analisis strong {
+  color: #00ffff;
+  font-weight: bold;
 }
