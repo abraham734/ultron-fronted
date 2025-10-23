@@ -240,6 +240,47 @@
 
 
 
+/* === Alineación horizontal reforzada para los 3 bloques === */
+.ultron-bloque-wrapper .ultron-bloque {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+  gap: 1.5rem;
+  width: 100%;
+  margin-top: 1.5rem;
+}
+
+/* === Tarjetas dentro del bloque === */
+.ultron-bloque .tarjeta-senal,
+.ultron-bloque .tarjeta-analisis,
+.ultron-bloque .bloque-configuracion {
+  flex: 1 1 0;
+  min-width: 0;
+  background-color: #0d1117;
+  border-radius: 10px;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.15);
+  color: #ffffff;
+}
+
+/* === Igualar alturas visuales === */
+.ultron-bloque .tarjeta-senal,
+.ultron-bloque .tarjeta-analisis,
+.ultron-bloque .bloque-configuracion {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+/* === Responsive === */
+@media (max-width: 1100px) {
+  .ultron-bloque-wrapper .ultron-bloque {
+    flex-wrap: wrap;
+  }
+}
 
 
 
