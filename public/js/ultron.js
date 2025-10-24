@@ -73,6 +73,9 @@ function renderListaActivos(categoria) {
 async function realizarAnalisis(simbolo) {
   const estrategiasActivas = obtenerEstadoEstrategias();
 
+  // Guardamos las estrategias actuales en localStorage (para sincronía visual)
+  localStorage.setItem("estrategiasActivas", JSON.stringify(estrategiasActivas));
+
   let contenedor = document.getElementById("contenedor-activos");
   if (!contenedor) {
     contenedor = document.createElement("div");
@@ -107,9 +110,11 @@ async function realizarAnalisis(simbolo) {
       else document.body.prepend(barra);
     }
 
-    barra.textContent = `🔍 Escaneando: ${resultado.simbolo} – Estrategia: ${resultado.tipoEntrada || "Sin estrategia activa"}`;
+    // 🔧 Mostrar estrategia activa incluso sin señal
+    const estrategiaTexto = obtenerNombreEstrategiaActiva(resultado.tipoEntrada);
+    barra.textContent = `🔍 Escaneando: ${resultado.simbolo} – Estrategia: ${estrategiaTexto}`;
 
-    // === Renderiza bloques principales (ahora unificados) ===
+    // === Renderiza bloques principales (unificados) ===
     contenedor.innerHTML = `
       <div class="ultron-bloque-wrapper">
         <div class="ultron-bloque">
@@ -141,16 +146,30 @@ async function realizarAnalisis(simbolo) {
   }
 }
 
-// === Renderiza bloque compacto y jerárquico del Análisis Estratégico ===
+// === Función auxiliar para mostrar estrategia activa aunque no haya señal ===
+function obtenerNombreEstrategiaActiva(tipoEntrada) {
+  if (tipoEntrada) return tipoEntrada;
+
+  const estrategias = JSON.parse(localStorage.getItem("estrategiasActivas") || "{}");
+  if (estrategias.cambioCiclo) return "Reversión Institucional";
+  if (estrategias.cajaDarvas) return "Caja Darvas";
+  if (estrategias.tendencia) return "Continuación de Tendencia";
+  if (estrategias.supertrendDoble) return "Supertrend Doble";
+  return "Sin estrategia activa";
+}
+
+// === Renderiza bloque del Análisis Estratégico ===
 function renderAnalisisEstrategico(resultado) {
   const simbolo = resultado.simbolo || "Activo desconocido";
   const precio = resultado.entry || resultado.precioActual || "Sin datos";
-  const estrategia = resultado.tipoEntrada || "Sin estrategia";
+  const estrategia = obtenerNombreEstrategiaActiva(resultado.tipoEntrada);
   const decision = resultado.decision || "NEUTRO";
   const riesgo = resultado.riesgo || "Bajo";
   const estructura = resultado.estructura || "No confirmada";
   const volumen = resultado.volumen || "Bajo";
-  const sesion = resultado.session || "Desconocida";
+  const sesion = resultado.session && resultado.session !== "undefined"
+    ? resultado.session
+    : "Fuera de horario / No disponible";
   const sl = resultado.stop || "-";
   const tp1 = resultado.tp1 || "-";
   const tp2 = resultado.tp2 || "-";
@@ -219,7 +238,6 @@ function renderAnalisisEstrategico(resultado) {
     </div>
   `;
 }
-
 
 // === Utilidades ===
 function formatearSimbolo(simbolo) {
