@@ -20,7 +20,7 @@
 /* === SEÑAL ACTIVA (más compacta) === */
 .tarjeta-senal {
   flex: 0.7;
-  max-width: 260px;
+  max-width: 210px;
   background-color: #0d1117;
   border: 1px solid #FFD700;
   border-radius: 10px;
