@@ -142,57 +142,83 @@ async function realizarAnalisis(simbolo) {
   }
 }
 
-// === Renderiza la tarjeta de señal activa ===
-function renderTarjetaSenalActiva(simbolo, precio = 1.0) {
-  const pipSize = getPipSize(simbolo);
-  const precioNum = parseFloat(precio);
-  const sl = (precioNum - 50 * pipSize).toFixed(5);
-  const tp1 = (precioNum + 50 * pipSize).toFixed(5);
-  const tp2 = (precioNum + 80 * pipSize).toFixed(5);
-  const tp3 = (precioNum + 100 * pipSize).toFixed(5);
-
-  return `
-    <div class="tarjeta-senal">
-      <h3>📡 Señal Activa</h3>
-      <p><strong>Activo:</strong> ${formatearSimbolo(simbolo)}</p>
-      <p><strong>Precio Actual:</strong> ${precioNum}</p>
-      <p><strong>SL:</strong> ${sl} <span class="gris">(50 pips abajo)</span></p>
-      <p><strong>TP1:</strong> ${tp1} <span class="gris">(50 pips arriba)</span></p>
-      <p><strong>TP2:</strong> ${tp2} <span class="gris">(80 pips arriba)</span></p>
-      <p><strong>TP3:</strong> ${tp3} <span class="gris">(100 pips arriba)</span></p>
-      <p><strong>Estado:</strong> 🟢 Activo</p>
-    </div>
-  `;
-}
-
+// === Renderiza bloque unificado: Análisis Estratégico ULTRÓN ===
 function renderAnalisisEstrategico(resultado) {
+  const simbolo = resultado.simbolo || "Activo desconocido";
+  const precio = resultado.entry || resultado.precioActual || "⚠️ Sin datos válidos";
+  const sl = resultado.stop || "-";
+  const tp1 = resultado.tp1 || "-";
+  const tp2 = resultado.tp2 || "-";
+  const tp3 = resultado.tp3 || "-";
+
+  // Color de decisión (verde si operar, rojo si no)
+  const claseDecision =
+    resultado.decision === "OPERAR" ? "verde" :
+    resultado.decision === "NO OPERAR" ? "rojo" : "amarillo";
+
   return `
     <div class="tarjeta-analisis">
       <h3>🧠 Análisis Estratégico ULTRÓN</h3>
 
-      <div class="bloque-diagnostico">
-        <label>Decisión:</label>
-        <div class="campo-valor ${resultado.decision === "OPERAR" ? "verde" : "rojo"}">
-          ${resultado.decision || "N/A"}
+      <!-- === Primera fila: activo y estado === -->
+      <div class="fila-analisis">
+        <div class="campo">
+          <label>Activo:</label>
+          <span class="valor">${simbolo}</span>
         </div>
-
-        <label>Tipo de Entrada:</label>
-        <div class="campo-valor">${resultado.tipoEntrada || "N/A"}</div>
-
-        <label>Riesgo:</label>
-        <div class="campo-valor">${resultado.riesgo || "Bajo"}</div>
+        <div class="campo">
+          <label>Precio Actual:</label>
+          <span class="valor ${precio.includes("⚠️") ? "rojo" : "verde"}">${precio}</span>
+        </div>
+        <div class="campo">
+          <label>Estado:</label>
+          <span class="valor ${claseDecision}">
+            ${resultado.decision || "Neutro"}
+          </span>
+        </div>
+        <div class="campo">
+          <label>Estrategia:</label>
+          <span class="valor">${resultado.tipoEntrada || "Sin estrategia"}</span>
+        </div>
       </div>
 
-      <div class="bloque-estructura">
-        <h4>📈 Estructura Detectada</h4>
-        <p class="sl">SL: ${resultado.stop || "-"}</p>
-        <p class="tp">TP1: ${resultado.tp1 || "-"}</p>
-        <p class="tp">TP2: ${resultado.tp2 || "-"}</p>
-        <p class="tp">TP3: ${resultado.tp3 || "-"}</p>
+      <!-- === Segunda fila: estructura táctica === -->
+      <div class="fila-analisis">
+        <div class="campo">
+          <label>Riesgo:</label>
+          <span class="valor">${resultado.riesgo || "Bajo"}</span>
+        </div>
+        <div class="campo">
+          <label>Estructura:</label>
+          <span class="valor">${resultado.estructura || "No confirmada"}</span>
+        </div>
+        <div class="campo">
+          <label>Volumen:</label>
+          <span class="valor">${resultado.volumen || "Bajo"}</span>
+        </div>
+        <div class="campo">
+          <label>Sesión:</label>
+          <span class="valor">${resultado.session || "Desconocida"}</span>
+        </div>
       </div>
 
+      <!-- === Tercera fila: lectura rápida === -->
+      <div class="fila-lectura">
+        <label>📊 Última Lectura:</label>
+        <span class="valor">${resultado.ultimaLectura || "BOS no validado"}</span>
+      </div>
+
+      <!-- === Cuarta fila: niveles detectados === -->
+      <div class="fila-niveles">
+        <span class="nivel rojo">SL: ${sl}</span>
+        <span class="nivel verde">TP1: ${tp1}</span>
+        <span class="nivel verde">TP2: ${tp2}</span>
+        <span class="nivel verde">TP3: ${tp3}</span>
+      </div>
+
+      <!-- === Quinta fila: razones === -->
       <div class="bloque-razones">
-        <h4>⚙️ Razones del Análisis</h4>
+        <h4>💬 Razones del Análisis</h4>
         <ul>
           ${
             resultado.razones?.length
@@ -202,9 +228,10 @@ function renderAnalisisEstrategico(resultado) {
         </ul>
       </div>
 
+      <!-- === Footer === -->
       <div class="footer-analisis">
-        <p><strong>Sesión:</strong> ${resultado.session || "Desconocida"}</p>
         <p><strong>Hora local:</strong> ${resultado.horaLocal || "No disponible"}</p>
+        <p><strong>Última actualización:</strong> hace 1 min</p>
       </div>
     </div>
   `;

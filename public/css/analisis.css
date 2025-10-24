@@ -1,4 +1,6 @@
-/* === CONTENEDOR PRINCIPAL === */
+/* === ANALISIS.CSS – versión limpia, optimizada y unificada === */
+
+/* === Contenedor principal === */
 .ultron-bloque-wrapper {
   background: transparent;
   width: 100%;
@@ -17,153 +19,151 @@
   background: transparent;
 }
 
-/* === SEÑAL ACTIVA (más compacta) === */
+/* === Señal Activa (bloque eliminado, pero se conserva por compatibilidad visual si se reusa) === */
 .tarjeta-senal {
-  flex: 0.7;
-  max-width: 210px;
-  background-color: #0d1117;
-  border: 1px solid #FFD700;
-  border-radius: 10px;
-  padding: 0.8rem 1rem;
-  color: #ffffff;
-  box-shadow: 0 0 8px rgba(255, 215, 0, 0.15);
-  height: 300px;
+  display: none; /* Oculto (ya integrado en el bloque principal) */
 }
 
-.tarjeta-senal h3 {
-  color: #FFD700;
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
-}
-
-/* === BLOQUE ANÁLISIS ESTRATÉGICO ULTRÓN === */
+/* === BLOQUE UNIFICADO: ANÁLISIS ESTRATÉGICO ULTRÓN === */
 .tarjeta-analisis {
-  flex: 1.2;
-  min-width: 0;
   background-color: #0b0f1a;
   border: 1px dashed #00bcd4;
   border-radius: 12px;
-  padding: 10px 12px;
+  padding: 14px 18px;
   color: #ffffff;
-  font-size: 13.5px;
+  font-size: 14px;
   line-height: 1.4;
-  box-shadow: 0 0 5px rgba(0, 188, 212, 0.15);
+  box-shadow: 0 0 8px rgba(0, 188, 212, 0.15);
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  height: 370px; /* 🔹 ajustado para alinearse con Configuración Rápida */
-  overflow: hidden;
 }
 
-/* === ENCABEZADO === */
+/* === Encabezado === */
 .tarjeta-analisis h3 {
   font-size: 15px;
   color: #00ffff;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   text-transform: uppercase;
   border-bottom: 1px solid #00bcd455;
   padding-bottom: 4px;
+  text-align: center;
   letter-spacing: 0.5px;
 }
 
-/* === SECCIÓN: DIAGNÓSTICO (alineado horizontal) === */
-.bloque-diagnostico {
-  display: grid;
-  grid-template-columns: 120px 1fr;
-  align-items: center;
-  row-gap: 6px;
-  column-gap: 10px;
-  margin-bottom: 8px;
-}
-
-.bloque-diagnostico label {
-  font-weight: bold;
-  font-size: 13px;
-  color: #d0d0d0;
-  text-align: right;
-}
-
-.bloque-diagnostico .campo-valor {
-  background-color: #101828;
-  border: 1px solid #1e2b3c;
-  border-radius: 6px;
-  padding: 5px 7px;
-  font-size: 13px;
-  color: #00eaff;
-  text-align: center;
-}
-
-/* Colores condicionales */
-.campo-valor.verde { color: #00ff88; }
-.campo-valor.rojo { color: #ff6060; }
-.campo-valor.amarillo { color: #ffd700; }
-
-/* === SECCIÓN: ESTRUCTURA DETECTADA === */
-.bloque-estructura {
-  margin-top: 6px;
-  background-color: #0f1422;
-  border: 1px dashed #1e2b3c;
-  border-radius: 6px;
-  padding: 6px 8px;
-}
-
-.bloque-estructura h4 {
-  font-size: 13px;
-  color: #00ffff;
-  margin-bottom: 4px;
-}
-
-.bloque-estructura p {
-  font-size: 12.5px;
-  margin: 2px 0;
+/* === Filas generales === */
+.fila-analisis,
+.fila-lectura,
+.fila-niveles {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
 }
 
-.bloque-estructura .sl { color: #ff5a5a; }
-.bloque-estructura .tp { color: #00ff88; }
+/* === Campos tácticos === */
+.campo {
+  flex: 1 1 22%;
+  display: flex;
+  justify-content: space-between;
+  background: #101828;
+  border-radius: 6px;
+  padding: 6px 10px;
+  border: 1px solid #1e2b3c;
+  align-items: center;
+}
 
-/* === SECCIÓN: RAZONES DEL ANÁLISIS === */
+.campo label {
+  font-weight: bold;
+  color: #ccc;
+  font-size: 13px;
+}
+
+.valor {
+  font-weight: 500;
+  font-size: 13px;
+}
+
+/* === Colores dinámicos === */
+.verde { color: #00ff88; }
+.rojo { color: #ff5a5a; }
+.amarillo { color: #ffd700; }
+
+/* === Fila de lectura rápida === */
+.fila-lectura {
+  background: #101828;
+  border-radius: 6px;
+  border: 1px solid #1e2b3c;
+  padding: 6px 10px;
+  font-size: 13px;
+  justify-content: flex-start;
+  gap: 12px;
+}
+
+/* === Fila de niveles SL / TP === */
+.fila-niveles {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  margin-bottom: 10px;
+}
+
+.fila-niveles .nivel {
+  flex: 1;
+  text-align: center;
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-weight: bold;
+  background-color: #101828;
+  border: 1px solid #1e2b3c;
+}
+
+.fila-niveles .rojo { color: #ff5a5a; }
+.fila-niveles .verde { color: #00ff88; }
+
+/* === Bloque de razones === */
 .bloque-razones {
-  margin-top: 6px;
   background-color: #0f1422;
   border: 1px dashed #1e2b3c;
   border-radius: 6px;
-  padding: 6px 8px;
-  flex-grow: 1;
-  overflow-y: auto;
+  padding: 8px;
+  margin-top: 10px;
 }
 
 .bloque-razones h4 {
-  font-size: 13px;
   color: #00ffff;
+  font-size: 13px;
   margin-bottom: 4px;
+  text-transform: uppercase;
 }
 
 .bloque-razones ul {
   list-style: none;
-  padding-left: 0;
+  padding: 0;
   margin: 0;
 }
 
 .bloque-razones li {
-  font-size: 12px;
+  font-size: 12.5px;
   color: #ccc;
-  margin-bottom: 2px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
+  margin-bottom: 3px;
 }
 
-.bloque-razones li.ok::before { content: "✅"; }
-.bloque-razones li.warn::before { content: "⚠️"; color: #ffd700; }
-.bloque-razones li.err::before { content: "❌"; color: #ff6060; }
+.bloque-razones li.ok::before { content: "✅ "; }
+.bloque-razones li.warn::before { content: "⚠️ "; color: #ffd700; }
+.bloque-razones li.err::before { content: "❌ "; color: #ff5a5a; }
 
-/* === FOOTER === */
+/* === Footer === */
 .footer-analisis {
-  margin-top: 6px;
+  margin-top: 10px;
   border-top: 1px solid #1e2b3c;
-  padding-top: 5px;
+  padding-top: 6px;
   font-size: 12px;
   color: #aaa;
   display: flex;
@@ -175,3 +175,38 @@
   color: #00ffff;
   font-weight: bold;
 }
+
+/* === Ajustes responsivos === */
+@media (max-width: 1100px) {
+  .ultron-bloque {
+    flex-wrap: wrap;
+  }
+
+  .tarjeta-analisis {
+    max-width: 100%;
+    padding: 12px;
+  }
+
+  .campo {
+    flex: 1 1 45%;
+  }
+
+  .fila-niveles {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 700px) {
+  .campo {
+    flex: 1 1 100%;
+  }
+
+  .fila-niveles .nivel {
+    flex: 1 1 45%;
+  }
+
+  .tarjeta-analisis {
+    font-size: 13px;
+  }
+}
+
