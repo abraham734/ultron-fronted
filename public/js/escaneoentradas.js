@@ -1,5 +1,5 @@
-// === escaneoentradas.js (frontend – solo visual) ===
-// Muestra visualmente el estado del escaneo secuencial sin lógica de análisis
+// === escaneoentradas.js (frontend – visual y sincronizado 23/oct/2025) ===
+// Recorre visualmente los activos en secuencia y muestra las estrategias activas correctamente
 
 import { activosPorCategoria } from "./watchlist.js";
 import { obtenerEstadoEstrategias } from "./switches.js";
@@ -26,22 +26,27 @@ function escanearVisualmenteSiguienteActivo() {
   const activo = activosSecuenciales[indiceActivoActual];
   const simbolo = activo.simbolo;
 
-  // 🧠 Detectar estrategias activas
+  // 🧠 Detectar estrategias activas (ahora con nombres sincronizados)
   const estrategias = obtenerEstadoEstrategias();
   const estrategiasActivas = [];
 
   if (estrategias.supertrendDoble) estrategiasActivas.push("Supertrend Doble");
-  if (estrategias.ciclo) estrategiasActivas.push("Reversión Institucional");
-  if (estrategias.darvas) estrategiasActivas.push("Caja Darvas");
+  if (estrategias.cambioCiclo) estrategiasActivas.push("Reversión Institucional");
+  if (estrategias.cajaDarvas) estrategiasActivas.push("Caja Darvas");
   if (estrategias.tendencia) estrategiasActivas.push("Continuación de Tendencia");
 
-  const estrategiaTexto = estrategiasActivas.length > 0
-    ? `Estrategias: ${estrategiasActivas.join(", ")}`
-    : "Sin estrategia activa";
+  // 📊 Construcción del mensaje
+  const estrategiaTexto =
+    estrategiasActivas.length > 0
+      ? `Estrategias: ${estrategiasActivas.join(", ")}`
+      : "Sin estrategia activa";
 
   const mensaje = `📊 Escaneando: ${simbolo} – ${estrategiaTexto}`;
   console.log(mensaje);
   actualizarVisual(mensaje);
+
+  // 🧩 Log adicional para confirmar que sí se están leyendo correctamente
+  console.log("🧠 Estado completo de estrategias:", estrategias);
 
   // Avanza al siguiente activo
   indiceActivoActual = (indiceActivoActual + 1) % activosSecuenciales.length;
