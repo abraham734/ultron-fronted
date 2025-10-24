@@ -24,16 +24,16 @@
   background-color: #0d1117;
   border: 1px solid #FFD700;
   border-radius: 10px;
-  padding: 0.9rem 1.2rem;
+  padding: 0.8rem 1rem;
   color: #ffffff;
   box-shadow: 0 0 8px rgba(255, 215, 0, 0.15);
-  height: 310px; /* 🔹 reducida a la mitad visual */
+  height: 300px;
 }
 
 .tarjeta-senal h3 {
   color: #FFD700;
   font-size: 1rem;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.5rem;
 }
 
 /* === BLOQUE ANÁLISIS ESTRATÉGICO ULTRÓN === */
@@ -43,15 +43,16 @@
   background-color: #0b0f1a;
   border: 1px dashed #00bcd4;
   border-radius: 12px;
-  padding: 10px 14px;
+  padding: 10px 12px;
   color: #ffffff;
-  font-size: 14px;
+  font-size: 13.5px;
   line-height: 1.4;
   box-shadow: 0 0 5px rgba(0, 188, 212, 0.15);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 400px; /* 🔹 ajustado para igualar Configuración Rápida */
+  height: 370px; /* 🔹 ajustado para alinearse con Configuración Rápida */
+  overflow: hidden;
 }
 
 /* === ENCABEZADO === */
@@ -65,42 +66,45 @@
   letter-spacing: 0.5px;
 }
 
-/* === SECCIÓN: DIAGNÓSTICO === */
+/* === SECCIÓN: DIAGNÓSTICO (alineado horizontal) === */
 .bloque-diagnostico {
-  margin-bottom: 10px;
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  align-items: center;
+  row-gap: 6px;
+  column-gap: 10px;
+  margin-bottom: 8px;
 }
 
 .bloque-diagnostico label {
-  display: block;
   font-weight: bold;
   font-size: 13px;
   color: #d0d0d0;
-  margin-top: 5px;
-  margin-bottom: 2px;
+  text-align: right;
 }
 
 .bloque-diagnostico .campo-valor {
-  width: 100%;
   background-color: #101828;
   border: 1px solid #1e2b3c;
   border-radius: 6px;
   padding: 5px 7px;
   font-size: 13px;
   color: #00eaff;
+  text-align: center;
 }
 
+/* Colores condicionales */
 .campo-valor.verde { color: #00ff88; }
 .campo-valor.rojo { color: #ff6060; }
 .campo-valor.amarillo { color: #ffd700; }
 
 /* === SECCIÓN: ESTRUCTURA DETECTADA === */
 .bloque-estructura {
-  margin-top: 8px;
-  margin-bottom: 10px;
+  margin-top: 6px;
   background-color: #0f1422;
   border: 1px dashed #1e2b3c;
   border-radius: 6px;
-  padding: 7px;
+  padding: 6px 8px;
 }
 
 .bloque-estructura h4 {
@@ -110,8 +114,10 @@
 }
 
 .bloque-estructura p {
-  font-size: 13px;
+  font-size: 12.5px;
   margin: 2px 0;
+  display: flex;
+  justify-content: space-between;
 }
 
 .bloque-estructura .sl { color: #ff5a5a; }
@@ -119,12 +125,13 @@
 
 /* === SECCIÓN: RAZONES DEL ANÁLISIS === */
 .bloque-razones {
-  margin-top: 8px;
+  margin-top: 6px;
   background-color: #0f1422;
   border: 1px dashed #1e2b3c;
   border-radius: 6px;
-  padding: 7px;
+  padding: 6px 8px;
   flex-grow: 1;
+  overflow-y: auto;
 }
 
 .bloque-razones h4 {
@@ -136,27 +143,25 @@
 .bloque-razones ul {
   list-style: none;
   padding-left: 0;
+  margin: 0;
 }
 
 .bloque-razones li {
-  font-size: 12.5px;
+  font-size: 12px;
   color: #ccc;
   margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
-.bloque-razones li::before {
-  content: "• ";
-  color: #00ffff;
-  font-weight: bold;
-}
-
-.bloque-razones li.ok::before { content: "✅ "; }
-.bloque-razones li.warn::before { content: "⚠️ "; color: #ffd700; }
-.bloque-razones li.err::before { content: "❌ "; color: #ff6060; }
+.bloque-razones li.ok::before { content: "✅"; }
+.bloque-razones li.warn::before { content: "⚠️"; color: #ffd700; }
+.bloque-razones li.err::before { content: "❌"; color: #ff6060; }
 
 /* === FOOTER === */
 .footer-analisis {
-  margin-top: 8px;
+  margin-top: 6px;
   border-top: 1px solid #1e2b3c;
   padding-top: 5px;
   font-size: 12px;
