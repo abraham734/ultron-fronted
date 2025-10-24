@@ -109,11 +109,10 @@ async function realizarAnalisis(simbolo) {
 
     barra.textContent = `🔍 Escaneando: ${resultado.simbolo} – Estrategia: ${resultado.tipoEntrada || "Sin estrategia activa"}`;
 
-    // === Renderiza módulos principales ===
+    // === Renderiza bloques principales (ahora unificados) ===
     contenedor.innerHTML = `
       <div class="ultron-bloque-wrapper">
         <div class="ultron-bloque">
-          ${renderTarjetaSenalActiva(resultado.simbolo, resultado.entry || "1.0000")}
           ${renderAnalisisEstrategico(resultado)}
           ${renderConfiguracionRapida(resultado.simbolo, resultado.entry || "1.0000")}
         </div>
@@ -151,7 +150,6 @@ function renderAnalisisEstrategico(resultado) {
   const tp2 = resultado.tp2 || "-";
   const tp3 = resultado.tp3 || "-";
 
-  // Color de decisión (verde si operar, rojo si no)
   const claseDecision =
     resultado.decision === "OPERAR" ? "verde" :
     resultado.decision === "NO OPERAR" ? "rojo" : "amarillo";
@@ -236,7 +234,6 @@ function renderAnalisisEstrategico(resultado) {
     </div>
   `;
 }
-
 
 // === Utilidades ===
 function formatearSimbolo(simbolo) {
