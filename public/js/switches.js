@@ -1,5 +1,6 @@
 // === switches.js ===
 // Control de encendido/apagado de estrategias Ultron (Frontend)
+// Versión sincronizada con motorDecisionUltron 23/oct/2025
 
 const BACKEND_URL = window.location.hostname.includes("vercel.app")
   ? "https://ultron-backend-zvtm.onrender.com"
@@ -14,17 +15,19 @@ export function renderSwitches() {
     <div class="estrategia-toggle">
       <span>📦 Caja Darvas</span>
       <label class="switch">
-        <input type="checkbox" id="toggle-darvas">
+        <input type="checkbox" id="toggle-cajaDarvas">
         <span class="slider"></span>
       </label>
     </div>
+
     <div class="estrategia-toggle">
-      <span>🧠 Cambio Ciclo</span>
+      <span>🧠 Cambio de Ciclo</span>
       <label class="switch">
-        <input type="checkbox" id="toggle-ciclo">
+        <input type="checkbox" id="toggle-cambioCiclo">
         <span class="slider"></span>
       </label>
     </div>
+
     <div class="estrategia-toggle">
       <span>📈 Tendencia</span>
       <label class="switch">
@@ -32,6 +35,7 @@ export function renderSwitches() {
         <span class="slider"></span>
       </label>
     </div>
+
     <div class="estrategia-toggle">
       <span>💎 Supertrend Doble</span>
       <label class="switch">
@@ -41,24 +45,31 @@ export function renderSwitches() {
     </div>
   `;
 
-  // Restaurar estado desde localStorage y agregar eventos
-  const switches = ["toggle-darvas", "toggle-ciclo", "toggle-tendencia", "toggle-supertrendDoble"];
-  switches.forEach(id => {
+  // === Restaurar estados desde localStorage ===
+  const switches = [
+    "toggle-cajaDarvas",
+    "toggle-cambioCiclo",
+    "toggle-tendencia",
+    "toggle-supertrendDoble"
+  ];
+
+  switches.forEach((id) => {
     const toggle = document.getElementById(id);
     const saved = localStorage.getItem(id);
     if (saved !== null) toggle.checked = saved === "true";
 
     toggle.addEventListener("change", () => {
       localStorage.setItem(id, toggle.checked);
+      console.log(`🎚️ Estrategia ${id.replace("toggle-", "")} => ${toggle.checked ? "ON" : "OFF"}`);
     });
   });
 }
 
-// === Consulta los estados actualizados desde la interfaz ===
+// === Devuelve el estado actual de las estrategias ===
 export function obtenerEstadoEstrategias() {
   return {
-    darvas: document.getElementById("toggle-darvas")?.checked ?? false,
-    ciclo: document.getElementById("toggle-ciclo")?.checked ?? false,
+    cajaDarvas: document.getElementById("toggle-cajaDarvas")?.checked ?? false,
+    cambioCiclo: document.getElementById("toggle-cambioCiclo")?.checked ?? false,
     tendencia: document.getElementById("toggle-tendencia")?.checked ?? false,
     supertrendDoble: document.getElementById("toggle-supertrendDoble")?.checked ?? false
   };
