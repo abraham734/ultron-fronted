@@ -1,63 +1,83 @@
-// === escaneoentradas.js (frontend – visual y sincronizado 23/oct/2025) ===
-// Recorre visualmente los activos en secuencia y muestra las estrategias activas correctamente
+// === escaneoentradas.js (frontend – escaneo REAL secuencial, 1/min) ===
+// Recorre los activos uno por minuto, aplica las estrategias activas y
+// usa la MISMA barra .barra-escaneo que el análisis manual.
 
+// Watchlist y switches (para pintar nombres en la barra mientras llega la respuesta)
 import { activosPorCategoria } from "./watchlist.js";
 import { obtenerEstadoEstrategias } from "./switches.js";
 
-// 🧩 Unifica todos los activos por categoría
+// Usamos la misma función que el análisis manual para no duplicar lógica
+import { realizarAnalisis } from "./ultron.js";
+
+// 🧩 Unifica todos los activos por categoría (orden secuencial)
 const activosSecuenciales = [
   ...(activosPorCategoria.Forex || []),
   ...(activosPorCategoria.Acciones || []),
   ...(activosPorCategoria.Índices || []),
-  ...(activosPorCategoria.Criptomonedas || [])
+  ...(activosPorCategoria.Criptomonedas || []),
 ];
 
 let indiceActivoActual = 0;
 const intervaloMinutos = 1;
+let escaneoEnProgreso = false;
 
-// 🔁 Función principal visual: solo recorre y actualiza barra
-function escanearVisualmenteSiguienteActivo() {
-  if (activosSecuenciales.length === 0) {
-    console.warn("⚠️ No hay activos disponibles en la watchlist.");
-    actualizarVisual("⚠️ Sin activos en la lista.");
+// 🧷 Asegura que existe una única barra compartida
+function getBarraEscaneo() {
+  let barra = document.querySelector(".barra-escaneo");
+  if (!barra) {
+    barra = document.createElement("div");
+    barra.classList.add("barra-escaneo");
+    const main = document.getElementById("contenedor-activos");
+    if (main) main.insertAdjacentElement("beforebegin", barra);
+    else document.body.prepend(barra);
+  }
+  return barra;
+}
+
+function etiquetasEstrategias() {
+  const e = obtenerEstadoEstrategias();
+  const activas = [];
+  if (e.cajaDarvas) activas.push("Caja Darvas");
+  if (e.cambioCiclo) activas.push("Reversión Institucional");
+  if (e.tendencia) activas.push("Continuación de Tendencia");
+  if (e.supertrendDoble) activas.push("Supertrend Doble");
+  return activas.length ? activas.join(", ") : "Sin estrategia activa";
+}
+
+// 🔁 Escaneo REAL (await al backend) – uno por minuto
+async function escanearSiguienteActivo() {
+  if (escaneoEnProgreso) return;
+  if (!activosSecuenciales.length) {
+    console.warn("⚠️ No hay activos en la watchlist.");
+    getBarraEscaneo().textContent = "⚠️ Sin activos en la lista.";
     return;
   }
 
-  const activo = activosSecuenciales[indiceActivoActual];
-  const simbolo = activo.simbolo;
+  escaneoEnProgreso = true;
 
-  // 🧠 Detectar estrategias activas (ahora con nombres sincronizados)
-  const estrategias = obtenerEstadoEstrategias();
-  const estrategiasActivas = [];
+  try {
+    const activo = activosSecuenciales[indiceActivoActual];
+    const simbolo = activo.simbolo;
+    const textoEstrategias = etiquetasEstrategias();
 
-  if (estrategias.supertrendDoble) estrategiasActivas.push("Supertrend Doble");
-  if (estrategias.cambioCiclo) estrategiasActivas.push("Reversión Institucional");
-  if (estrategias.cajaDarvas) estrategiasActivas.push("Caja Darvas");
-  if (estrategias.tendencia) estrategiasActivas.push("Continuación de Tendencia");
+    // Mensaje intermedio (antes de la respuesta del backend)
+    const barra = getBarraEscaneo();
+    barra.textContent = `🔍 Escaneando: ${simbolo} – Estrategia: ${textoEstrategias}`;
+    console.log(`📊 Escaneando (AUTO): ${simbolo} – ${textoEstrategias}`);
 
-  // 📊 Construcción del mensaje
-  const estrategiaTexto =
-    estrategiasActivas.length > 0
-      ? `Estrategias: ${estrategiasActivas.join(", ")}`
-      : "Sin estrategia activa";
+    // 👉 Llama a la MISMA función del análisis manual (envía estrategias y actualiza todo)
+    await realizarAnalisis(simbolo);
 
-  const mensaje = `📊 Escaneando: ${simbolo} – ${estrategiaTexto}`;
-  console.log(mensaje);
-  actualizarVisual(mensaje);
-
-  // 🧩 Log adicional para confirmar que sí se están leyendo correctamente
-  console.log("🧠 Estado completo de estrategias:", estrategias);
-
-  // Avanza al siguiente activo
-  indiceActivoActual = (indiceActivoActual + 1) % activosSecuenciales.length;
+  } catch (err) {
+    console.error("❌ Error en escaneo automático:", err);
+    getBarraEscaneo().textContent = `❌ Error de escaneo: ${err?.message || err}`;
+  } finally {
+    // Avanza al siguiente activo y libera el lock
+    indiceActivoActual = (indiceActivoActual + 1) % activosSecuenciales.length;
+    escaneoEnProgreso = false;
+  }
 }
 
-// 🔧 Actualiza visualmente el DOM
-function actualizarVisual(texto) {
-  const contenedor = document.getElementById("estado-escaneo");
-  if (contenedor) contenedor.textContent = texto;
-}
-
-// 🚀 Iniciar escaneo visual cada minuto
-escanearVisualmenteSiguienteActivo();
-setInterval(escanearVisualmenteSiguienteActivo, intervaloMinutos * 60 * 1000);
+// 🚀 Primer disparo inmediato + intervalo (1/min) SIN solaparse
+escanearSiguienteActivo();
+setInterval(escanearSiguienteActivo, intervaloMinutos * 60 * 1000);
