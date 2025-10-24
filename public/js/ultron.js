@@ -141,99 +141,85 @@ async function realizarAnalisis(simbolo) {
   }
 }
 
-// === Renderiza bloque unificado: Análisis Estratégico ULTRÓN ===
+// === Renderiza bloque compacto y jerárquico del Análisis Estratégico ===
 function renderAnalisisEstrategico(resultado) {
   const simbolo = resultado.simbolo || "Activo desconocido";
-  const precio = resultado.entry || resultado.precioActual || "⚠️ Sin datos válidos";
+  const precio = resultado.entry || resultado.precioActual || "Sin datos";
+  const estrategia = resultado.tipoEntrada || "Sin estrategia";
+  const decision = resultado.decision || "NEUTRO";
+  const riesgo = resultado.riesgo || "Bajo";
+  const estructura = resultado.estructura || "No confirmada";
+  const volumen = resultado.volumen || "Bajo";
+  const sesion = resultado.session || "Desconocida";
   const sl = resultado.stop || "-";
   const tp1 = resultado.tp1 || "-";
   const tp2 = resultado.tp2 || "-";
   const tp3 = resultado.tp3 || "-";
+  const lectura = resultado.ultimaLectura || "BOS no validado";
+  const razones =
+    resultado.razones?.length
+      ? resultado.razones.join(" + ")
+      : "Sin razones disponibles";
 
-  const claseDecision =
-    resultado.decision === "OPERAR" ? "verde" :
-    resultado.decision === "NO OPERAR" ? "rojo" : "amarillo";
+  // Color contextual
+  const colorDecision =
+    decision === "OPERAR" ? "verde" :
+    decision === "NO OPERAR" ? "rojo" : "gris";
 
   return `
     <div class="tarjeta-analisis">
       <h3>🧠 Análisis Estratégico ULTRÓN</h3>
 
-      <!-- === Primera fila: activo y estado === -->
-      <div class="fila-analisis">
-        <div class="campo">
-          <label>Activo:</label>
-          <span class="valor">${simbolo}</span>
+      <!-- Línea principal -->
+      <div class="linea-principal">
+        <div class="activo-bloque">
+          <span class="etiqueta">Activo:</span> 
+          <span class="activo-nombre">${simbolo}</span>
+          <span class="activo-precio">${precio}</span>
         </div>
-        <div class="campo">
-          <label>Precio Actual:</label>
-          <span class="valor ${precio.includes("⚠️") ? "rojo" : "verde"}">${precio}</span>
-        </div>
-        <div class="campo">
-          <label>Estado:</label>
-          <span class="valor ${claseDecision}">
-            ${resultado.decision || "Neutro"}
-          </span>
-        </div>
-        <div class="campo">
-          <label>Estrategia:</label>
-          <span class="valor">${resultado.tipoEntrada || "Sin estrategia"}</span>
+        <div class="estrategia-bloque">
+          <span class="etiqueta">Estrategia:</span> 
+          <span class="estrategia">${estrategia}</span> |
+          <span class="etiqueta">Estado:</span> 
+          <span class="estado ${colorDecision}">${decision}</span>
         </div>
       </div>
 
-      <!-- === Segunda fila: estructura táctica === -->
-      <div class="fila-analisis">
-        <div class="campo">
-          <label>Riesgo:</label>
-          <span class="valor">${resultado.riesgo || "Bajo"}</span>
-        </div>
-        <div class="campo">
-          <label>Estructura:</label>
-          <span class="valor">${resultado.estructura || "No confirmada"}</span>
-        </div>
-        <div class="campo">
-          <label>Volumen:</label>
-          <span class="valor">${resultado.volumen || "Bajo"}</span>
-        </div>
-        <div class="campo">
-          <label>Sesión:</label>
-          <span class="valor">${resultado.session || "Desconocida"}</span>
-        </div>
+      <!-- Línea de contexto -->
+      <div class="linea-contexto">
+        <span>Riesgo: <strong>${riesgo}</strong></span> |
+        <span>Estructura: <strong>${estructura}</strong></span> |
+        <span>Volumen: <strong>${volumen}</strong></span> |
+        <span>Sesión: <strong>${sesion}</strong></span>
       </div>
 
-      <!-- === Tercera fila: lectura rápida === -->
-      <div class="fila-lectura">
-        <label>📊 Última Lectura:</label>
-        <span class="valor">${resultado.ultimaLectura || "BOS no validado"}</span>
+      <!-- Línea de niveles -->
+      <div class="linea-niveles">
+        <span class="sl">SL: ${sl}</span> |
+        <span class="tp">TP1: ${tp1}</span> |
+        <span class="tp">TP2: ${tp2}</span> |
+        <span class="tp">TP3: ${tp3}</span>
       </div>
 
-      <!-- === Cuarta fila: niveles detectados === -->
-      <div class="fila-niveles">
-        <span class="nivel rojo">SL: ${sl}</span>
-        <span class="nivel verde">TP1: ${tp1}</span>
-        <span class="nivel verde">TP2: ${tp2}</span>
-        <span class="nivel verde">TP3: ${tp3}</span>
+      <!-- Lectura -->
+      <div class="linea-lectura">
+        <span>📊 Última lectura:</span> 
+        <span class="lectura">${lectura}</span>
       </div>
 
-      <!-- === Quinta fila: razones === -->
-      <div class="bloque-razones">
-        <h4>💬 Razones del Análisis</h4>
-        <ul>
-          ${
-            resultado.razones?.length
-              ? resultado.razones.map(r => `<li>${r}</li>`).join("")
-              : "<li class='warn'>Sin razones disponibles</li>"
-          }
-        </ul>
+      <!-- Razones -->
+      <div class="linea-razones">
+        <span>💬 ${razones}</span>
       </div>
 
-      <!-- === Footer === -->
+      <!-- Footer -->
       <div class="footer-analisis">
         <p><strong>Hora local:</strong> ${resultado.horaLocal || "No disponible"}</p>
-        <p><strong>Última actualización:</strong> hace 1 min</p>
       </div>
     </div>
   `;
 }
+
 
 // === Utilidades ===
 function formatearSimbolo(simbolo) {

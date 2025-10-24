@@ -1,212 +1,135 @@
-/* === ANALISIS.CSS – versión limpia, optimizada y unificada === */
-
-/* === Contenedor principal === */
-.ultron-bloque-wrapper {
-  background: transparent;
-  width: 100%;
-  margin: 1.5rem auto;
-  padding: 0;
-}
-
-.ultron-bloque {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 1.5rem;
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  background: transparent;
-}
-
-/* === Señal Activa (bloque eliminado, pero se conserva por compatibilidad visual si se reusa) === */
-.tarjeta-senal {
-  display: none; /* Oculto (ya integrado en el bloque principal) */
-}
-
-/* === BLOQUE UNIFICADO: ANÁLISIS ESTRATÉGICO ULTRÓN === */
+/* === Bloque principal del análisis estratégico === */
 .tarjeta-analisis {
   background-color: #0b0f1a;
-  border: 1px dashed #00bcd4;
-  border-radius: 12px;
-  padding: 14px 18px;
-  color: #ffffff;
-  font-size: 14px;
-  line-height: 1.4;
-  box-shadow: 0 0 8px rgba(0, 188, 212, 0.15);
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
+  border: 1px dashed #009191;
+  border-radius: 10px;
+  padding: 12px 16px;
+  color: #e0e0e0;
+  font-size: 13px;
+  line-height: 1.5;
+  box-shadow: 0 0 5px rgba(0, 255, 255, 0.1);
+  flex: 1.2;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  height: auto;
 }
 
-/* === Encabezado === */
+/* Título */
 .tarjeta-analisis h3 {
-  font-size: 15px;
-  color: #00ffff;
-  margin-bottom: 10px;
-  text-transform: uppercase;
-  border-bottom: 1px solid #00bcd455;
+  font-size: 14px;
+  color: #00b2b2;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #00808044;
   padding-bottom: 4px;
-  text-align: center;
   letter-spacing: 0.5px;
 }
 
-/* === Filas generales === */
-.fila-analisis,
-.fila-lectura,
-.fila-niveles {
+/* Línea principal */
+.linea-principal {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 8px;
   flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 6px;
 }
 
-/* === Campos tácticos === */
-.campo {
-  flex: 1 1 22%;
-  display: flex;
-  justify-content: space-between;
-  background: #101828;
+.activo-bloque {
+  border: 1px solid #ffd700;
+  padding: 4px 8px;
   border-radius: 6px;
-  padding: 6px 10px;
-  border: 1px solid #1e2b3c;
-  align-items: center;
+  background-color: #111624;
 }
 
-.campo label {
+.activo-nombre {
+  color: #ffffff;
   font-weight: bold;
-  color: #ccc;
-  font-size: 13px;
+  margin-right: 6px;
 }
 
-.valor {
-  font-weight: 500;
-  font-size: 13px;
+.activo-precio {
+  color: #ffd700;
+  font-weight: 600;
+  font-size: 12.5px;
 }
 
-/* === Colores dinámicos === */
-.verde { color: #00ff88; }
-.rojo { color: #ff5a5a; }
-.amarillo { color: #ffd700; }
-
-/* === Fila de lectura rápida === */
-.fila-lectura {
-  background: #101828;
-  border-radius: 6px;
-  border: 1px solid #1e2b3c;
-  padding: 6px 10px;
-  font-size: 13px;
-  justify-content: flex-start;
-  gap: 12px;
-}
-
-/* === Fila de niveles SL / TP === */
-.fila-niveles {
+.estrategia-bloque {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 8px;
-  margin-top: 4px;
-  margin-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 
-.fila-niveles .nivel {
-  flex: 1;
-  text-align: center;
+.etiqueta {
+  color: #aaa;
+}
+
+.estrategia {
+  color: #00ffff;
+  font-weight: 500;
+}
+
+.estado {
+  font-weight: 700;
+}
+
+.estado.verde {
+  color: #00ff99;
+}
+.estado.rojo {
+  color: #ff6060;
+}
+.estado.gris {
+  color: #aaaaaa;
+}
+
+/* Línea de contexto */
+.linea-contexto {
+  margin: 6px 0;
+  color: #ccc;
+  font-size: 12.5px;
+  background: #101624;
   padding: 6px 8px;
   border-radius: 6px;
-  font-weight: bold;
-  background-color: #101828;
-  border: 1px solid #1e2b3c;
 }
 
-.fila-niveles .rojo { color: #ff5a5a; }
-.fila-niveles .verde { color: #00ff88; }
-
-/* === Bloque de razones === */
-.bloque-razones {
-  background-color: #0f1422;
-  border: 1px dashed #1e2b3c;
-  border-radius: 6px;
-  padding: 8px;
-  margin-top: 10px;
-}
-
-.bloque-razones h4 {
-  color: #00ffff;
-  font-size: 13px;
-  margin-bottom: 4px;
-  text-transform: uppercase;
-}
-
-.bloque-razones ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.bloque-razones li {
-  font-size: 12.5px;
+/* Línea de niveles */
+.linea-niveles {
   color: #ccc;
-  margin-bottom: 3px;
+  font-size: 12.5px;
+  margin: 4px 0;
 }
 
-.bloque-razones li.ok::before { content: "✅ "; }
-.bloque-razones li.warn::before { content: "⚠️ "; color: #ffd700; }
-.bloque-razones li.err::before { content: "❌ "; color: #ff5a5a; }
+.linea-niveles .sl {
+  color: #ff6060;
+}
+.linea-niveles .tp {
+  color: #00ff99;
+}
 
-/* === Footer === */
+/* Línea de lectura */
+.linea-lectura {
+  margin: 6px 0;
+  font-size: 12.5px;
+  color: #ddd;
+}
+
+/* Línea de razones */
+.linea-razones {
+  background-color: #101624;
+  border-left: 3px solid #00b2b2;
+  padding: 6px 8px;
+  border-radius: 6px;
+  color: #ccc;
+  font-size: 12.5px;
+  margin-top: 6px;
+}
+
+/* Footer */
 .footer-analisis {
-  margin-top: 10px;
+  margin-top: 8px;
   border-top: 1px solid #1e2b3c;
   padding-top: 6px;
   font-size: 12px;
   color: #aaa;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
 }
-
-.footer-analisis strong {
-  color: #00ffff;
-  font-weight: bold;
-}
-
-/* === Ajustes responsivos === */
-@media (max-width: 1100px) {
-  .ultron-bloque {
-    flex-wrap: wrap;
-  }
-
-  .tarjeta-analisis {
-    max-width: 100%;
-    padding: 12px;
-  }
-
-  .campo {
-    flex: 1 1 45%;
-  }
-
-  .fila-niveles {
-    flex-wrap: wrap;
-  }
-}
-
-@media (max-width: 700px) {
-  .campo {
-    flex: 1 1 100%;
-  }
-
-  .fila-niveles .nivel {
-    flex: 1 1 45%;
-  }
-
-  .tarjeta-analisis {
-    font-size: 13px;
-  }
-}
-
