@@ -127,17 +127,29 @@ async function realizarAnalisis(simbolo) {
     configurarEventoCalculo(resultado.simbolo, resultado.entry || "1.0000");
 
     // === 🧠 Registrar entrada válida en historial ===
-    if (resultado.decision === "OPERAR" || resultado.tipoEntrada) {
+    const datosCompletos =
+      resultado.decision === "OPERAR" &&
+      resultado.tipoEntrada &&
+      resultado.tipoEntrada !== "Desconocido" &&
+      resultado.stop && resultado.stop !== "-" &&
+      resultado.tp1 && resultado.tp1 !== "-" &&
+      resultado.tp2 && resultado.tp2 !== "-" &&
+      resultado.tp3 && resultado.tp3 !== "-" &&
+      (resultado.entry || resultado.precioActual);
+
+    if (datosCompletos) {
       registrarEntradaUltron({
         activo: resultado.simbolo,
-        tipoEntrada: resultado.tipoEntrada || "Desconocido",
-        sl: resultado.stop || "-",
-        tp1: resultado.tp1 || "-",
-        tp2: resultado.tp2 || "-",
-        tp3: resultado.tp3 || "-",
+        tipoEntrada: resultado.tipoEntrada,
+        sl: resultado.stop,
+        tp1: resultado.tp1,
+        tp2: resultado.tp2,
+        tp3: resultado.tp3,
         fechaHora: new Date().toLocaleString("es-MX", { timeZone: "America/Mexico_City" }),
       });
-      console.log("🗃️ Entrada registrada en historial:", resultado.simbolo);
+      console.log("🗃️ ✅ Entrada registrada (completa):", resultado.simbolo);
+    } else {
+      console.log("🚫 Entrada omitida por datos incompletos:", resultado.simbolo, resultado);
     }
 
   } catch (error) {
@@ -207,8 +219,7 @@ function renderAnalisisEstrategico(resultado) {
       <!-- Línea de contexto -->
       <div class="linea-contexto">
         <span>Riesgo: <strong>${riesgo}</strong></span> |
-       <span>Riesgo: <strong>${riesgo}</strong></span> |
-      <span>Sesión: <strong>${sesion}</strong></span>
+        <span>Sesión: <strong>${sesion}</strong></span>
       </div>
 
       <!-- Línea de niveles -->
