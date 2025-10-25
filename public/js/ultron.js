@@ -207,9 +207,8 @@ function renderAnalisisEstrategico(resultado) {
       <!-- Línea de contexto -->
       <div class="linea-contexto">
         <span>Riesgo: <strong>${riesgo}</strong></span> |
-        <span>Estructura: <strong>${estructura}</strong></span> |
-        <span>Volumen: <strong>${volumen}</strong></span> |
-        <span>Sesión: <strong>${sesion}</strong></span>
+       <span>Riesgo: <strong>${riesgo}</strong></span> |
+      <span>Sesión: <strong>${sesion}</strong></span>
       </div>
 
       <!-- Línea de niveles -->
