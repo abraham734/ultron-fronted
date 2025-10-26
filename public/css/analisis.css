@@ -163,18 +163,3 @@
 }
 
 
-/* === Fondo principal del sitio === */
-body {
-  background-color: #060a14 !important; /* oscuro profundo para contraste */
-  overflow-x: hidden;
-}
-
-/* === Bloques principales (mantienen color pero dejan ver el fondo dinámico) === */
-.tarjeta-analisis,
-.bloque-configuracion,
-.ultron-bloque,
-#contenedor-activos {
-  background-color: rgba(12, 17, 30, 0.94); /* 94% opaco, 6% deja pasar efecto */
-  backdrop-filter: blur(1.5px);
-  border: 1px solid rgba(0, 255, 255, 0.08);
-}
