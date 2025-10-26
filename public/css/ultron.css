@@ -587,3 +587,24 @@ body {
     flex-wrap: wrap;
   }
 }
+
+
+
+
+
+
+
+
+
+
+#matrixRain {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  background: black;
+  opacity: 0.08; /* 🔹 nivel de sutilidad */
+  pointer-events: none; /* evita interferir con los clics */
+}
