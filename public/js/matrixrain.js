@@ -35,11 +35,13 @@ export function iniciarMatrixRain() {
       if (y * fontSize > canvas.height && Math.random() > 0.975) {
         drops[index] = 0;
       }
-      drops[index]++;
+      drops[index] += 0.5; // en lugar de 1
+
     });
   }
 
-  const interval = setInterval(draw, 33);
+  const interval = setInterval(draw, 80);
+
 
   // Ajusta al cambiar tamaño de ventana
   window.addEventListener("resize", () => {
