@@ -145,3 +145,17 @@
   font-size: 1.15rem; /* 🔹 más grande y legible */
   font-weight: 700;
 }
+
+
+/* === Fondo Matrix Rain === */
+#matrix-rain {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* no bloquea clics */
+  background: transparent;
+  opacity: 0.15; /* 🔹 sutil */
+}
