@@ -28,9 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   verificarConexionBackend();
 
-  // === 💾 Activar fondo Matrix Rain ===
-  let matrix = iniciarMatrixRain();
-  console.log("🟢 Efecto Matrix Rain activo.");
+ 
 });
 
 
