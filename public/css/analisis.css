@@ -176,3 +176,15 @@ body {
   backdrop-filter: blur(1.5px);
   border: 1px solid rgba(0, 255, 255, 0.08);
 }
+/* === Fondo de efecto Matrix detrás de todo === */
+#matrix-rain {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1; /* 👈 detrás de todo */
+  pointer-events: none;
+  opacity: 0.35;
+  background: transparent;
+}
