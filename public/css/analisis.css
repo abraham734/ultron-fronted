@@ -147,15 +147,22 @@
 }
 
 
-/* === Fondo Matrix Rain === */
+
+
+/* === Fondo Matrix Rain (debajo del layout) === */
 #matrix-rain {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none; /* no bloquea clics */
-  background: transparent;
-  opacity: 0.15; /* 🔹 sutil */
+  z-index: 0; /* 👈 lo envía detrás de todo */
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none; /* evita interferir con clics */
+  opacity: 0.4; /* leve transparencia para efecto elegante */
+}
+
+/* === Asegura que todo el contenido quede por encima === */
+body * {
+  position: relative;
+  z-index: 2;
 }
