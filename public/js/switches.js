@@ -43,6 +43,14 @@ export function renderSwitches() {
         <span class="slider"></span>
       </label>
     </div>
+
+    <div class="estrategia-toggle">
+      <span>📊 Triple EMA + ADX</span>
+      <label class="switch">
+        <input type="checkbox" id="toggle-emaTriple">
+        <span class="slider"></span>
+      </label>
+    </div>
   `;
 
   // === Restaurar estados desde localStorage ===
@@ -50,7 +58,8 @@ export function renderSwitches() {
     "toggle-cajaDarvas",
     "toggle-cambioCiclo",
     "toggle-tendencia",
-    "toggle-supertrendDoble"
+    "toggle-supertrendDoble",
+    "toggle-emaTriple" // 🧩 Nuevo switch añadido
   ];
 
   switches.forEach((id) => {
@@ -71,6 +80,7 @@ export function obtenerEstadoEstrategias() {
     cajaDarvas: document.getElementById("toggle-cajaDarvas")?.checked ?? false,
     cambioCiclo: document.getElementById("toggle-cambioCiclo")?.checked ?? false,
     tendencia: document.getElementById("toggle-tendencia")?.checked ?? false,
-    supertrendDoble: document.getElementById("toggle-supertrendDoble")?.checked ?? false
+    supertrendDoble: document.getElementById("toggle-supertrendDoble")?.checked ?? false,
+    emaTriple: document.getElementById("toggle-emaTriple")?.checked ?? false // 🧠 Nuevo campo agregado
   };
 }
