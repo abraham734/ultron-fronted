@@ -1,16 +1,21 @@
-// === matrixrain_ultron.js ===
+// === matrixrain.js ===
 // Efecto "Matrix Rain" versión Ultron — tonos cian/azul neón
 // Diseñado para fondo oscuro con estética tecnológica
 
 export function iniciarMatrixRain() {
+  // 🧩 Evita duplicados: si ya existe un canvas, no crear otro
+  const existingCanvas = document.getElementById("matrix-rain");
+  if (existingCanvas) {
+    console.warn("⚠️ MatrixRain ya está activo, se omite nueva creación.");
+    return { canvas: existingCanvas };
+  }
+
   // Crear e insertar el canvas
   const canvas = document.createElement("canvas");
   canvas.id = "matrix-rain";
-
-  // 👇 Asegura que quede al fondo del body, no dentro de otro contenedor
   document.body.insertBefore(canvas, document.body.firstChild);
 
-  // === Estilo del canvas ===
+  // === Estilo visual ===
   Object.assign(canvas.style, {
     position: "fixed",
     top: "0",
@@ -27,49 +32,42 @@ export function iniciarMatrixRain() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
-  // Caracteres (mezcla entre símbolos técnicos y letras)
+  // Caracteres — mezcla técnica con letras latinas
   const simbolos = "01ΛΣΞΦΩΨΔΓΠΘΩΧΒΝΜ<>-=+*#@$&";
   const latin = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   const alfabeto = simbolos + latin;
 
-  // Tamaño y columnas
+  // Tamaño de fuente y columnas
   const fontSize = 16;
   const columns = Math.floor(canvas.width / fontSize);
   const drops = Array(columns).fill(1);
 
   // === Efecto principal ===
   function draw() {
-    // Fondo translúcido (deja una estela)
     ctx.fillStyle = "rgba(0, 0, 0, 0.08)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Color principal: azul-cian neón con leve degradado
     const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-    gradient.addColorStop(0, "#00FFFF"); // cian brillante
-    gradient.addColorStop(1, "#0077FF"); // azul profundo
+    gradient.addColorStop(0, "#00FFFF");
+    gradient.addColorStop(1, "#0077FF");
     ctx.fillStyle = gradient;
     ctx.font = `${fontSize}px 'Courier New', monospace`;
 
-    // Dibujar cada línea
     drops.forEach((y, index) => {
       const text = alfabeto.charAt(Math.floor(Math.random() * alfabeto.length));
       const x = index * fontSize;
       ctx.fillText(text, x, y * fontSize);
 
-      // Reinicio aleatorio de las "gotas"
       if (y * fontSize > canvas.height && Math.random() > 0.975) {
         drops[index] = 0;
       }
 
-      // 🔽 Caída más lenta y fluida
-      drops[index] += 0.45;
+      drops[index] += 0.45; // velocidad controlada
     });
   }
 
-  // Intervalo pausado (≈12 fps)
   const interval = setInterval(draw, 80);
 
-  // Recalcular en caso de cambio de ventana
   window.addEventListener("resize", () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
