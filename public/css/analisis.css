@@ -156,10 +156,12 @@
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -1; /* 👈 al fondo absoluto */
+  z-index: -1; /* 👈 detrás del layout */
   pointer-events: none;
-  opacity: 0.35; /* intensidad */
+  opacity: 0.35;
+  background: transparent;
 }
+
 
 /* === Fondo principal del sitio === */
 body {
@@ -175,16 +177,4 @@ body {
   background-color: rgba(12, 17, 30, 0.94); /* 94% opaco, 6% deja pasar efecto */
   backdrop-filter: blur(1.5px);
   border: 1px solid rgba(0, 255, 255, 0.08);
-}
-/* === Fondo de efecto Matrix detrás de todo === */
-#matrix-rain {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: -1; /* 👈 detrás de todo */
-  pointer-events: none;
-  opacity: 0.35;
-  background: transparent;
 }
