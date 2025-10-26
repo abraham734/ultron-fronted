@@ -3,11 +3,25 @@
 // Diseñado para fondo oscuro con estética tecnológica
 
 export function iniciarMatrixRain() {
+  // Crear e insertar el canvas
   const canvas = document.createElement("canvas");
   canvas.id = "matrix-rain";
-  document.body.prepend(canvas); // 👈 se inserta al inicio, debajo de todo
-canvas.style.zIndex = "-1"; // 👈 asegura que esté al fondo
 
+  // 👇 Asegura que quede al fondo del body, no dentro de otro contenedor
+  document.body.insertBefore(canvas, document.body.firstChild);
+
+  // === Estilo del canvas ===
+  Object.assign(canvas.style, {
+    position: "fixed",
+    top: "0",
+    left: "0",
+    width: "100vw",
+    height: "100vh",
+    zIndex: "-1",
+    pointerEvents: "none",
+    opacity: "0.35",
+    background: "transparent",
+  });
 
   const ctx = canvas.getContext("2d");
   canvas.width = window.innerWidth;
