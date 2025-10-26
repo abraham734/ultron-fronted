@@ -121,3 +121,27 @@
     0 2px 0 rgba(0, 0, 0, 0.35);
   transform: none;
 }
+
+/* === Ajuste visual: Bloque de SL y TP === */
+.linea-niveles {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: rgba(255, 215, 0, 0.05);
+  border-radius: 8px;
+  padding: 0.6rem 0;
+  margin-top: 0.8rem;
+  height: 55px; /* 🔹 más altura para alinear con Configuración Rápida */
+}
+
+.linea-niveles span {
+  font-size: 0.95rem;
+  color: #ccc; /* texto base “SL:” “TP1:” etc */
+}
+
+/* Solo los números (valores) en dorado y más grandes */
+.linea-niveles span strong {
+  color: #FFD700; /* mismo dorado del activo */
+  font-size: 1.15rem; /* 🔹 más grande y legible */
+  font-weight: 700;
+}

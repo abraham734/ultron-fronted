@@ -225,12 +225,13 @@ function renderAnalisisEstrategico(resultado) {
       </div>
 
       <!-- Línea de niveles -->
-      <div class="linea-niveles">
-        <span class="sl">SL: ${sl}</span> |
-        <span class="tp">TP1: ${tp1}</span> |
-        <span class="tp">TP2: ${tp2}</span> |
-        <span class="tp">TP3: ${tp3}</span>
-      </div>
+     <div class="linea-niveles">
+  <span class="sl">SL: <strong>${sl}</strong></span> |
+  <span class="tp">TP1: <strong>${tp1}</strong></span> |
+  <span class="tp">TP2: <strong>${tp2}</strong></span> |
+  <span class="tp">TP3: <strong>${tp3}</strong></span>
+</div>
+
 
       <!-- Lectura -->
       <div class="linea-lectura">
