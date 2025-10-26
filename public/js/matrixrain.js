@@ -5,7 +5,9 @@
 export function iniciarMatrixRain() {
   const canvas = document.createElement("canvas");
   canvas.id = "matrix-rain";
-  document.body.appendChild(canvas);
+  document.body.prepend(canvas); // 👈 se inserta al inicio, debajo de todo
+canvas.style.zIndex = "-1"; // 👈 asegura que esté al fondo
+
 
   const ctx = canvas.getContext("2d");
   canvas.width = window.innerWidth;

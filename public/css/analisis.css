@@ -149,34 +149,30 @@
 
 
 
-/* === Fondo Matrix Rain (detrás del layout) === */
+/* === Fondo dinámico de Ultron === */
 #matrix-rain {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* 👈 al fondo absoluto */
   pointer-events: none;
-  opacity: 0.4;
+  opacity: 0.35; /* intensidad */
 }
 
-/* === Permitir que se vea el fondo dinámico === */
+/* === Fondo principal del sitio === */
 body {
-  background: transparent !important; /* 👈 permite ver el canvas */
+  background-color: #060a14 !important; /* oscuro profundo para contraste */
   overflow-x: hidden;
 }
 
-/* === Capa principal del contenido === */
-.main-content, .ultron-bloque, .tarjeta-analisis, .bloque-configuracion, #contenedor-activos {
-  background-color: rgba(10, 14, 25, 0.92); /* 👈 opaco pero deja pasar el efecto */
-  backdrop-filter: blur(2px); /* efecto de profundidad */
-  position: relative;
-  z-index: 2;
-}
-
-/* === Asegura que el resto del contenido esté encima === */
-body * {
-  position: relative;
-  z-index: 2;
+/* === Bloques principales (mantienen color pero dejan ver el fondo dinámico) === */
+.tarjeta-analisis,
+.bloque-configuracion,
+.ultron-bloque,
+#contenedor-activos {
+  background-color: rgba(12, 17, 30, 0.94); /* 94% opaco, 6% deja pasar efecto */
+  backdrop-filter: blur(1.5px);
+  border: 1px solid rgba(0, 255, 255, 0.08);
 }
