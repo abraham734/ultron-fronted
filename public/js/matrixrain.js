@@ -1,6 +1,6 @@
-// === matrixrain.js ===
-// Efecto visual tipo Matrix Rain (código cayendo)
-// Activable/desactivable sin afectar el resto del sistema
+// === matrixrain_ultron.js ===
+// Efecto "Matrix Rain" versión Ultron — tonos cian/azul neón
+// Diseñado para fondo oscuro con estética tecnológica
 
 export function iniciarMatrixRain() {
   const canvas = document.createElement("canvas");
@@ -11,50 +11,61 @@ export function iniciarMatrixRain() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
-  const katakana = "アイウエオカキクケコサシスセソタチツテトナニヌネノ";
+  // Caracteres (mezcla entre símbolos técnicos y letras)
+  const simbolos = "01ΛΣΞΦΩΨΔΓΠΘΩΧΒΝΜ<>-=+*#@$&";
   const latin = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  const nums = "0123456789";
-  const alphabet = katakana + latin + nums;
+  const alfabeto = simbolos + latin;
 
+  // Tamaño y columnas
   const fontSize = 16;
-  const columns = canvas.width / fontSize;
-  const drops = Array(Math.floor(columns)).fill(1);
+  const columns = Math.floor(canvas.width / fontSize);
+  const drops = Array(columns).fill(1);
 
+  // === Efecto principal ===
   function draw() {
-    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+    // Fondo translúcido (deja una estela)
+    ctx.fillStyle = "rgba(0, 0, 0, 0.08)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    ctx.fillStyle = "#00FF41"; // verde neón clásico
-    ctx.font = `${fontSize}px monospace`;
+    // Color principal: azul-cian neón con leve degradado
+    const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    gradient.addColorStop(0, "#00FFFF"); // cian brillante
+    gradient.addColorStop(1, "#0077FF"); // azul profundo
+    ctx.fillStyle = gradient;
+    ctx.font = `${fontSize}px 'Courier New', monospace`;
 
+    // Dibujar cada línea
     drops.forEach((y, index) => {
-      const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+      const text = alfabeto.charAt(Math.floor(Math.random() * alfabeto.length));
       const x = index * fontSize;
       ctx.fillText(text, x, y * fontSize);
 
+      // Reinicio aleatorio de las "gotas"
       if (y * fontSize > canvas.height && Math.random() > 0.975) {
         drops[index] = 0;
       }
-      drops[index] += 0.5; // en lugar de 1
 
+      // 🔽 Caída más lenta y fluida
+      drops[index] += 0.45;
     });
   }
 
+  // Intervalo pausado (≈12 fps)
   const interval = setInterval(draw, 80);
 
-
-  // Ajusta al cambiar tamaño de ventana
+  // Recalcular en caso de cambio de ventana
   window.addEventListener("resize", () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
   });
 
-  console.log("🟢 Matrix Rain iniciado.");
+  console.log("🟢 Matrix Rain Ultron (azul cian) activo.");
   return { canvas, interval };
 }
 
+// === Detener efecto ===
 export function detenerMatrixRain(matrix) {
   if (matrix && matrix.interval) clearInterval(matrix.interval);
   if (matrix && matrix.canvas) matrix.canvas.remove();
-  console.log("🔴 Matrix Rain detenido.");
+  console.log("🔴 Matrix Rain Ultron detenido.");
 }
