@@ -5,7 +5,7 @@ import { activos } from "./data.js";
 import { renderConfiguracionRapida, configurarEventoCalculo } from "./configuracionrapida.js";
 import { renderSwitches, obtenerEstadoEstrategias } from "./switches.js";
 import { cargarHistorialDesdeStorage, registrarEntradaUltron } from "./historial.js"; // ✅ Integración historial
-import { iniciarMatrixRain, detenerMatrixRain } from "./matrixrain.js";
+
 
 // === URL dinámica del backend ===
 const BACKEND_URL = window.location.hostname.includes("vercel.app")
