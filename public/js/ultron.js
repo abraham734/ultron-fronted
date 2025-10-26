@@ -167,8 +167,10 @@ function obtenerNombreEstrategiaActiva(tipoEntrada) {
   if (estrategias.cajaDarvas) return "Caja Darvas";
   if (estrategias.tendencia) return "Continuación de Tendencia";
   if (estrategias.supertrendDoble) return "Supertrend Doble";
+  if (estrategias.emaTriple) return "Triple EMA + ADX"; // 🧩 NUEVA LÍNEA
   return "Sin estrategia activa";
 }
+
 
 // === Renderiza bloque del Análisis Estratégico ===
 function renderAnalisisEstrategico(resultado) {

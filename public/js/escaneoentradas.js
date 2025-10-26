@@ -41,6 +41,7 @@ function etiquetasEstrategias() {
   if (e.cambioCiclo) activas.push("Reversión Institucional");
   if (e.tendencia) activas.push("Continuación de Tendencia");
   if (e.supertrendDoble) activas.push("Supertrend Doble");
+  if (e.emaTriple) activas.push("Triple EMA + ADX"); // 🧠 NUEVA LÍNEA
   return activas.length ? activas.join(", ") : "Sin estrategia activa";
 }
 
