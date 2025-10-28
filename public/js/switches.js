@@ -1,6 +1,6 @@
 // === switches.js ===
-// Control de encendido/apagado de estrategias Ultron (Frontend)
-// Versión sincronizada con motorDecisionUltron 23/oct/2025
+// Control Triple Switch de estrategias Ultron (Frontend)
+// Versión actualizada 28/oct/2025
 
 const BACKEND_URL = window.location.hostname.includes("vercel.app")
   ? "https://ultron-backend-zvtm.onrender.com"
@@ -11,76 +11,83 @@ export function renderSwitches() {
   const barra = document.getElementById("barra-estrategias");
   if (!barra) return;
 
+  // === Plantilla con selectores de tres estados ===
   barra.innerHTML = `
     <div class="estrategia-toggle">
       <span>📦 Caja Darvas</span>
-      <label class="switch">
-        <input type="checkbox" id="toggle-cajaDarvas">
-        <span class="slider"></span>
-      </label>
+      <select id="modo-cajaDarvas" class="triple-switch">
+        <option value="OFF">OFF</option>
+        <option value="STANDARD">STANDARD</option>
+        <option value="RIESGO">RIESGO</option>
+      </select>
     </div>
 
     <div class="estrategia-toggle">
       <span>🧠 Cambio de Ciclo</span>
-      <label class="switch">
-        <input type="checkbox" id="toggle-cambioCiclo">
-        <span class="slider"></span>
-      </label>
+      <select id="modo-cambioCiclo" class="triple-switch">
+        <option value="OFF">OFF</option>
+        <option value="STANDARD">STANDARD</option>
+        <option value="RIESGO">RIESGO</option>
+      </select>
     </div>
 
     <div class="estrategia-toggle">
       <span>📈 Tendencia</span>
-      <label class="switch">
-        <input type="checkbox" id="toggle-tendencia">
-        <span class="slider"></span>
-      </label>
+      <select id="modo-tendencia" class="triple-switch">
+        <option value="OFF">OFF</option>
+        <option value="STANDARD">STANDARD</option>
+        <option value="RIESGO">RIESGO</option>
+      </select>
     </div>
 
     <div class="estrategia-toggle">
       <span>💎 Supertrend Doble</span>
-      <label class="switch">
-        <input type="checkbox" id="toggle-supertrendDoble">
-        <span class="slider"></span>
-      </label>
+      <select id="modo-supertrendDoble" class="triple-switch">
+        <option value="OFF">OFF</option>
+        <option value="STANDARD">STANDARD</option>
+        <option value="RIESGO">RIESGO</option>
+      </select>
     </div>
 
     <div class="estrategia-toggle">
       <span>📊 Triple EMA + ADX</span>
-      <label class="switch">
-        <input type="checkbox" id="toggle-emaTriple">
-        <span class="slider"></span>
-      </label>
+      <select id="modo-emaTriple" class="triple-switch">
+        <option value="OFF">OFF</option>
+        <option value="STANDARD">STANDARD</option>
+        <option value="RIESGO">RIESGO</option>
+      </select>
     </div>
   `;
 
-  // === Restaurar estados desde localStorage ===
-  const switches = [
-    "toggle-cajaDarvas",
-    "toggle-cambioCiclo",
-    "toggle-tendencia",
-    "toggle-supertrendDoble",
-    "toggle-emaTriple" // 🧩 Nuevo switch añadido
+  // === Restaurar modos desde localStorage ===
+  const modulos = [
+    "modo-cajaDarvas",
+    "modo-cambioCiclo",
+    "modo-tendencia",
+    "modo-supertrendDoble",
+    "modo-emaTriple"
   ];
 
-  switches.forEach((id) => {
-    const toggle = document.getElementById(id);
+  modulos.forEach((id) => {
+    const selector = document.getElementById(id);
     const saved = localStorage.getItem(id);
-    if (saved !== null) toggle.checked = saved === "true";
+    if (saved) selector.value = saved;
 
-    toggle.addEventListener("change", () => {
-      localStorage.setItem(id, toggle.checked);
-      console.log(`🎚️ Estrategia ${id.replace("toggle-", "")} => ${toggle.checked ? "ON" : "OFF"}`);
+    selector.addEventListener("change", () => {
+      localStorage.setItem(id, selector.value);
+      console.log(`🎚️ Estrategia ${id.replace("modo-", "")} => ${selector.value}`);
     });
   });
 }
 
-// === Devuelve el estado actual de las estrategias ===
+// === Devuelve el modo actual de cada estrategia ===
 export function obtenerEstadoEstrategias() {
+  const get = (id) => document.getElementById(id)?.value || "OFF";
   return {
-    cajaDarvas: document.getElementById("toggle-cajaDarvas")?.checked ?? false,
-    cambioCiclo: document.getElementById("toggle-cambioCiclo")?.checked ?? false,
-    tendencia: document.getElementById("toggle-tendencia")?.checked ?? false,
-    supertrendDoble: document.getElementById("toggle-supertrendDoble")?.checked ?? false,
-    emaTriple: document.getElementById("toggle-emaTriple")?.checked ?? false // 🧠 Nuevo campo agregado
+    cajaDarvas: get("modo-cajaDarvas"),
+    cambioCiclo: get("modo-cambioCiclo"),
+    tendencia: get("modo-tendencia"),
+    supertrendDoble: get("modo-supertrendDoble"),
+    emaTriple: get("modo-emaTriple")
   };
 }
