@@ -1,3 +1,8 @@
+/* ==========================================================
+   ⚙️ ULTRÓN FRONTEND – ESTILOS PRINCIPALES
+   Estructura modular y optimizada
+   ========================================================== */
+
 /* === RESET GENERAL === */
 * {
   margin: 0;
@@ -10,80 +15,14 @@ body {
   background-color: #10131a;
   color: #ffffff;
   min-height: 100vh;
+  overflow: hidden;
 }
 
-
-/* === SIDEBAR LATERAL === */
-.sidebar {
-  background-color: #0d1117;
-  padding: 30px 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100vh;
-  border-right: 1px solid #2e2e2e;
-}
-
-.sidebar-header .logo {
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  background-color: #3b82f6;
-  color: #fff;
-  font-size: 1.4rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
-.sidebar-header .title {
-  font-size: 1.5rem;
-  margin-bottom: 5px;
-}
-
-.sidebar-header .subtitle {
-  font-size: 0.85rem;
-  color: #999;
-}
-
-.sidebar-status {
-  font-size: 0.85rem;
-  color: #9ca3af;
-}
-
-/* === MENÚ DEL SIDEBAR === */
-.sidebar-menu {
-  margin-top: 30px;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.sidebar-menu a {
-  color: #ccc;
-  text-decoration: none;
-  font-size: 0.95rem;
-  padding: 8px 12px;
-  border-radius: 6px;
-  transition: background 0.3s;
-}
-
-.sidebar-menu a:hover {
-  background-color: #1f2937;
-  color: #fff;
-}
-
-
-/* === CONTENIDO PRINCIPAL === */
-.main-content {
-  padding: 30px;
-}
-
-/* === LAYOUT ULTRÓN – ESTRUCTURA PRINCIPAL === */
+/* ==========================================================
+   🧱 ESTRUCTURA PRINCIPAL (GRID)
+   ========================================================== */
 .layout-ultron {
-  display: grid !important;
+  display: grid;
   grid-template-columns: 250px 1fr 260px; /* Sidebar / Main / Watchlist */
   grid-template-areas: "sidebar main watchlist";
   height: 100vh;
@@ -91,12 +30,11 @@ body {
   background-color: #10131a;
 }
 
-/* === SIDEBAR IZQUIERDA === */
+/* ==========================================================
+   🧩 SIDEBAR IZQUIERDA
+   ========================================================== */
 .sidebar {
   grid-area: sidebar;
-  position: relative !important; /* Elimina el fixed anterior */
-  width: 100%;
-  height: 100%;
   background-color: #0d1117;
   border-right: 1px solid #2e2e2e;
   padding: 30px 20px;
@@ -107,275 +45,12 @@ body {
   overflow-y: auto;
 }
 
-/* === CONTENIDO CENTRAL === */
-.main-content {
-  grid-area: main;
-  width: 100%;
-  height: 100%;
-  padding: 30px;
-  background-color: #10131a;
-  overflow-y: auto;
-}
-
-/* === WATCHLIST DERECHA === */
-.watchlist-panel {
-  grid-area: watchlist;
-  width: 100%;
-  height: 100%;
-  background-color: #0d1117;
-  border-left: 1px solid #2a2f38;
-  padding: 15px 10px;
-  overflow-y: auto;
-  box-shadow: -4px 0 8px rgba(0, 0, 0, 0.3);
-  color: #fff;
-}
-
-/* === AJUSTE GLOBAL === */
-body {
-  margin: 0;
-  padding: 0;
-  background-color: #10131a;
-  font-family: 'Segoe UI', sans-serif;
-  overflow: hidden;
-}
-
-
-
-
-
-
-
-
-
-
-
-/* === BARRA DE FILTROS (Forex, Cripto, etc.) === */
-.filtros-barra {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  padding: 12px 0;
-  background-color: #101827;
-  margin-bottom: 20px;
-  border-bottom: 1px solid #222;
-}
-
-.filtros-barra button {
-  background: none;
-  color: #ffffff;
-  border: none;
-  font-size: 16px;
-  padding: 8px 20px;
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-  transition: all 0.3s ease;
-}
-
-.filtros-barra button:hover {
-  color: #00ffcc;
-  border-bottom: 2px solid #00ffcc;
-}
-
-.filtros-barra .filtro-activo {
-  color: #00ffcc;
-  border-bottom: 2px solid #00ffcc;
-}
-
-
-/* === BOTÓN PRINCIPAL DE ANÁLISIS === */
-.boton-analizar {
-  display: block;
-  margin: 30px auto;
-  background-color: #3b82f6;
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  font-size: 1rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.boton-analizar:hover {
-  background-color: #2563eb;
-}
-
-
-/* === TARJETA DE ACTIVO DINÁMICA === */
-.tarjeta-activo {
-  background-color: #1f2937;
-  padding: 20px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.15);
-}
-
-.activo-header {
-  display: flex;
-  justify-content: space-between;
-  font-size: 1.1rem;
-  margin-bottom: 8px;
-}
-
-.activo-precio {
-  font-size: 1.4rem;
-  font-weight: bold;
-  color: #fbbf24;
-}
-
-.activo-cambio {
-  font-size: 0.95rem;
-  margin-top: 6px;
-}
-
-.activo-cambio.positivo {
-  color: #10b981;
-}
-
-.activo-cambio.negativo {
-  color: #ef4444;
-}
-
-.icono-tendencia {
-  font-size: 1.2rem;
-}
-
-.etiqueta-activa {
-  background-color: #10b981;
-  color: white;
-  font-size: 0.8rem;
-  padding: 4px 8px;
-  border-radius: 5px;
-  margin-right: 10px;
-}
-
-.activo-acciones {
-  margin-top: 10px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-/* Botón dentro de cada tarjeta */
-.btn-analisis {
-  background-color: #3b82f6;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.btn-analisis:hover {
-  background-color: #2563eb;
-}
-
-
-
-
-
-
-
-/* === Configuración Rápida === */
-.bloque-configuracion {
-  background-color: #0f1117;
-  border: 1px solid #2c2f38;
-  padding: 1rem;
-  border-radius: 12px;
-  margin-top: 1.5rem;
-  width: 100%;
-  max-width: 320px;
-  box-shadow: inset 0 0 12px #1e1f24;
-  font-size: 14px;
-  color: #f2f2f2;
-}
-
-.bloque-configuracion h3 {
-  margin-bottom: 1rem;
-  font-size: 16px;
-  color: #f0c14b;
-  text-align: center;
-}
-
-.form-config {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.form-config label {
-  color: #d1d1d1;
-  font-size: 13px;
-}
-
-.form-config input {
-  padding: 6px;
-  border-radius: 6px;
-  border: 1px solid #444;
-  background-color: #1c1f26;
-  color: #ffffff;
-}
-
-#boton-calcular-lote {
-  margin-top: 1rem;
-  width: 100%;
-  background: linear-gradient(90deg, #ffe066, #f0c14b);
-  color: #000;
-  border: none;
-  border-radius: 6px;
-  padding: 8px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-#boton-calcular-lote:hover {
-  background: linear-gradient(90deg, #f0c14b, #ffe066);
-  box-shadow: 0 0 6px #f0c14b;
-}
-
-.resultado-config {
-  margin-top: 1rem;
-  font-size: 13px;
-  line-height: 1.4;
-  color: #b7f397;
-}
-
-.resultado-config .error {
-  color: #f28787;
-}
-
-.resultado-config .resultado {
-  font-weight: bold;
-  color: #ffffff;
-}
-
-
-
-
-
-
-
-
-/* === LOGO Y TITULO ULTRON EN SIDEBAR === */
 .sidebar-header.simple {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 1rem;
-  padding-bottom: 0.5rem;
+  padding: 1rem 0 0.5rem;
   text-align: center;
-  border-bottom: none;
-  height: auto;
-}
-
-.ultron-title {
-  font-size: 1rem;
-  color: #ffffff;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
 }
 
 .ultron-logo {
@@ -387,26 +62,15 @@ body {
   margin-bottom: 0.3rem;
 }
 
-/* === BLOQUE DE HISTORIAL === */
-#historial-entradas {
-  margin-top: 1.5rem;
-}
-
-.sidebar .sidebar-section {
-  margin-top: 1.5rem;
-}
-
 .ultron-title {
   font-size: 1.3rem;
   font-weight: bold;
-  color: #00faff; /* azul tipo reactor */
+  color: #00faff;
   text-align: center;
   margin-bottom: 0.5rem;
   transition: all 0.3s ease;
-  position: relative;
   cursor: default;
 }
-
 .ultron-title::after {
   content: "";
   display: block;
@@ -414,28 +78,34 @@ body {
   height: 2px;
   background: #00faff;
   transition: width 0.3s ease;
-  margin: 4px auto 0 auto;
+  margin: 4px auto 0;
 }
-
 .ultron-title:hover {
-  color: #66fcf1; /* tono más brillante */
+  color: #66fcf1;
   text-shadow: 0 0 6px #00faff, 0 0 12px #00faff;
 }
-
 .ultron-title:hover::after {
   width: 60%;
 }
 
+/* === HISTORIAL === */
+#historial-entradas {
+  margin-top: 1.5rem;
+}
 
+.sidebar-section {
+  margin-top: 1.5rem;
+}
+
+/* === ESTADO SISTEMA === */
 .indicador-vivo {
-  color: #ffff;
+  color: #fff;
   font-weight: 600;
   font-size: 14px;
   display: flex;
   align-items: center;
   gap: 8px;
 }
-
 .punto-verde {
   width: 10px;
   height: 10px;
@@ -444,37 +114,71 @@ body {
   animation: parpadeo 1.2s infinite;
   box-shadow: 0 0 4px #00c896;
 }
-
 @keyframes parpadeo {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.4; }
 }
 
+/* ==========================================================
+   🧠 CONTENIDO PRINCIPAL
+   ========================================================== */
+.main-content {
+  grid-area: main;
+  width: 100%;
+  height: 100%;
+  padding: 30px;
+  background-color: #10131a;
+  overflow-y: auto;
+}
 
+/* === HEADER PRINCIPAL === */
+.main-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid #2a2f38;
+}
 
+.header-flex {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
 
+/* === SELECTOR DE INTERVALOS === */
+.selector-intervalo {
+  background-color: #0d1320;
+  color: #FFD700;
+  border: 1px solid #2c3e50;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  padding: 4px 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.selector-intervalo:hover {
+  border-color: #FFD700;
+  background-color: #131a2b;
+  box-shadow: 0 0 6px rgba(255, 215, 0, 0.3);
+}
 
-/* === Estado del escaneo activo === */
-
-
-/* Solo texto sin fondo ahora */
-
-
-
-/* === REAJUSTE DE BLOQUES EN PANTALLA === */
+/* ==========================================================
+   🧮 BLOQUES PRINCIPALES (Análisis + Configuración)
+   ========================================================== */
 .ultron-bloque {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  gap: 30px;
-  flex-wrap: wrap;
-  margin: 30px auto;
-  max-width: 1200px; /* centra el conjunto */
+  flex-wrap: nowrap;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
   width: 100%;
+  max-width: 1200px;
+  margin: 30px auto;
   padding: 10px;
 }
 
-/* Cada tarjeta mantiene proporciones coherentes */
 .tarjeta-senal,
 .tarjeta-analisis,
 .bloque-configuracion,
@@ -490,16 +194,115 @@ body {
   color: #fff;
 }
 
-/* Asegura que Configuración Rápida se alinee correctamente */
-.bloque-configuracion,
-.bloque-config {
+/* === BLOQUE CONFIGURACIÓN RÁPIDA === */
+.bloque-configuracion {
+  background-color: #0f1117;
+  border-left: 3px solid #FFD700;
+  border: 1px solid #2c2f38;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: inset 0 0 12px #1e1f24;
+  font-size: 14px;
+  color: #f2f2f2;
   align-self: flex-start;
 }
+.bloque-configuracion h3 {
+  margin-bottom: 1rem;
+  font-size: 16px;
+  color: #f0c14b;
+  text-align: center;
+}
+.form-config {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.form-config label {
+  color: #d1d1d1;
+  font-size: 13px;
+}
+.form-config input {
+  padding: 6px;
+  border-radius: 6px;
+  border: 1px solid #444;
+  background-color: #1c1f26;
+  color: #ffffff;
+}
+#boton-calcular-lote {
+  margin-top: 1rem;
+  width: 100%;
+  background: linear-gradient(90deg, #ffe066, #f0c14b);
+  color: #000;
+  border: none;
+  border-radius: 6px;
+  padding: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+#boton-calcular-lote:hover {
+  background: linear-gradient(90deg, #f0c14b, #ffe066);
+  box-shadow: 0 0 6px #f0c14b;
+}
+.resultado-config {
+  margin-top: 1rem;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #b7f397;
+}
+.resultado-config .error { color: #f28787; }
+.resultado-config .resultado { font-weight: bold; color: #ffffff; }
 
+/* ==========================================================
+   🔍 BARRA DE ESCANEO
+   ========================================================== */
+.barra-escaneo {
+  background-color: #0e2d4d;
+  color: #00bfff;
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 0.6rem 1.2rem;
+  border-left: 4px solid #0066cc;
+  border-radius: 4px;
+  box-shadow: inset 0 0 4px rgba(0, 191, 255, 0.25);
+  margin: 1rem 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+#estado-escaneo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+#estado-escaneo::before {
+  content: "📘";
+  display: inline-block;
+}
 
+/* ==========================================================
+   🧾 WATCHLIST DERECHA
+   ========================================================== */
+.watchlist-panel {
+  grid-area: watchlist;
+  width: 100%;
+  height: 100%;
+  background-color: #0d1117;
+  border-left: 1px solid #2a2f38;
+  padding: 15px 10px;
+  overflow-y: auto;
+  box-shadow: -4px 0 8px rgba(0, 0, 0, 0.3);
+  color: #fff;
+}
 
+/* ==========================================================
+   📱 RESPONSIVE DESIGN
+   ========================================================== */
+@media (max-width: 1100px) {
+  .ultron-bloque {
+    flex-wrap: wrap;
+  }
+}
 
-/* Ajuste responsive para pantallas pequeñas */
 @media (max-width: 900px) {
   .ultron-bloque {
     flex-direction: column;
@@ -514,80 +317,6 @@ body {
     max-width: 90%;
   }
 }
-
-
-
-
-/* === Barra de escaneo estilo local === */
-.barra-escaneo {
-  background-color: #0e2d4d;
-  color: #00bfff;
-  font-size: 0.95rem;
-  font-weight: 500;
-  padding: 0.6rem 1.2rem;
-  border-left: 4px solid #0066cc;
-  border-radius: 4px;
-  box-shadow: inset 0 0 4px rgba(0, 191, 255, 0.25);
-  margin: 1rem 0;
-  
-  /* 🔥 NUEVO: ancho completo con alineación fluida */
-  width: 100%;
-  box-sizing: border-box;
-}
-
-
-#estado-escaneo {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  white-space: nowrap;
-}
-
-#estado-escaneo::before {
-  content: "📘";
-  display: inline-block;
-}
-
-
-
-
-
-/* === Alineación horizontal de bloques principales === */
-.ultron-bloque {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  flex-wrap: nowrap;
-  gap: 1.5rem;
-  margin-top: 1.5rem;
-  width: 100%;
-}
-
-/* === Ajuste individual de cada tarjeta === */
-.tarjeta-senal,
-.tarjeta-analisis,
-.bloque-configuracion {
-  flex: 1 1 0;
-  min-width: 0;
-  background-color: #0d1117;
-  border-radius: 10px;
-  padding: 1rem 1.5rem;
-  box-shadow: 0 0 8px rgba(255, 215, 0, 0.15);
-  color: #ffffff;
-}
-
-/* === Corrección del bloque de configuración rápida (ya viene desde configuracionrapida.js) === */
-.bloque-configuracion {
-  border-left: 3px solid #FFD700;
-}
-
-/* === Comportamiento responsivo: en pantallas pequeñas vuelve a formato vertical === */
-@media (max-width: 1100px) {
-  .ultron-bloque {
-    flex-wrap: wrap;
-  }
-}
-
 
 
 

@@ -37,6 +37,15 @@
     <main class="main-content">
       <header class="main-header">
         <h2>Análisis Estratégico en Tiempo Real</h2>
+      
+        <!-- 🔽 Selector de Intervalos -->
+      <select id="selector-intervalo" class="selector-intervalo">
+      <option value="10m">10m</option>
+      <option value="30m">30m</option>
+      <option value="1h" selected>1h</option>
+      <option value="4h">4h</option>
+      </select>
+
         <div id="indicador-vivo" class="indicador-vivo">
           <span class="punto-verde"></span> ULTRÓN OPERATIVO
         </div>
@@ -67,6 +76,8 @@
 <script type="module" src="/js/watchlist.js"></script>
 <script type="module" src="/js/keepalive.js"></script>
 <script type="module" src="/js/escaneoentradas.js"></script>
+<script type="module" src="/js/intervalosporactivo.js"></script>
+
 
 
 </body>

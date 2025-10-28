@@ -5,6 +5,7 @@ import { activos } from "./data.js";
 import { renderConfiguracionRapida, configurarEventoCalculo } from "./configuracionrapida.js";
 import { renderSwitches, obtenerEstadoEstrategias } from "./switches.js";
 import { cargarHistorialDesdeStorage, registrarEntradaUltron } from "./historial.js"; // ✅ Integración historial
+import { obtenerIntervaloActivo, guardarIntervaloActivo } from "./intervalosporactivo.js"; // ✅ Nueva importación
 
 
 // === URL dinámica del backend ===
@@ -12,25 +13,28 @@ const BACKEND_URL = window.location.hostname.includes("vercel.app")
   ? "https://ultron-backend-zvtm.onrender.com"
   : "http://127.0.0.1:3000";
 
+
 // === Evento principal al cargar el DOM ===
 document.addEventListener("DOMContentLoaded", () => {
   console.log("✅ Interfaz ULTRÓN cargada correctamente.");
 
   renderSwitches();
-  cargarHistorialDesdeStorage(); // ✅ Carga historial guardado
+  cargarHistorialDesdeStorage();
 
-  const botonAnalisis = document.getElementById("boton-iniciar-analisis");
-  if (botonAnalisis) {
-    botonAnalisis.addEventListener("click", () => {
-      renderListaActivos("forex");
+  // 🎯 Listener del selector de intervalos
+  const selectorIntervalo = document.getElementById("selector-intervalo");
+  if (selectorIntervalo) {
+    selectorIntervalo.addEventListener("change", () => {
+      const activoActual = localStorage.getItem("activoActual");
+      if (activoActual) {
+        guardarIntervaloActivo(activoActual, selectorIntervalo.value);
+        console.log(`🕒 Intervalo guardado para ${activoActual}: ${selectorIntervalo.value}`);
+      }
     });
   }
 
   verificarConexionBackend();
-
- 
 });
-
 
 
 // === Verifica conexión con el backend ===
@@ -43,6 +47,7 @@ async function verificarConexionBackend() {
     console.error("❌ Error al hacer ping al backend:", error.message);
   }
 }
+
 
 // === Renderiza lista de activos por categoría ===
 function renderListaActivos(categoria) {
@@ -74,12 +79,18 @@ function renderListaActivos(categoria) {
   });
 }
 
-// === Realiza análisis enviando estrategias activas ===
+
+// === Realiza análisis enviando estrategias activas e intervalo ===
 async function realizarAnalisis(simbolo) {
   const estrategiasActivas = obtenerEstadoEstrategias();
 
-  // Guardamos las estrategias actuales en localStorage (para sincronía visual)
+  // 🧠 Guarda las estrategias y el símbolo actual
   localStorage.setItem("estrategiasActivas", JSON.stringify(estrategiasActivas));
+  localStorage.setItem("activoActual", simbolo);
+
+  // 🔁 Obtiene el intervalo personalizado o el default
+  const intervalo = obtenerIntervaloActivo(simbolo);
+  console.log(`⏱️ Intervalo aplicado a ${simbolo}: ${intervalo}`);
 
   let contenedor = document.getElementById("contenedor-activos");
   if (!contenedor) {
@@ -93,7 +104,7 @@ async function realizarAnalisis(simbolo) {
     const res = await fetch(`${BACKEND_URL}/api/analisis`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ simbolo, estrategiasActivas }),
+      body: JSON.stringify({ simbolo, intervalo, estrategiasActivas }), // ✅ Se envía el intervalo
     });
 
     if (!res.ok) throw new Error(`Error HTTP ${res.status}`);
@@ -117,7 +128,7 @@ async function realizarAnalisis(simbolo) {
 
     // 🔧 Mostrar estrategia activa incluso sin señal
     const estrategiaTexto = obtenerNombreEstrategiaActiva(resultado.tipoEntrada);
-    barra.textContent = `🔍 Escaneando: ${resultado.simbolo} – Estrategia: ${estrategiaTexto}`;
+    barra.textContent = `🔍 Escaneando: ${resultado.simbolo} – Estrategia: ${estrategiaTexto} [${intervalo}]`;
 
     // === Renderiza bloques principales (unificados) ===
     contenedor.innerHTML = `
@@ -163,6 +174,7 @@ async function realizarAnalisis(simbolo) {
   }
 }
 
+
 // === Función auxiliar para mostrar estrategia activa aunque no haya señal ===
 function obtenerNombreEstrategiaActiva(tipoEntrada) {
   if (tipoEntrada) return tipoEntrada;
@@ -172,7 +184,7 @@ function obtenerNombreEstrategiaActiva(tipoEntrada) {
   if (estrategias.cajaDarvas) return "Caja Darvas";
   if (estrategias.tendencia) return "Continuación de Tendencia";
   if (estrategias.supertrendDoble) return "Supertrend Doble";
-  if (estrategias.emaTriple) return "Triple EMA + ADX"; // 🧩 NUEVA LÍNEA
+  if (estrategias.emaTriple) return "Triple EMA + ADX";
   return "Sin estrategia activa";
 }
 
@@ -184,8 +196,6 @@ function renderAnalisisEstrategico(resultado) {
   const estrategia = obtenerNombreEstrategiaActiva(resultado.tipoEntrada);
   const decision = resultado.decision || "NEUTRO";
   const riesgo = resultado.riesgo || "Bajo";
-  const estructura = resultado.estructura || "No confirmada";
-  const volumen = resultado.volumen || "Bajo";
   const sesion = resultado.session && resultado.session !== "undefined"
     ? resultado.session
     : "Fuera de horario / No disponible";
@@ -199,7 +209,6 @@ function renderAnalisisEstrategico(resultado) {
       ? resultado.razones.join(" + ")
       : "Sin razones disponibles";
 
-  // Color contextual
   const colorDecision =
     decision === "OPERAR" ? "verde" :
     decision === "NO OPERAR" ? "rojo" : "gris";
@@ -208,7 +217,6 @@ function renderAnalisisEstrategico(resultado) {
     <div class="tarjeta-analisis">
       <h3>🧠 Análisis Estratégico ULTRÓN</h3>
 
-      <!-- Línea principal -->
       <div class="linea-principal">
         <div class="activo-bloque">
           <span class="etiqueta">Activo:</span> 
@@ -223,39 +231,34 @@ function renderAnalisisEstrategico(resultado) {
         </div>
       </div>
 
-      <!-- Línea de contexto -->
       <div class="linea-contexto">
         <span>Riesgo: <strong>${riesgo}</strong></span> |
         <span>Sesión: <strong>${sesion}</strong></span>
       </div>
 
-      <!-- Línea de niveles -->
-     <div class="linea-niveles">
-  <span class="sl">SL: <strong>${sl}</strong></span> |
-  <span class="tp">TP1: <strong>${tp1}</strong></span> |
-  <span class="tp">TP2: <strong>${tp2}</strong></span> |
-  <span class="tp">TP3: <strong>${tp3}</strong></span>
-</div>
+      <div class="linea-niveles">
+        <span class="sl">SL: <strong>${sl}</strong></span> |
+        <span class="tp">TP1: <strong>${tp1}</strong></span> |
+        <span class="tp">TP2: <strong>${tp2}</strong></span> |
+        <span class="tp">TP3: <strong>${tp3}</strong></span>
+      </div>
 
-
-      <!-- Lectura -->
       <div class="linea-lectura">
         <span>📊 Última lectura:</span> 
         <span class="lectura">${lectura}</span>
       </div>
 
-      <!-- Razones -->
       <div class="linea-razones">
         <span>💬 ${razones}</span>
       </div>
 
-      <!-- Footer -->
       <div class="footer-analisis">
         <p><strong>Hora local:</strong> ${resultado.horaLocal || "No disponible"}</p>
       </div>
     </div>
   `;
 }
+
 
 // === Utilidades ===
 function formatearSimbolo(simbolo) {
@@ -270,6 +273,7 @@ function getPipSize(simbolo) {
   if (simbolo === "BTCUSD") return 1.0;
   return 0.0001;
 }
+
 
 // === Exportaciones ===
 export { realizarAnalisis, realizarAnalisis as ejecutarAnalisisEstrategico };
