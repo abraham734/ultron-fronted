@@ -1,18 +1,16 @@
 // === ultron.js ===
-// Lógica principal del asistente ULTRÓN – Análisis Estratégico
+// Lógica principal del asistente ULTRÓN – Análisis Estratégico (28/oct/2025)
 
 import { activos } from "./data.js";
 import { renderConfiguracionRapida, configurarEventoCalculo } from "./configuracionrapida.js";
 import { renderSwitches, obtenerEstadoEstrategias } from "./switches.js";
-import { cargarHistorialDesdeStorage, registrarEntradaUltron } from "./historial.js"; // ✅ Integración historial
-import { obtenerIntervaloActivo, guardarIntervaloActivo } from "./intervalosporactivo.js"; // ✅ Nueva importación
-
+import { cargarHistorialDesdeStorage, registrarEntradaUltron } from "./historial.js";
+import { obtenerIntervaloActivo, guardarIntervaloActivo } from "./intervalosporactivo.js";
 
 // === URL dinámica del backend ===
 const BACKEND_URL = window.location.hostname.includes("vercel.app")
   ? "https://ultron-backend-zvtm.onrender.com"
   : "http://127.0.0.1:3000";
-
 
 // === Evento principal al cargar el DOM ===
 document.addEventListener("DOMContentLoaded", () => {
@@ -36,7 +34,6 @@ document.addEventListener("DOMContentLoaded", () => {
   verificarConexionBackend();
 });
 
-
 // === Verifica conexión con el backend ===
 async function verificarConexionBackend() {
   try {
@@ -47,7 +44,6 @@ async function verificarConexionBackend() {
     console.error("❌ Error al hacer ping al backend:", error.message);
   }
 }
-
 
 // === Renderiza lista de activos por categoría ===
 function renderListaActivos(categoria) {
@@ -74,21 +70,19 @@ function renderListaActivos(categoria) {
     btn.addEventListener("click", () => {
       const simbolo = btn.dataset.simbolo;
       console.log("🧩 Símbolo seleccionado:", simbolo);
-      realizarAnalisis(simbolo); // 👈 Llama al flujo principal
+      realizarAnalisis(simbolo);
     });
   });
 }
 
-
 // === Realiza análisis enviando estrategias activas e intervalo ===
 async function realizarAnalisis(simbolo) {
-  const estrategiasActivas = obtenerEstadoEstrategias();
+  const estrategiasActivas = obtenerEstadoEstrategias(); // ahora devuelve OFF / STANDARD / RIESGO
 
-  // 🧠 Guarda las estrategias y el símbolo actual
+  // 🧠 Guarda en localStorage
   localStorage.setItem("estrategiasActivas", JSON.stringify(estrategiasActivas));
   localStorage.setItem("activoActual", simbolo);
 
-  // 🔁 Obtiene el intervalo personalizado o el default
   const intervalo = obtenerIntervaloActivo(simbolo);
   console.log(`⏱️ Intervalo aplicado a ${simbolo}: ${intervalo}`);
 
@@ -104,7 +98,7 @@ async function realizarAnalisis(simbolo) {
     const res = await fetch(`${BACKEND_URL}/api/analisis`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ simbolo, intervalo, estrategiasActivas }), // ✅ Se envía el intervalo
+      body: JSON.stringify({ simbolo, intervalo, estrategiasActivas }), // ✅ envía texto con modos
     });
 
     if (!res.ok) throw new Error(`Error HTTP ${res.status}`);
@@ -126,11 +120,10 @@ async function realizarAnalisis(simbolo) {
       else document.body.prepend(barra);
     }
 
-    // 🔧 Mostrar estrategia activa incluso sin señal
     const estrategiaTexto = obtenerNombreEstrategiaActiva(resultado.tipoEntrada);
     barra.textContent = `🔍 Escaneando: ${resultado.simbolo} – Estrategia: ${estrategiaTexto} [${intervalo}]`;
 
-    // === Renderiza bloques principales (unificados) ===
+    // === Renderiza análisis + configuración ===
     contenedor.innerHTML = `
       <div class="ultron-bloque-wrapper">
         <div class="ultron-bloque">
@@ -142,15 +135,12 @@ async function realizarAnalisis(simbolo) {
 
     configurarEventoCalculo(resultado.simbolo, resultado.entry || "1.0000");
 
-    // === 🧠 Registrar entrada válida en historial ===
+    // === Guardar entrada válida en historial ===
     const datosCompletos =
       resultado.decision === "OPERAR" &&
       resultado.tipoEntrada &&
       resultado.tipoEntrada !== "Desconocido" &&
-      resultado.stop && resultado.stop !== "-" &&
-      resultado.tp1 && resultado.tp1 !== "-" &&
-      resultado.tp2 && resultado.tp2 !== "-" &&
-      resultado.tp3 && resultado.tp3 !== "-" &&
+      resultado.stop && resultado.tp1 && resultado.tp2 && resultado.tp3 &&
       (resultado.entry || resultado.precioActual);
 
     if (datosCompletos) {
@@ -163,9 +153,9 @@ async function realizarAnalisis(simbolo) {
         tp3: resultado.tp3,
         fechaHora: new Date().toLocaleString("es-MX", { timeZone: "America/Mexico_City" }),
       });
-      console.log("🗃️ ✅ Entrada registrada (completa):", resultado.simbolo);
+      console.log("🗃️ ✅ Entrada registrada:", resultado.simbolo);
     } else {
-      console.log("🚫 Entrada omitida por datos incompletos:", resultado.simbolo, resultado);
+      console.log("🚫 Entrada omitida por datos incompletos:", resultado.simbolo);
     }
 
   } catch (error) {
@@ -174,20 +164,27 @@ async function realizarAnalisis(simbolo) {
   }
 }
 
-
-// === Función auxiliar para mostrar estrategia activa aunque no haya señal ===
+// === Mostrar estrategia activa aunque no haya señal ===
 function obtenerNombreEstrategiaActiva(tipoEntrada) {
   if (tipoEntrada) return tipoEntrada;
 
   const estrategias = JSON.parse(localStorage.getItem("estrategiasActivas") || "{}");
-  if (estrategias.cambioCiclo) return "Reversión Institucional";
-  if (estrategias.cajaDarvas) return "Caja Darvas";
-  if (estrategias.tendencia) return "Continuación de Tendencia";
-  if (estrategias.supertrendDoble) return "Supertrend Doble";
-  if (estrategias.emaTriple) return "Triple EMA + ADX";
+
+  // Compara por modo activo
+  for (const [nombre, modo] of Object.entries(estrategias)) {
+    if (modo && modo !== "OFF") {
+      switch (nombre) {
+        case "cambioCiclo": return "Reversión Institucional";
+        case "cajaDarvas": return "Caja Darvas";
+        case "tendencia": return "Continuación de Tendencia";
+        case "supertrendDoble": return "Supertrend Doble";
+        case "emaTriple": return "Triple EMA + ADX";
+        default: return "Estrategia Activa";
+      }
+    }
+  }
   return "Sin estrategia activa";
 }
-
 
 // === Renderiza bloque del Análisis Estratégico ===
 function renderAnalisisEstrategico(resultado) {
@@ -259,21 +256,5 @@ function renderAnalisisEstrategico(resultado) {
   `;
 }
 
-
-// === Utilidades ===
-function formatearSimbolo(simbolo) {
-  if (simbolo.length === 6) return `${simbolo.slice(0, 3)}/${simbolo.slice(3, 6)}`;
-  return simbolo;
-}
-
-function getPipSize(simbolo) {
-  simbolo = simbolo.toUpperCase();
-  if (simbolo.includes("JPY")) return 0.01;
-  if (simbolo === "XAUUSD") return 0.1;
-  if (simbolo === "BTCUSD") return 1.0;
-  return 0.0001;
-}
-
-
 // === Exportaciones ===
-export { realizarAnalisis, realizarAnalisis as ejecutarAnalisisEstrategico };
+export { renderListaActivos, realizarAnalisis, realizarAnalisis as ejecutarAnalisisEstrategico };
