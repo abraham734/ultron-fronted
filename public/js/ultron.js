@@ -1,5 +1,6 @@
 // === ultron.js ===
-// Lógica principal del asistente ULTRÓN – Análisis Estratégico (actualizado 29/oct/2025)
+// Lógica principal del asistente ULTRÓN – Optimizada para control de consumo API y estabilidad
+// Fecha: 29/oct/2025 – Versión táctica con bloqueo 429 + anti-spam + desactivación SYNC_INIT
 
 import { activos } from "./data.js";
 import { renderConfiguracionRapida, configurarEventoCalculo } from "./configuracionrapida.js";
@@ -12,6 +13,11 @@ const BACKEND_URL = window.location.hostname.includes("vercel.app")
   ? "https://ultron-backend-zvtm.onrender.com"
   : "http://127.0.0.1:3000";
 
+// === Variables de control ===
+let analisisEnProgreso = false;
+let modoAPILimitado = false;
+let tiempoRestanteAPI = 0;
+
 // === Evento principal al cargar el DOM ===
 document.addEventListener("DOMContentLoaded", () => {
   console.log("✅ Interfaz ULTRÓN cargada correctamente.");
@@ -19,31 +25,8 @@ document.addEventListener("DOMContentLoaded", () => {
   renderSwitches();
   cargarHistorialDesdeStorage();
 
-  // === 🔄 SINCRONIZACIÓN INICIAL DE ESTRATEGIAS ===
-  try {
-    const estrategiasActivas = JSON.parse(localStorage.getItem("estrategiasActivas") || "{}");
-
-    // Mostrar en consola qué modos se están sincronizando
-    console.log("🧭 Sincronizando modos iniciales con backend:", estrategiasActivas);
-
-    if (Object.keys(estrategiasActivas).length > 0) {
-      fetch(`${BACKEND_URL}/api/analisis`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          simbolo: "SYNC_INIT",
-          intervalo: "1h",
-          estrategiasActivas
-        })
-      })
-        .then(() => console.log("🔁 Estrategias sincronizadas correctamente con backend"))
-        .catch(err => console.warn("⚠️ Error al sincronizar estrategias:", err.message));
-    } else {
-      console.log("📭 No hay estrategias previas en localStorage (todas OFF por defecto).");
-    }
-  } catch (error) {
-    console.warn("⚠️ No se pudo sincronizar estrategias al inicio:", error.message);
-  }
+  // 🚫 Se desactiva la sincronización SYNC_INIT para evitar llamadas innecesarias
+  console.log("📭 Sincronización SYNC_INIT deshabilitada para reducir consumo API.");
 
   // 🎯 Listener del selector de intervalos
   const selectorIntervalo = document.getElementById("selector-intervalo");
@@ -80,15 +63,12 @@ function renderListaActivos(categoria) {
   contenedor.innerHTML = `
     <h3>🧠 Selecciona un activo para analizar (${categoria.toUpperCase()})</h3>
     <div class="lista-activos">
-      ${lista
-        .map(
-          (activo) => `
-            <button class="btn-activo" data-simbolo="${activo.simbolo}">
-              ${activo.nombre}
-            </button>
-          `
-        )
-        .join("")}
+      ${lista.map(
+        (activo) => `
+          <button class="btn-activo" data-simbolo="${activo.simbolo}">
+            ${activo.nombre}
+          </button>`
+      ).join("")}
     </div>
   `;
 
@@ -103,9 +83,20 @@ function renderListaActivos(categoria) {
 
 // === Realiza análisis enviando estrategias activas e intervalo ===
 async function realizarAnalisis(simbolo) {
-  const estrategiasActivas = obtenerEstadoEstrategias(); // OFF / STANDARD / RIESGO
+  if (analisisEnProgreso) {
+    console.warn("⏳ Análisis en progreso, espera unos segundos...");
+    return;
+  }
+  if (modoAPILimitado) {
+    console.warn(`🚫 API en modo limitado. Espera ${tiempoRestanteAPI} min antes de reintentar.`);
+    alert(`⚠️ Has alcanzado el límite diario de la API. Intenta nuevamente después de las 6:00 p.m.`);
+    return;
+  }
 
-  // 🧠 Guarda en localStorage
+  analisisEnProgreso = true;
+  setTimeout(() => (analisisEnProgreso = false), 5000); // ⏱️ Enfriamiento de 5s
+
+  const estrategiasActivas = obtenerEstadoEstrategias();
   localStorage.setItem("estrategiasActivas", JSON.stringify(estrategiasActivas));
   localStorage.setItem("activoActual", simbolo);
 
@@ -127,8 +118,20 @@ async function realizarAnalisis(simbolo) {
       body: JSON.stringify({ simbolo, intervalo, estrategiasActivas }),
     });
 
-    if (!res.ok) throw new Error(`Error HTTP ${res.status}`);
+    if (!res.ok) {
+      if (res.status === 429) {
+        activarModoAPILimitado();
+      }
+      throw new Error(`Error HTTP ${res.status}`);
+    }
+
     const resultado = await res.json();
+
+    if (resultado?.error?.includes("API limit")) {
+      activarModoAPILimitado();
+      contenedor.innerHTML = `<p class="error">🚫 Límite de API alcanzado. Intenta más tarde.</p>`;
+      return;
+    }
 
     if (!resultado || !resultado.simbolo) {
       contenedor.innerHTML = `<p class="error">⚠️ No se encontraron datos válidos para ${simbolo}</p>`;
@@ -164,7 +167,6 @@ async function realizarAnalisis(simbolo) {
     const datosCompletos =
       resultado.decision === "OPERAR" &&
       resultado.tipoEntrada &&
-      resultado.tipoEntrada !== "Desconocido" &&
       resultado.stop && resultado.tp1 && resultado.tp2 && resultado.tp3 &&
       (resultado.entry || resultado.precioActual);
 
@@ -186,7 +188,24 @@ async function realizarAnalisis(simbolo) {
   } catch (error) {
     contenedor.innerHTML = `<p class="error">❌ Error al obtener datos desde backend: ${error.message}</p>`;
     console.error("❌ Error en análisis:", error);
+  } finally {
+    analisisEnProgreso = false;
   }
+}
+
+// === Activar modo de espera si se alcanza el límite de API ===
+function activarModoAPILimitado() {
+  modoAPILimitado = true;
+  const ahora = new Date();
+  const proximoResetUTC = new Date();
+  proximoResetUTC.setUTCHours(0, 0, 0, 0); // corte 00:00 UTC
+  if (ahora > proximoResetUTC) proximoResetUTC.setUTCDate(proximoResetUTC.getUTCDate() + 1);
+
+  const minutosRestantes = Math.ceil((proximoResetUTC - ahora) / 60000);
+  tiempoRestanteAPI = Math.max(minutosRestantes, 0);
+
+  console.warn(`🚫 Límite de API alcanzado. Modo espera activo (${tiempoRestanteAPI} min hasta reset).`);
+  alert("⚠️ Límite diario de API alcanzado. Ultron pausará peticiones hasta el próximo reinicio (6:00 p.m. CDMX).");
 }
 
 // === Mostrar estrategia activa aunque no haya señal ===
@@ -224,10 +243,7 @@ function renderAnalisisEstrategico(resultado) {
   const tp2 = resultado.tp2 || "-";
   const tp3 = resultado.tp3 || "-";
   const lectura = resultado.ultimaLectura || "BOS no validado";
-  const razones =
-    resultado.razones?.length
-      ? resultado.razones.join(" + ")
-      : "Sin razones disponibles";
+  const razones = resultado.razones?.length ? resultado.razones.join(" + ") : "Sin razones disponibles";
 
   const colorDecision =
     decision === "OPERAR" ? "verde" :
@@ -236,7 +252,6 @@ function renderAnalisisEstrategico(resultado) {
   return `
     <div class="tarjeta-analisis">
       <h3>🧠 Análisis Estratégico ULTRÓN</h3>
-
       <div class="linea-principal">
         <div class="activo-bloque">
           <span class="etiqueta">Activo:</span> 
@@ -250,28 +265,23 @@ function renderAnalisisEstrategico(resultado) {
           <span class="estado ${colorDecision}">${decision}</span>
         </div>
       </div>
-
       <div class="linea-contexto">
         <span>Riesgo: <strong>${riesgo}</strong></span> |
         <span>Sesión: <strong>${sesion}</strong></span>
       </div>
-
       <div class="linea-niveles">
         <span class="sl">SL: <strong>${sl}</strong></span> |
         <span class="tp">TP1: <strong>${tp1}</strong></span> |
         <span class="tp">TP2: <strong>${tp2}</strong></span> |
         <span class="tp">TP3: <strong>${tp3}</strong></span>
       </div>
-
       <div class="linea-lectura">
         <span>📊 Última lectura:</span> 
         <span class="lectura">${lectura}</span>
       </div>
-
       <div class="linea-razones">
         <span>💬 ${razones}</span>
       </div>
-
       <div class="footer-analisis">
         <p><strong>Hora local:</strong> ${resultado.horaLocal || "No disponible"}</p>
       </div>
