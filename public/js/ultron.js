@@ -1,5 +1,5 @@
 // === ultron.js ===
-// Lógica principal del asistente ULTRÓN – Análisis Estratégico (28/oct/2025)
+// Lógica principal del asistente ULTRÓN – Análisis Estratégico (actualizado 29/oct/2025)
 
 import { activos } from "./data.js";
 import { renderConfiguracionRapida, configurarEventoCalculo } from "./configuracionrapida.js";
@@ -18,6 +18,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
   renderSwitches();
   cargarHistorialDesdeStorage();
+
+  // === 🔄 SINCRONIZACIÓN INICIAL DE ESTRATEGIAS ===
+  try {
+    const estrategiasActivas = JSON.parse(localStorage.getItem("estrategiasActivas") || "{}");
+
+    // Mostrar en consola qué modos se están sincronizando
+    console.log("🧭 Sincronizando modos iniciales con backend:", estrategiasActivas);
+
+    if (Object.keys(estrategiasActivas).length > 0) {
+      fetch(`${BACKEND_URL}/api/analisis`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          simbolo: "SYNC_INIT",
+          intervalo: "1h",
+          estrategiasActivas
+        })
+      })
+        .then(() => console.log("🔁 Estrategias sincronizadas correctamente con backend"))
+        .catch(err => console.warn("⚠️ Error al sincronizar estrategias:", err.message));
+    } else {
+      console.log("📭 No hay estrategias previas en localStorage (todas OFF por defecto).");
+    }
+  } catch (error) {
+    console.warn("⚠️ No se pudo sincronizar estrategias al inicio:", error.message);
+  }
 
   // 🎯 Listener del selector de intervalos
   const selectorIntervalo = document.getElementById("selector-intervalo");
@@ -77,7 +103,7 @@ function renderListaActivos(categoria) {
 
 // === Realiza análisis enviando estrategias activas e intervalo ===
 async function realizarAnalisis(simbolo) {
-  const estrategiasActivas = obtenerEstadoEstrategias(); // ahora devuelve OFF / STANDARD / RIESGO
+  const estrategiasActivas = obtenerEstadoEstrategias(); // OFF / STANDARD / RIESGO
 
   // 🧠 Guarda en localStorage
   localStorage.setItem("estrategiasActivas", JSON.stringify(estrategiasActivas));
@@ -98,11 +124,10 @@ async function realizarAnalisis(simbolo) {
     const res = await fetch(`${BACKEND_URL}/api/analisis`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ simbolo, intervalo, estrategiasActivas }), // ✅ envía texto con modos
+      body: JSON.stringify({ simbolo, intervalo, estrategiasActivas }),
     });
 
     if (!res.ok) throw new Error(`Error HTTP ${res.status}`);
-
     const resultado = await res.json();
 
     if (!resultado || !resultado.simbolo) {
@@ -169,8 +194,6 @@ function obtenerNombreEstrategiaActiva(tipoEntrada) {
   if (tipoEntrada) return tipoEntrada;
 
   const estrategias = JSON.parse(localStorage.getItem("estrategiasActivas") || "{}");
-
-  // Compara por modo activo
   for (const [nombre, modo] of Object.entries(estrategias)) {
     if (modo && modo !== "OFF") {
       switch (nombre) {
