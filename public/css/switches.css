@@ -60,7 +60,27 @@
   left: 28px;
 }
 
-/* Efecto hover */
+/* Hover + tooltip */
 .switch-triple:hover {
   filter: brightness(1.2);
+}
+
+/* Tooltip nativo estilizado (para navegadores modernos) */
+.switch-triple[title] {
+  position: relative;
+}
+.switch-triple[title]:hover::before {
+  content: attr(title);
+  position: absolute;
+  bottom: 35px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #1e1e1e;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 10;
+  opacity: 0.9;
 }

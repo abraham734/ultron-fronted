@@ -1,12 +1,11 @@
 // === switches.js ===
 // Control de 5 estrategias con switch visual triple (OFF / STANDARD / RIESGO)
-// Actualizado 29/oct/2025
+// Versión final 29/oct/2025 con tooltip dinámico
 
 export function renderSwitches() {
   const barra = document.getElementById("barra-estrategias");
   if (!barra) return;
 
-  // === Plantilla con los nuevos switches ===
   const estrategias = [
     { id: "modo-cajaDarvas", nombre: "📦 Caja Darvas" },
     { id: "modo-cambioCiclo", nombre: "🧠 Cambio de Ciclo" },
@@ -15,6 +14,7 @@ export function renderSwitches() {
     { id: "modo-emaTriple", nombre: "📊 Triple EMA + ADX" },
   ];
 
+  // === Render dinámico ===
   barra.innerHTML = estrategias
     .map(
       (e) => `
@@ -30,6 +30,7 @@ export function renderSwitches() {
   estrategias.forEach(({ id }) => {
     const switchEl = document.getElementById(id);
     let estado = localStorage.getItem(id) || "OFF";
+
     aplicarEstadoVisual(switchEl, estado);
 
     switchEl.addEventListener("click", () => {
@@ -48,9 +49,10 @@ function siguienteEstado(actual) {
   return "OFF";
 }
 
-// === Aplica clase visual y color correspondiente ===
+// === Aplica color, posición y tooltip ===
 function aplicarEstadoVisual(elemento, estado) {
   elemento.className = "switch-triple"; // limpia clases previas
+  elemento.setAttribute("title", `Modo: ${estado}`); // tooltip dinámico
   if (estado === "STANDARD") elemento.classList.add("standard");
   if (estado === "RIESGO") elemento.classList.add("riesgo");
 }
