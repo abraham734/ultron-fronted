@@ -1,93 +1,76 @@
 // === switches.js ===
-// Control Triple Switch de estrategias Ultron (Frontend)
-// Versión actualizada 28/oct/2025
+// Control de 5 estrategias con switch visual triple (OFF / STANDARD / RIESGO)
+// Actualizado 29/oct/2025
 
-const BACKEND_URL = window.location.hostname.includes("vercel.app")
-  ? "https://ultron-backend-zvtm.onrender.com"
-  : "http://127.0.0.1:10000";
-
-// === Renderiza los switches en pantalla ===
 export function renderSwitches() {
   const barra = document.getElementById("barra-estrategias");
   if (!barra) return;
 
-  // === Plantilla con selectores de tres estados ===
-  barra.innerHTML = `
-    <div class="estrategia-toggle">
-      <span>📦 Caja Darvas</span>
-      <select id="modo-cajaDarvas" class="triple-switch">
-        <option value="OFF">OFF</option>
-        <option value="STANDARD">STANDARD</option>
-        <option value="RIESGO">RIESGO</option>
-      </select>
-    </div>
-
-    <div class="estrategia-toggle">
-      <span>🧠 Cambio de Ciclo</span>
-      <select id="modo-cambioCiclo" class="triple-switch">
-        <option value="OFF">OFF</option>
-        <option value="STANDARD">STANDARD</option>
-        <option value="RIESGO">RIESGO</option>
-      </select>
-    </div>
-
-    <div class="estrategia-toggle">
-      <span>📈 Tendencia</span>
-      <select id="modo-tendencia" class="triple-switch">
-        <option value="OFF">OFF</option>
-        <option value="STANDARD">STANDARD</option>
-        <option value="RIESGO">RIESGO</option>
-      </select>
-    </div>
-
-    <div class="estrategia-toggle">
-      <span>💎 Supertrend Doble</span>
-      <select id="modo-supertrendDoble" class="triple-switch">
-        <option value="OFF">OFF</option>
-        <option value="STANDARD">STANDARD</option>
-        <option value="RIESGO">RIESGO</option>
-      </select>
-    </div>
-
-    <div class="estrategia-toggle">
-      <span>📊 Triple EMA + ADX</span>
-      <select id="modo-emaTriple" class="triple-switch">
-        <option value="OFF">OFF</option>
-        <option value="STANDARD">STANDARD</option>
-        <option value="RIESGO">RIESGO</option>
-      </select>
-    </div>
-  `;
-
-  // === Restaurar modos desde localStorage ===
-  const modulos = [
-    "modo-cajaDarvas",
-    "modo-cambioCiclo",
-    "modo-tendencia",
-    "modo-supertrendDoble",
-    "modo-emaTriple"
+  // === Plantilla con los nuevos switches ===
+  const estrategias = [
+    { id: "modo-cajaDarvas", nombre: "📦 Caja Darvas" },
+    { id: "modo-cambioCiclo", nombre: "🧠 Cambio de Ciclo" },
+    { id: "modo-tendencia", nombre: "📈 Tendencia" },
+    { id: "modo-supertrendDoble", nombre: "💎 Supertrend Doble" },
+    { id: "modo-emaTriple", nombre: "📊 Triple EMA + ADX" },
   ];
 
-  modulos.forEach((id) => {
-    const selector = document.getElementById(id);
-    const saved = localStorage.getItem(id);
-    if (saved) selector.value = saved;
+  barra.innerHTML = estrategias
+    .map(
+      (e) => `
+      <div class="estrategia-toggle">
+        <span>${e.nombre}</span>
+        <div id="${e.id}" class="switch-triple"></div>
+      </div>
+    `
+    )
+    .join("");
 
-    selector.addEventListener("change", () => {
-      localStorage.setItem(id, selector.value);
-      console.log(`🎚️ Estrategia ${id.replace("modo-", "")} => ${selector.value}`);
+  // === Cargar y activar estado desde localStorage ===
+  estrategias.forEach(({ id }) => {
+    const switchEl = document.getElementById(id);
+    let estado = localStorage.getItem(id) || "OFF";
+    aplicarEstadoVisual(switchEl, estado);
+
+    switchEl.addEventListener("click", () => {
+      estado = siguienteEstado(estado);
+      aplicarEstadoVisual(switchEl, estado);
+      localStorage.setItem(id, estado);
+      console.log(`🎚️ Estrategia ${id.replace("modo-", "")} => ${estado}`);
     });
   });
 }
 
+// === Alterna entre OFF → STANDARD → RIESGO ===
+function siguienteEstado(actual) {
+  if (actual === "OFF") return "STANDARD";
+  if (actual === "STANDARD") return "RIESGO";
+  return "OFF";
+}
+
+// === Aplica clase visual y color correspondiente ===
+function aplicarEstadoVisual(elemento, estado) {
+  elemento.className = "switch-triple"; // limpia clases previas
+  if (estado === "STANDARD") elemento.classList.add("standard");
+  if (estado === "RIESGO") elemento.classList.add("riesgo");
+}
+
 // === Devuelve el modo actual de cada estrategia ===
 export function obtenerEstadoEstrategias() {
-  const get = (id) => document.getElementById(id)?.value || "OFF";
+  const ids = [
+    "modo-cajaDarvas",
+    "modo-cambioCiclo",
+    "modo-tendencia",
+    "modo-supertrendDoble",
+    "modo-emaTriple",
+  ];
+  const get = (id) => localStorage.getItem(id) || "OFF";
+
   return {
-    cajaDarvas: get("modo-cajaDarvas"),
-    cambioCiclo: get("modo-cambioCiclo"),
-    tendencia: get("modo-tendencia"),
-    supertrendDoble: get("modo-supertrendDoble"),
-    emaTriple: get("modo-emaTriple")
+    cajaDarvas: get(ids[0]),
+    cambioCiclo: get(ids[1]),
+    tendencia: get(ids[2]),
+    supertrendDoble: get(ids[3]),
+    emaTriple: get(ids[4]),
   };
 }
