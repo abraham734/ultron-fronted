@@ -1,5 +1,6 @@
 // === watchlist.js ===
 // Panel lateral de activos (tipo TradingView) con conexión directa al flujo de análisis principal
+// Versión táctica 29/oct/2025 – sin ETFs, solo activos volátiles
 
 import { realizarAnalisis } from "./ultron.js"; // ✅ usa el mismo flujo POST oficial
 
@@ -22,11 +23,7 @@ export const activosPorCategoria = {
 
   Índices: [
     { nombre: "S&P 500", simbolo: "SP500" },
-    { nombre: "Nasdaq (QQQ)", simbolo: "QQQ" },
-    { nombre: "Real Estate (XLRE)", simbolo: "XLRE" },
-    { nombre: "Financials (XLF)", simbolo: "XLF" },
-    { nombre: "Health (XLV)", simbolo: "XLV" },
-    { nombre: "Consumer Discretionary (XLY)", simbolo: "XLY" }
+    { nombre: "Nasdaq 100", simbolo: "NDX" }
   ],
 
   Criptomonedas: [
@@ -36,11 +33,12 @@ export const activosPorCategoria = {
   ]
 };
 
-// === Render principal (corregido) ===
+// === Render principal ===
 export function renderWatchlist() {
-  const panel = document.querySelector(".watchlist-panel"); // Usa el existente
+  const panel = document.querySelector(".watchlist-panel");
+  if (!panel) return;
 
-  // Limpia el contenido previo (por si se vuelve a renderizar)
+  // Limpia contenido previo
   panel.innerHTML = "";
 
   for (const categoria in activosPorCategoria) {
@@ -59,14 +57,13 @@ export function renderWatchlist() {
       btn.textContent = activo.nombre;
       btn.dataset.simbolo = activo.simbolo;
 
-      // === Flujo: análisis completo vía POST ===
       btn.addEventListener("click", async () => {
         try {
           console.log(`🧭 Analizando activo manual: ${activo.simbolo}`);
           await realizarAnalisis(activo.simbolo);
         } catch (error) {
-          console.error(`❌ Error al ejecutar análisis manual de ${activo.simbolo}:`, error);
-          alert(`Error al analizar ${activo.nombre}. Revisa conexión o backend.`);
+          console.error(`❌ Error al ejecutar análisis de ${activo.simbolo}:`, error);
+          alert(`Error al analizar ${activo.nombre}. Verifica conexión o backend.`);
         }
       });
 
@@ -76,7 +73,6 @@ export function renderWatchlist() {
     panel.appendChild(seccion);
   }
 }
-
 
 // === Inicialización automática ===
 renderWatchlist();

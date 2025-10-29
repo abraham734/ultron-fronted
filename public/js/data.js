@@ -1,5 +1,6 @@
 // === data.js ===
 // Lista sincronizada con la watchlist de TradingView de Néstor
+// Versión depurada – sin ETFs (solo activos volátiles y principales)
 
 export const activos = {
   Forex: [
@@ -19,11 +20,7 @@ export const activos = {
 
   Índices: [
     { nombre: "S&P 500", simbolo: "SP500" },
-    { nombre: "Nasdaq (QQQ)", simbolo: "QQQ" },
-    { nombre: "Real Estate (XLRE)", simbolo: "XLRE" },
-    { nombre: "Financials (XLF)", simbolo: "XLF" },
-    { nombre: "Health (XLV)", simbolo: "XLV" },
-    { nombre: "Consumer Discretionary (XLY)", simbolo: "XLY" }
+    { nombre: "Nasdaq 100", simbolo: "NDX" }
   ],
 
   Criptomonedas: [
