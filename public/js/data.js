@@ -1,6 +1,7 @@
 // === data.js ===
 // Lista sincronizada con la watchlist de TradingView de Néstor
-// Versión depurada – sin ETFs (solo activos volátiles y principales)
+// Versión táctica – optimizada para plan gratuito TwelveData
+// Fecha: 29/oct/2025
 
 export const activos = {
   Forex: [
@@ -15,17 +16,21 @@ export const activos = {
   Acciones: [
     { nombre: "Google", simbolo: "GOOG" },
     { nombre: "Tesla", simbolo: "TSLA" },
-    { nombre: "Apple", simbolo: "AAPL" }
+    { nombre: "Apple", simbolo: "AAPL" },
+    { nombre: "Nvidia", simbolo: "NVDA" },
+    { nombre: "Meta Platforms", simbolo: "META" },
+    { nombre: "AMD", simbolo: "AMD" }
   ],
 
   Índices: [
-    { nombre: "S&P 500", simbolo: "SP500" },
-    { nombre: "Nasdaq 100", simbolo: "NDX" }
+    { nombre: "S&P 500 (ETF SPY)", simbolo: "SPY" },
+    { nombre: "Nasdaq 100 (ETF QQQ)", simbolo: "QQQ" }
   ],
 
   Criptomonedas: [
     { nombre: "Bitcoin", simbolo: "BTC/USD" },
     { nombre: "Ethereum", simbolo: "ETH/USD" },
-    { nombre: "Solana", simbolo: "SOL/USD" }
+    { nombre: "Solana", simbolo: "SOL/USD" },
+    { nombre: "Binance Coin", simbolo: "BNB/USD" }
   ]
 };
