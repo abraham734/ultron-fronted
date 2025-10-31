@@ -4,27 +4,28 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 30px;
-  padding: 12px 0;
+  gap: 16px; /* antes 30px */
+  padding: 10px 0;
   background-color: #0e1117;
   border-bottom: 1px solid #2c2f36;
-  flex-wrap: wrap;
+  flex-wrap: wrap; /* se mantiene por seguridad */
 }
 
+/* Contenedor de cada switch + texto */
 .estrategia-toggle {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 6px; /* antes 10px */
   color: #ffffff;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 13px; /* ligeramente más compacto */
 }
 
 /* === Switch triple (OFF / STANDARD / RIESGO) === */
 .switch-triple {
-  width: 50px;
-  height: 26px;
-  border-radius: 20px;
+  width: 44px; /* antes 50px */
+  height: 22px; /* antes 26px */
+  border-radius: 18px;
   background-color: #555; /* OFF */
   position: relative;
   cursor: pointer;
@@ -37,8 +38,8 @@
   position: absolute;
   top: 3px;
   left: 3px;
-  width: 20px;
-  height: 20px;
+  width: 16px; /* antes 20px */
+  height: 16px;
   background-color: white;
   border-radius: 50%;
   transition: left 0.3s ease, background-color 0.3s ease;
@@ -49,7 +50,7 @@
   background-color: #007bff;
 }
 .switch-triple.standard::after {
-  left: 15px;
+  left: 14px; /* ajustado al nuevo tamaño */
 }
 
 /* RIESGO (Naranja encendido) */
@@ -57,29 +58,29 @@
   background-color: #ff9800;
 }
 .switch-triple.riesgo::after {
-  left: 28px;
+  left: 25px; /* ajustado al nuevo tamaño */
 }
 
 /* Hover + tooltip */
 .switch-triple:hover {
-  filter: brightness(1.2);
+  filter: brightness(1.15);
 }
 
-/* Tooltip nativo estilizado (para navegadores modernos) */
+/* Tooltip estilizado */
 .switch-triple[title] {
   position: relative;
 }
 .switch-triple[title]:hover::before {
   content: attr(title);
   position: absolute;
-  bottom: 35px;
+  bottom: 32px;
   left: 50%;
   transform: translateX(-50%);
   background-color: #1e1e1e;
   color: #fff;
-  padding: 4px 8px;
-  border-radius: 5px;
-  font-size: 12px;
+  padding: 3px 6px;
+  border-radius: 4px;
+  font-size: 11px;
   white-space: nowrap;
   z-index: 10;
   opacity: 0.9;
