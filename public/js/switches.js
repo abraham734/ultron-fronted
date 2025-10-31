@@ -7,11 +7,11 @@ export function renderSwitches() {
   if (!barra) return;
 
   const estrategias = [
-    { id: "modo-cajaDarvas", nombre: "📦 Caja Darvas" },
+    { id: "modo-cajaDarvas", nombre: "📦 Caja Darvas + SQZEE" },
     { id: "modo-cambioCiclo", nombre: "🧠 Cambio de Ciclo" },
     { id: "modo-tendencia", nombre: "📈 Tendencia" },
     { id: "modo-supertrendDoble", nombre: "💎 Supertrend Doble" },
-    { id: "modo-emaTriple", nombre: "📊 Triple EMA + ADX" },
+    { id: "modo-emaTriple", nombre: "📊 Triple EMA + SQZEE" },
   ];
 
   // === Render dinámico ===
