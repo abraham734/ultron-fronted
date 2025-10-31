@@ -1,4 +1,4 @@
-// === escaneoentradas.js (frontend – escaneo REAL secuencial, 1/min) ===
+// === escaneoentradas.js (frontend – escaneo REAL secuencial, 1/min con contador visual) ===
 // Recorre los activos uno por minuto y aplica SOLO las estrategias activas
 // OFF = ignorada | STANDARD y RIESGO = válidas
 // Usa la MISMA barra .barra-escaneo que el análisis manual.
@@ -18,6 +18,7 @@ const activosSecuenciales = [
 let indiceActivoActual = 0;
 const intervaloMinutos = 1;
 let escaneoEnProgreso = false;
+let contadorInterval = null;
 
 // 🧷 Asegura que existe una única barra compartida
 function getBarraEscaneo() {
@@ -50,6 +51,23 @@ function obtenerEstrategiasActivas() {
   return activas;
 }
 
+// 🎛️ Inicia cuenta regresiva visual entre escaneos
+function iniciarContador(barra, duracionSegundos) {
+  let tiempoRestante = duracionSegundos;
+  clearInterval(contadorInterval);
+
+  contadorInterval = setInterval(() => {
+    tiempoRestante--;
+    if (tiempoRestante <= 0) {
+      clearInterval(contadorInterval);
+      return;
+    }
+    // Actualiza el texto de la barra sin borrar el nombre del activo
+    const textoBase = barra.dataset.textoBase || barra.textContent;
+    barra.textContent = `${textoBase} | Próximo en: ${tiempoRestante}s`;
+  }, 1000);
+}
+
 // 🔁 Escaneo REAL secuencial (uno por minuto)
 async function escanearSiguienteActivo() {
   if (escaneoEnProgreso) return;
@@ -61,7 +79,6 @@ async function escanearSiguienteActivo() {
 
   const estrategiasActivas = obtenerEstrategiasActivas();
   if (estrategiasActivas.length === 0) {
-    // Ninguna estrategia activa → modo reposo
     getBarraEscaneo().textContent = "🟡 Esperando... (todas las estrategias en OFF)";
     console.log("🟡 Ciclo pausado: no hay estrategias activas.");
     return;
@@ -73,21 +90,24 @@ async function escanearSiguienteActivo() {
     const activo = activosSecuenciales[indiceActivoActual];
     const simbolo = activo.simbolo;
     const barra = getBarraEscaneo();
-
-    // Estrategia seleccionada (solo la primera activa, para evitar duplicados)
     const estrategiaSeleccionada = estrategiasActivas[0];
 
-    barra.textContent = `🔍 Escaneando: ${simbolo} – Estrategia: ${estrategiaSeleccionada}`;
+    const textoBase = `🔍 Escaneando: ${simbolo} – Estrategia: ${estrategiaSeleccionada}`;
+    barra.textContent = textoBase;
+    barra.dataset.textoBase = textoBase;
+
     console.log(`📊 Escaneando (AUTO): ${simbolo} – ${estrategiaSeleccionada}`);
 
     // Llamada al backend (misma función que análisis manual)
     await realizarAnalisis(simbolo);
 
+    // Inicia cuenta regresiva hasta el siguiente activo
+    iniciarContador(barra, intervaloMinutos * 60);
+
   } catch (err) {
     console.error("❌ Error en escaneo automático:", err);
     getBarraEscaneo().textContent = `❌ Error de escaneo: ${err?.message || err}`;
   } finally {
-    // Avanza y libera
     indiceActivoActual = (indiceActivoActual + 1) % activosSecuenciales.length;
     escaneoEnProgreso = false;
   }
