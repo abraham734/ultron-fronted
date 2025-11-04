@@ -128,4 +128,7 @@ function iniciarMonitoreoLogs() {
 }
 
 // === Auto render al cargar DOM ===
-document.addEventListener("DOMContentLoaded", renderJarvisPanel);
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("🟢 [Jarvis] Iniciando render...");
+  renderJarvisPanel();
+});
