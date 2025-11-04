@@ -1,0 +1,67 @@
+/* === jarvis_panel.css === */
+/* Estilo inicial tipo terminal con acentos dorado y azul */
+
+#jarvis-panel {
+  background: #0e1117;
+  border: 1px solid #2c2f36;
+  color: #fff;
+  font-family: 'Consolas', monospace;
+  padding: 20px;
+  margin: 25px;
+  border-radius: 10px;
+  box-shadow: inset 0 0 8px #1b1f27;
+}
+
+.jarvis-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #2c2f36;
+  padding-bottom: 10px;
+}
+
+.jarvis-header h2 {
+  font-size: 18px;
+  color: #f4c542;
+}
+
+.btn-jarvis {
+  background: #f4c542;
+  color: #0e1117;
+  border: none;
+  border-radius: 5px;
+  padding: 6px 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-jarvis:hover {
+  background: #ffd65c;
+}
+
+.jarvis-body {
+  display: flex;
+  gap: 20px;
+  margin-top: 15px;
+}
+
+.jarvis-log {
+  flex: 2;
+  background: #141821;
+  border: 1px solid #2c2f36;
+  padding: 10px;
+  height: 200px;
+  overflow-y: auto;
+  font-size: 13px;
+  color: #a7b2c0;
+}
+
+.jarvis-metricas {
+  flex: 1;
+  background: #141821;
+  border: 1px solid #2c2f36;
+  padding: 10px;
+  font-size: 14px;
+  color: #d1d5db;
+}
