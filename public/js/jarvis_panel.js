@@ -1,6 +1,7 @@
 // === jarvis_panel.js ===
 // Interfaz visual para Jarvis – Oro Pro (modo simulación)
-// Fecha: 03/nov/2025
+// Versión ajustada para integrarse sin alterar layout principal
+// Fecha: 03/nov/2025 – Revisión táctica
 
 const JARVIS_BACKEND = window.location.hostname.includes("vercel.app")
   ? "https://ultron-backend-zvtm.onrender.com"
@@ -16,21 +17,27 @@ function renderJarvisPanel() {
     return;
   }
 
+  // 💠 Diseño compacto tipo dashboard (no rompe layout)
   contenedor.innerHTML = `
-    <div class="jarvis-header">
-      <h2>🤖 Jarvis – Oro Pro <span class="estado">${jarvisActivo ? "🟢 Activo" : "🔴 Inactivo"}</span></h2>
-      <button id="btn-toggle-jarvis" class="btn-jarvis">
-        ${jarvisActivo ? "Detener" : "Iniciar"} Jarvis
-      </button>
-    </div>
-    <div class="jarvis-body">
-      <div class="jarvis-log" id="jarvis-log">
-        <p>Esperando actividad...</p>
+    <div class="jarvis-panel-box">
+      <div class="jarvis-header">
+        <h2>🧠 <span class="titulo">Jarvis - Oro Pro</span> 
+          <span class="estado">${jarvisActivo ? "🟢 Activo" : "🔴 Inactivo"}</span>
+        </h2>
+        <button id="btn-toggle-jarvis" class="btn-jarvis">
+          ${jarvisActivo ? "Detener" : "Iniciar"} Jarvis
+        </button>
       </div>
-      <div class="jarvis-metricas" id="jarvis-metricas">
-        <p><strong>Activo:</strong> XAU/USD</p>
-        <p><strong>Modo:</strong> Simulación</p>
-        <p><strong>Intervalo:</strong> 2 minutos</p>
+
+      <div class="jarvis-body">
+        <div class="jarvis-log" id="jarvis-log">
+          <p>Esperando actividad...</p>
+        </div>
+        <div class="jarvis-metricas" id="jarvis-metricas">
+          <p><strong>Activo:</strong> <span>XAU/USD</span></p>
+          <p><strong>Modo:</strong> <span>Simulación</span></p>
+          <p><strong>Intervalo:</strong> <span>2 minutos</span></p>
+        </div>
       </div>
     </div>
   `;
@@ -93,7 +100,7 @@ async function iniciarMonitoreoLogs() {
 }
 
 // === Auto render al cargar DOM ===
-document.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("load", () => {
   console.log("🟢 [Jarvis] Iniciando render...");
   renderJarvisPanel();
 });
