@@ -9,7 +9,7 @@ const JARVIS_BACKEND = window.location.hostname.includes("vercel.app")
 let jarvisActivo = false;
 
 // === Render principal ===
-export function renderJarvisPanel() {
+function renderJarvisPanel() {
   const contenedor = document.getElementById("jarvis-panel");
   if (!contenedor) {
     console.error("❌ [Jarvis] Contenedor #jarvis-panel no encontrado en el DOM.");
@@ -37,7 +37,6 @@ export function renderJarvisPanel() {
 
   configurarEventosJarvis();
   iniciarMonitoreoLogs();
-
   console.log("✅ [Jarvis Panel] Renderizado correctamente.");
 }
 
