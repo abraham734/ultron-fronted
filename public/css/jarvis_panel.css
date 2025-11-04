@@ -8,13 +8,15 @@
   color: #fff;
   font-family: 'Consolas', monospace;
   padding: 22px;
-  margin: 25px auto;
+  margin: 40px auto 60px auto;
   border-radius: 12px;
   box-shadow:
     0 0 10px rgba(0, 0, 0, 0.6),
     inset 0 0 12px rgba(25, 30, 40, 0.8);
   max-width: 1150px;
   transition: all 0.3s ease;
+  position: relative;
+  z-index: 5;
 }
 
 #jarvis-panel:hover {
@@ -141,27 +143,15 @@
   background-color: #f4c542;
 }
 
-
-/* === Ajustes de visibilidad y capa === */
-#jarvis-panel {
-  position: relative;
-  z-index: 9999; /* asegura que quede encima de otros elementos */
-  display: block;
-  opacity: 1;
-  visibility: visible;
-}
-
-/* Si por alguna razón está fuera de la vista */
+/* === Asegura visibilidad y correcta jerarquía === */
 body {
   overflow-y: auto !important;
 }
 
-/* Asegura separación del contenido principal */
-#jarvis-panel {
-  margin-top: 40px !important;
-}
-
-/* En caso de que haya conflicto con flex del layout principal */
+/* === Reintegración con layout Ultron === */
 .layout-ultron {
-  display: block !important;
+  display: grid; /* Restaura comportamiento normal del dashboard */
+  grid-template-columns: 250px 1fr;
+  grid-template-areas: "sidebar main";
+  min-height: 100vh;
 }
