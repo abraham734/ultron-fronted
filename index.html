@@ -2,23 +2,21 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ultrón - Asistente de Trading</title>
 
-  <!-- === ESTILOS CORE ULTRÓN === -->
-  <link rel="stylesheet" href="/css/ultron.css">
-  <link rel="stylesheet" href="/css/analisis.css">
-  <link rel="stylesheet" href="/css/watchlist.css">
-  <link rel="stylesheet" href="/css/configuracionrapida.css">
-  <link rel="stylesheet" href="/css/historial.css">
-  <link rel="stylesheet" href="/css/switches.css">
-
-  <!-- === ESTILO JARVIS (antes de los scripts) === -->
+  <!-- === ESTILOS === -->
+  <link rel="stylesheet" href="/css/ultron.css" />
+  <link rel="stylesheet" href="/css/analisis.css" />
+  <link rel="stylesheet" href="/css/watchlist.css" />
+  <link rel="stylesheet" href="/css/configuracionrapida.css" />
+  <link rel="stylesheet" href="/css/historial.css" />
+  <link rel="stylesheet" href="/css/switches.css" />
   <link rel="stylesheet" href="/css/jarvis_panel.css" />
 </head>
 
 <body>
-  <!-- === LAYOUT PRINCIPAL ULTRÓN (NO DEBE ESTAR VACÍO) === -->
+  <!-- === LAYOUT COMPLETO DE ULTRÓN === -->
   <div class="layout-ultron">
     <!-- === SIDEBAR === -->
     <aside class="sidebar">
@@ -32,7 +30,7 @@
       </div>
 
       <div class="sidebar-footer">
-        <p><strong>Sistema Activo</strong><br>Monitoreando 24 horas</p>
+        <p><strong>Sistema Activo</strong><br />Monitoreando 24 horas</p>
       </div>
     </aside>
 
@@ -54,23 +52,26 @@
         </div>
       </header>
 
+      <!-- Barra de estrategias -->
       <nav id="barra-estrategias"></nav>
 
+      <!-- Estado de escaneo -->
       <div class="barra-escaneo">
         <span id="estado-escaneo">🔍 Esperando análisis...</span>
       </div>
 
+      <!-- Contenedor principal del análisis -->
       <section id="contenedor-activos" class="contenedor-activos"></section>
+
+      <!-- Panel Jarvis Oro Pro -->
+      <section id="jarvis-panel"></section>
     </main>
 
-    <!-- === WATCHLIST === -->
+    <!-- === PANEL DE WATCHLIST === -->
     <aside class="watchlist-panel"></aside>
   </div>
 
-  <!-- === PANEL JARVIS (DEBAJO DEL LAYOUT, EN EL MISMO BODY) === -->
- 
-
-  <!-- === SCRIPTS (una sola carga por archivo) === -->
+  <!-- === SCRIPTS === -->
   <script type="module" src="/js/ultron.js"></script>
   <script type="module" src="/js/api_twelvedata.js"></script>
   <script type="module" src="/js/configuracionrapida.js"></script>
@@ -82,9 +83,7 @@
   <script type="module" src="/js/escaneoentradas.js"></script>
   <script type="module" src="/js/intervalosporactivo.js"></script>
 
-  <!-- Jarvis UI -->
+  <!-- Panel Jarvis -->
   <script type="module" src="/js/jarvis_panel.js"></script>
 </body>
 </html>
-
-
