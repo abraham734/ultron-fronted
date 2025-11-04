@@ -140,3 +140,28 @@
 .jarvis-log::-webkit-scrollbar-thumb:hover {
   background-color: #f4c542;
 }
+
+
+/* === Ajustes de visibilidad y capa === */
+#jarvis-panel {
+  position: relative;
+  z-index: 9999; /* asegura que quede encima de otros elementos */
+  display: block;
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Si por alguna razón está fuera de la vista */
+body {
+  overflow-y: auto !important;
+}
+
+/* Asegura separación del contenido principal */
+#jarvis-panel {
+  margin-top: 40px !important;
+}
+
+/* En caso de que haya conflicto con flex del layout principal */
+.layout-ultron {
+  display: block !important;
+}
