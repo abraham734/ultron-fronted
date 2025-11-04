@@ -1,6 +1,5 @@
 // === jarvis_panel.js ===
-// Interfaz visual para Jarvis – Oro Pro (modo simulación integrado en ULTRÓN)
-// Fecha: 03/nov/2025
+// Interfaz visual para Jarvis – Oro Pro (modo simulación)
 
 const JARVIS_BACKEND = window.location.hostname.includes("vercel.app")
   ? "https://ultron-backend-zvtm.onrender.com"
@@ -8,87 +7,77 @@ const JARVIS_BACKEND = window.location.hostname.includes("vercel.app")
 
 let jarvisActivo = false;
 
-// === Render principal ===
+// Render dentro del <section id="jarvis-panel"> que ya existe en el index
 function renderJarvisPanel() {
-  // 📍 Buscamos el contenedor principal dentro del layout
-  const mainContent = document.querySelector(".main-content");
-  if (!mainContent) {
-    console.error("❌ [Jarvis] No se encontró .main-content para insertar el panel.");
+  const contenedor = document.getElementById("jarvis-panel");
+  if (!contenedor) {
+    console.error("❌ [Jarvis] No existe <section id='jarvis-panel'> en el DOM.");
     return;
   }
 
-  // Evitar duplicados
-  if (document.getElementById("jarvis-panel")) {
+  // Evitar doble render
+  if (contenedor.dataset.rendered === "1") {
     console.warn("⚠️ [Jarvis] Panel ya existente, omitiendo render.");
     return;
   }
 
-  // 📦 Creamos el panel
-  const contenedor = document.createElement("section");
-  contenedor.id = "jarvis-panel";
   contenedor.innerHTML = `
-    <div class="jarvis-panel-box">
-      <div class="jarvis-header">
-        <h2>🧠 Jarvis - Oro Pro <span class="estado">${jarvisActivo ? "🟢 Activo" : "🔴 Inactivo"}</span></h2>
-        <button id="btn-toggle-jarvis" class="btn-jarvis">
-          ${jarvisActivo ? "Detener" : "Iniciar"} Jarvis
-        </button>
+    <div class="jarvis-header">
+      <h2>🧠 Jarvis - Oro Pro <span class="estado">${jarvisActivo ? "🟢 Activo" : "🔴 Inactivo"}</span></h2>
+      <button id="btn-toggle-jarvis" class="btn-jarvis">
+        ${jarvisActivo ? "Detener" : "Iniciar"} Jarvis
+      </button>
+    </div>
+
+    <div class="jarvis-body">
+      <div class="jarvis-log" id="jarvis-log">
+        <p>Esperando actividad...</p>
       </div>
 
-      <div class="jarvis-body">
-        <div class="jarvis-log" id="jarvis-log">
-          <p>Esperando actividad...</p>
-        </div>
-        <div class="jarvis-metricas" id="jarvis-metricas">
-          <p><strong>Activo:</strong> XAU/USD</p>
-          <p><strong>Modo:</strong> Simulación</p>
-          <p><strong>Intervalo:</strong> 2 minutos</p>
-        </div>
+      <div class="jarvis-metricas" id="jarvis-metricas">
+        <p><strong>Activo:</strong> XAU/USD</p>
+        <p><strong>Modo:</strong> Simulación</p>
+        <p><strong>Intervalo:</strong> 2 minutos</p>
       </div>
     </div>
   `;
 
-  // 📍 Insertamos el panel justo debajo del bloque de análisis
-  const referencia = document.getElementById("contenedor-activos");
-  if (referencia && referencia.parentNode === mainContent) {
-    mainContent.insertBefore(contenedor, referencia.nextSibling);
-  } else {
-    mainContent.appendChild(contenedor);
-  }
-
+  contenedor.dataset.rendered = "1";
   configurarEventosJarvis();
   iniciarMonitoreoLogs();
-  console.log("✅ [Jarvis Panel] Integrado correctamente dentro de ULTRÓN.");
+  console.log("✅ [Jarvis Panel] Renderizado correctamente.");
 }
 
-// === Control de botones ===
 function configurarEventosJarvis() {
   const boton = document.getElementById("btn-toggle-jarvis");
   if (!boton) return;
 
   boton.addEventListener("click", async () => {
-    if (jarvisActivo) {
-      await fetch(`${JARVIS_BACKEND}/api/jarvis/stop`);
-      jarvisActivo = false;
-      actualizarEstadoJarvis("🔴 Inactivo");
-      agregarLog("🛑 Jarvis detenido manualmente.");
-    } else {
-      await fetch(`${JARVIS_BACKEND}/api/jarvis/start`);
-      jarvisActivo = true;
-      actualizarEstadoJarvis("🟢 Activo");
-      agregarLog("🚀 Jarvis iniciado en modo simulación...");
+    try {
+      if (jarvisActivo) {
+        await fetch(`${JARVIS_BACKEND}/api/jarvis/stop`);
+        jarvisActivo = false;
+        actualizarEstadoJarvis("🔴 Inactivo");
+        agregarLog("🛑 Jarvis detenido manualmente.");
+        boton.textContent = "Iniciar Jarvis";
+      } else {
+        await fetch(`${JARVIS_BACKEND}/api/jarvis/start`);
+        jarvisActivo = true;
+        actualizarEstadoJarvis("🟢 Activo");
+        agregarLog("🚀 Jarvis iniciado en modo simulación...");
+        boton.textContent = "Detener Jarvis";
+      }
+    } catch (e) {
+      console.warn("⚠️ [Jarvis] No se pudo alternar estado:", e?.message || e);
     }
-    boton.textContent = jarvisActivo ? "Detener Jarvis" : "Iniciar Jarvis";
   });
 }
 
-// === Actualizar estado visual ===
 function actualizarEstadoJarvis(estado) {
   const estadoSpan = document.querySelector("#jarvis-panel .estado");
   if (estadoSpan) estadoSpan.textContent = estado;
 }
 
-// === Logs dinámicos ===
 function agregarLog(mensaje) {
   const log = document.getElementById("jarvis-log");
   if (!log) return;
@@ -97,8 +86,7 @@ function agregarLog(mensaje) {
   log.prepend(p);
 }
 
-// === Monitoreo de estado (cada 10s) ===
-async function iniciarMonitoreoLogs() {
+function iniciarMonitoreoLogs() {
   setInterval(async () => {
     try {
       const res = await fetch(`${JARVIS_BACKEND}/api/jarvis/estado`);
@@ -108,13 +96,12 @@ async function iniciarMonitoreoLogs() {
         agregarLog(`📈 Última señal: ${data.ultimaOperacion.tipo} (${data.ultimaOperacion.motivo})`);
       }
     } catch (err) {
-      console.warn("⚠️ No se pudo actualizar estado Jarvis:", err.message);
+      console.warn("⚠️ [Jarvis] No se pudo actualizar estado:", err?.message || err);
     }
   }, 10000);
 }
 
-// === Auto render ===
-window.addEventListener("load", () => {
-  console.log("🟢 [Jarvis] Integrando dentro de ULTRÓN...");
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("🟢 [Jarvis] Integrando dentro de ULTRÓN…");
   renderJarvisPanel();
 });
