@@ -1,7 +1,6 @@
 // === jarvis_panel.js ===
-// Interfaz visual para Jarvis – Oro Pro (modo simulación)
-// Versión ajustada para integrarse sin alterar layout principal
-// Fecha: 03/nov/2025 – Revisión táctica
+// Interfaz visual para Jarvis – Oro Pro (modo simulación integrado en ULTRÓN)
+// Fecha: 03/nov/2025
 
 const JARVIS_BACKEND = window.location.hostname.includes("vercel.app")
   ? "https://ultron-backend-zvtm.onrender.com"
@@ -11,19 +10,26 @@ let jarvisActivo = false;
 
 // === Render principal ===
 function renderJarvisPanel() {
-  const contenedor = document.getElementById("jarvis-panel");
-  if (!contenedor) {
-    console.error("❌ [Jarvis] Contenedor #jarvis-panel no encontrado en el DOM.");
+  // 📍 Buscamos el contenedor principal dentro del layout
+  const mainContent = document.querySelector(".main-content");
+  if (!mainContent) {
+    console.error("❌ [Jarvis] No se encontró .main-content para insertar el panel.");
     return;
   }
 
-  // 💠 Diseño compacto tipo dashboard (no rompe layout)
+  // Evitar duplicados
+  if (document.getElementById("jarvis-panel")) {
+    console.warn("⚠️ [Jarvis] Panel ya existente, omitiendo render.");
+    return;
+  }
+
+  // 📦 Creamos el panel
+  const contenedor = document.createElement("section");
+  contenedor.id = "jarvis-panel";
   contenedor.innerHTML = `
     <div class="jarvis-panel-box">
       <div class="jarvis-header">
-        <h2>🧠 <span class="titulo">Jarvis - Oro Pro</span> 
-          <span class="estado">${jarvisActivo ? "🟢 Activo" : "🔴 Inactivo"}</span>
-        </h2>
+        <h2>🧠 Jarvis - Oro Pro <span class="estado">${jarvisActivo ? "🟢 Activo" : "🔴 Inactivo"}</span></h2>
         <button id="btn-toggle-jarvis" class="btn-jarvis">
           ${jarvisActivo ? "Detener" : "Iniciar"} Jarvis
         </button>
@@ -34,17 +40,25 @@ function renderJarvisPanel() {
           <p>Esperando actividad...</p>
         </div>
         <div class="jarvis-metricas" id="jarvis-metricas">
-          <p><strong>Activo:</strong> <span>XAU/USD</span></p>
-          <p><strong>Modo:</strong> <span>Simulación</span></p>
-          <p><strong>Intervalo:</strong> <span>2 minutos</span></p>
+          <p><strong>Activo:</strong> XAU/USD</p>
+          <p><strong>Modo:</strong> Simulación</p>
+          <p><strong>Intervalo:</strong> 2 minutos</p>
         </div>
       </div>
     </div>
   `;
 
+  // 📍 Insertamos el panel justo debajo del bloque de análisis
+  const referencia = document.getElementById("contenedor-activos");
+  if (referencia && referencia.parentNode === mainContent) {
+    mainContent.insertBefore(contenedor, referencia.nextSibling);
+  } else {
+    mainContent.appendChild(contenedor);
+  }
+
   configurarEventosJarvis();
   iniciarMonitoreoLogs();
-  console.log("✅ [Jarvis Panel] Renderizado correctamente.");
+  console.log("✅ [Jarvis Panel] Integrado correctamente dentro de ULTRÓN.");
 }
 
 // === Control de botones ===
@@ -99,8 +113,8 @@ async function iniciarMonitoreoLogs() {
   }, 10000);
 }
 
-// === Auto render al cargar DOM ===
+// === Auto render ===
 window.addEventListener("load", () => {
-  console.log("🟢 [Jarvis] Iniciando render...");
+  console.log("🟢 [Jarvis] Integrando dentro de ULTRÓN...");
   renderJarvisPanel();
 });
