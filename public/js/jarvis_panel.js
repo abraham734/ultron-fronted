@@ -1,5 +1,5 @@
 // === jarvis_panel.js ===
-// Interfaz visual para Jarvis – Oro Pro (modo simulación)
+// Interfaz visual para Jarvis – Oro Pro (modo real demo)
 
 const JARVIS_BACKEND = window.location.hostname.includes("vercel.app")
   ? "https://ultron-backend-zvtm.onrender.com"
@@ -7,7 +7,7 @@ const JARVIS_BACKEND = window.location.hostname.includes("vercel.app")
 
 let jarvisActivo = false;
 
-// Render dentro del <section id="jarvis-panel"> que ya existe en el index
+// === Render del panel principal ===
 function renderJarvisPanel() {
   const contenedor = document.getElementById("jarvis-panel");
   if (!contenedor) {
@@ -35,8 +35,8 @@ function renderJarvisPanel() {
       </div>
 
       <div class="jarvis-metricas" id="jarvis-metricas">
-        <p><strong>Activo:</strong> XAU/USD</p>
-        <p><strong>Modo:</strong> Simulación</p>
+        <p><strong>Activo:</strong> XAU/USD (Oro)</p>
+        <p><strong>Modo:</strong> <span class="modo">Real (Demo Pepperstone)</span></p>
         <p><strong>Intervalo:</strong> 2 minutos</p>
       </div>
     </div>
@@ -45,9 +45,10 @@ function renderJarvisPanel() {
   contenedor.dataset.rendered = "1";
   configurarEventosJarvis();
   iniciarMonitoreoLogs();
-  console.log("✅ [Jarvis Panel] Renderizado correctamente.");
+  console.log("✅ [Jarvis Panel] Renderizado correctamente (modo real demo).");
 }
 
+// === Eventos: Iniciar / Detener ===
 function configurarEventosJarvis() {
   const boton = document.getElementById("btn-toggle-jarvis");
   if (!boton) return;
@@ -58,13 +59,13 @@ function configurarEventosJarvis() {
         await fetch(`${JARVIS_BACKEND}/api/jarvis/stop`);
         jarvisActivo = false;
         actualizarEstadoJarvis("🔴 Inactivo");
-        agregarLog("🛑 Jarvis detenido manualmente.");
+        agregarLog("🛑 Jarvis Oro Pro detenido manualmente.");
         boton.textContent = "Iniciar Jarvis";
       } else {
         await fetch(`${JARVIS_BACKEND}/api/jarvis/start`);
         jarvisActivo = true;
         actualizarEstadoJarvis("🟢 Activo");
-        agregarLog("🚀 Jarvis iniciado en modo simulación...");
+        agregarLog("🚀 Jarvis Oro Pro iniciado (modo real demo conectado a cTrader).");
         boton.textContent = "Detener Jarvis";
       }
     } catch (e) {
@@ -73,11 +74,13 @@ function configurarEventosJarvis() {
   });
 }
 
+// === Actualizar texto de estado ===
 function actualizarEstadoJarvis(estado) {
   const estadoSpan = document.querySelector("#jarvis-panel .estado");
   if (estadoSpan) estadoSpan.textContent = estado;
 }
 
+// === Agregar mensaje al log ===
 function agregarLog(mensaje) {
   const log = document.getElementById("jarvis-log");
   if (!log) return;
@@ -86,12 +89,20 @@ function agregarLog(mensaje) {
   log.prepend(p);
 }
 
+// === Monitorear logs de actividad ===
 function iniciarMonitoreoLogs() {
   setInterval(async () => {
     try {
       const res = await fetch(`${JARVIS_BACKEND}/api/jarvis/estado`);
       if (!res.ok) return;
       const data = await res.json();
+
+      if (data?.activo) {
+        actualizarEstadoJarvis("🟢 Activo");
+      } else {
+        actualizarEstadoJarvis("🔴 Inactivo");
+      }
+
       if (data?.ultimaOperacion) {
         agregarLog(`📈 Última señal: ${data.ultimaOperacion.tipo} (${data.ultimaOperacion.motivo})`);
       }
@@ -101,7 +112,8 @@ function iniciarMonitoreoLogs() {
   }, 10000);
 }
 
+// === Inicialización ===
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("🟢 [Jarvis] Integrando dentro de ULTRÓN…");
+  console.log("🟢 [Jarvis] Integrando dentro de ULTRÓN (modo real demo)...");
   renderJarvisPanel();
 });
