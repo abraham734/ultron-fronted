@@ -68,23 +68,12 @@
   transition: box-shadow 0.4s ease;
 }
 
-/* === Borde animado completo “signo de vida” === */
+/* === Borde chispa (animación alrededor del panel) === */
 .borde-chispa {
   position: relative;
   border: 2px solid rgba(255, 153, 0, 0.2);
   border-radius: 12px;
-  padding: 14px;
   overflow: hidden;
-  background: rgba(20, 20, 20, 0.9);
-}
-
-/* === Pulso completo que recorre todo el borde === */
-.borde-chispa {
-  position: relative;
-  border-radius: 12px;
-  padding: 14px;
-  overflow: hidden;
-  border: 2px solid rgba(255, 153, 0, 0.15);
 }
 
 .borde-chispa::before {
@@ -92,41 +81,36 @@
   position: absolute;
   inset: 0;
   border-radius: 12px;
-  padding: 2px;
-  background: conic-gradient(
-    from 0deg,
-    #ffb347 0deg,
-    transparent 60deg,
-    transparent 180deg,
-    #ffb347 240deg,
-    transparent 360deg
-  );
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
+  border: 2px solid transparent;
+  /* La “chispa” dorada */
+  background: linear-gradient(90deg, transparent, #ffae42, transparent) no-repeat;
+  background-size: 300% 100%;
+  animation: moverChispa 6s linear infinite;
+  z-index: 2;
+  pointer-events: none;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   mask-composite: exclude;
-  animation: rotarChispa 6s linear infinite;
-  opacity: 0.9;
-  z-index: 1;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
 }
 
-/* Efecto dinámico */
+/* === Animación de desplazamiento de la chispa === */
+@keyframes moverChispa {
+  0% { background-position: 300% 0; }
+  100% { background-position: -300% 0; }
+}
+
+/* === Estado dinámico === */
 .borde-chispa.activo::before {
   opacity: 1;
   animation-play-state: running;
 }
 
 .borde-chispa.error::before {
-  opacity: 0.1;
+  opacity: 0.3;
   animation-play-state: paused;
 }
 
-/* Animación continua 360° */
-@keyframes rotarChispa {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
 
 
 /* === Sección Log === */
