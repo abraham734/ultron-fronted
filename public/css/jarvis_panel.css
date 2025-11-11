@@ -1,14 +1,13 @@
-/* === jarvis_panel.css === */
-/* Estilo refinado para Jarvis – Oro Pro (aislado) */
+/* === jarvis_panel.css (versión final con chispa de borde completa) === */
+/* Autor: Néstor & Quinto – Revisión 10/nov/2025 */
 
 #jarvis-panel {
-  /* contenedor del panel */
   background: #0d1017;
   border: 1px solid #2c2f36;
   color: #fff;
   font-family: 'Consolas', monospace;
   padding: 22px;
-  margin: 28px 0 10px 0; /* espacio dentro del main de Ultron */
+  margin: 28px 0 10px 0;
   border-radius: 12px;
   box-shadow:
     0 0 10px rgba(0, 0, 0, 0.6),
@@ -16,6 +15,7 @@
   max-width: 100%;
 }
 
+/* === Cabecera === */
 #jarvis-panel .jarvis-header {
   display: flex;
   justify-content: space-between;
@@ -32,43 +32,96 @@
   margin: 0;
 }
 
-#jarvis-panel .jarvis-header .estado {
-  font-weight: bold;
-  margin-left: 8px;
-  color: #00ffff;
-  animation: jarvis-parpadeo 2s infinite;
+/* === Estado visual === */
+.jarvis-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
 }
 
-@keyframes jarvis-parpadeo {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.65; }
+.indicador {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  transition: all 0.3s ease;
 }
 
-#jarvis-panel .btn-jarvis {
-  background: linear-gradient(180deg, #f4c542, #d7a934);
-  color: #0d1017;
-  border: none;
-  border-radius: 6px;
-  padding: 8px 16px;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 13px;
-  letter-spacing: 0.5px;
-  box-shadow: 0 0 6px rgba(244, 197, 66, 0.4);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+.indicador.online  { background: #00ff80; box-shadow: 0 0 8px #00ff80; }
+.indicador.warn    { background: #ffb347; box-shadow: 0 0 8px #ffb347; animation: parpadeo 1.5s infinite alternate; }
+.indicador.offline { background: #ff4d4d; box-shadow: 0 0 8px #ff4d4d; }
+
+@keyframes parpadeo {
+  0% { opacity: 0.6; }
+  100% { opacity: 1; }
 }
 
-#jarvis-panel .btn-jarvis:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 0 10px rgba(255, 214, 92, 0.5);
-}
-
+/* === Cuerpo del panel === */
 #jarvis-panel .jarvis-body {
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 20px;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: box-shadow 0.4s ease;
 }
 
+/* === Borde animado completo “signo de vida” === */
+.borde-chispa {
+  position: relative;
+  border: 2px solid rgba(255, 153, 0, 0.2);
+  border-radius: 12px;
+  padding: 14px;
+  overflow: hidden;
+  background: rgba(20, 20, 20, 0.9);
+}
+
+/* Contenedor del borde brillante animado */
+.borde-chispa::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  border: 2px solid transparent;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    transparent 85deg,
+    #ffb347 100deg,
+    transparent 115deg,
+    transparent 360deg
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: borde-circular 6s linear infinite;
+  opacity: 0.8;
+  z-index: 1;
+}
+
+/* Estado activo: chispa brillante */
+.borde-chispa.activo::before {
+  opacity: 1;
+  animation-play-state: running;
+}
+
+/* Estado error: chispa pausada y tenue */
+.borde-chispa.error::before {
+  opacity: 0.1;
+  animation-play-state: paused;
+}
+
+/* Animación del pulso que recorre el borde */
+@keyframes borde-circular {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* === Sección Log === */
 #jarvis-panel .jarvis-log {
   background: #141821;
   border: 1px solid #2c2f36;
@@ -87,6 +140,7 @@
   padding-left: 6px;
 }
 
+/* === Sección Métricas === */
 #jarvis-panel .jarvis-metricas {
   background: #141821;
   border: 1px solid #2c2f36;
@@ -107,80 +161,20 @@
   color: #f4c542;
 }
 
-/* Scrollbar solo dentro del log */
-#jarvis-panel .jarvis-log::-webkit-scrollbar {
-  width: 6px;
+#ultima-lectura {
+  font-size: 13px;
+  color: #9aa3b0;
+  margin-top: 6px;
+  font-style: italic;
+  text-align: right;
 }
+
+/* Scrollbar */
+#jarvis-panel .jarvis-log::-webkit-scrollbar { width: 6px; }
 #jarvis-panel .jarvis-log::-webkit-scrollbar-thumb {
   background-color: #3a3f4b;
   border-radius: 10px;
 }
 #jarvis-panel .jarvis-log::-webkit-scrollbar-thumb:hover {
   background-color: #f4c542;
-}
-
-
-/* === Jarvis Panel === */
-.jarvis-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-}
-
-.jarvis-status {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 600;
-  color: #fff;
-}
-
-.indicador {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  display: inline-block;
-  transition: all 0.3s ease;
-}
-
-.indicador.online  { background: #00ff80; box-shadow: 0 0 8px #00ff80; }
-.indicador.warn    { background: #ffb347; box-shadow: 0 0 8px #ffb347; animation: parpadeo 1.5s infinite alternate; }
-.indicador.offline { background: #ff4d4d; box-shadow: 0 0 8px #ff4d4d; }
-
-@keyframes parpadeo {
-  0% { opacity: 0.6; }
-  100% { opacity: 1; }
-}
-
-/* === Efecto borde “signo de vida” === */
-.borde-vida {
-  position: relative;
-  border: 2px solid rgba(255, 136, 0, 0.25);
-  border-radius: 10px;
-  padding: 14px;
-  overflow: hidden;
-  background: rgba(20, 20, 20, 0.9);
-}
-
-.borde-vida::before {
-  content: "";
-  position: absolute;
-  top: -2px; left: -2px; right: -2px; bottom: -2px;
-  border-radius: 10px;
-  background: linear-gradient(90deg, transparent, #ffb347, transparent);
-  background-size: 200% 100%;
-  animation: pulsoVida 4s linear infinite;
-  z-index: 0;
-  opacity: 0.35;
-}
-
-.borde-vida.error::before {
-  animation-play-state: paused;
-  opacity: 0.1;
-}
-
-@keyframes pulsoVida {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
 }
