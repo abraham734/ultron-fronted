@@ -1,11 +1,11 @@
 // === jarvis_panel.js ===
-// Interfaz visual para Jarvis – Oro Pro (modo real demo)
+// Interfaz visual para Jarvis – Oro Pro (modo real demo, 24/5 activo)
+// Nueva versión con indicador de estado visual + borde animado de “vida”
+// Autor: Néstor & Quinto | Revisión: 10/nov/2025
 
 const JARVIS_BACKEND = window.location.hostname.includes("vercel.app")
   ? "https://ultron-backend-zvtm.onrender.com"
   : "http://127.0.0.1:3000";
-
-let jarvisActivo = false;
 
 // === Render del panel principal ===
 function renderJarvisPanel() {
@@ -23,64 +23,67 @@ function renderJarvisPanel() {
 
   contenedor.innerHTML = `
     <div class="jarvis-header">
-      <h2>🧠 Jarvis - Oro Pro <span class="estado">${jarvisActivo ? "🟢 Activo" : "🔴 Inactivo"}</span></h2>
-      <button id="btn-toggle-jarvis" class="btn-jarvis">
-        ${jarvisActivo ? "Detener" : "Iniciar"} Jarvis
-      </button>
+      <h2>🧠 Jarvis – Oro Pro</h2>
+      <div id="jarvis-status" class="jarvis-status">
+        <span id="jarvis-indicador" class="indicador offline"></span>
+        <span id="jarvis-estado-texto" class="estado-texto">Sin conexión</span>
+      </div>
     </div>
 
-    <div class="jarvis-body">
+    <div class="jarvis-body borde-vida">
       <div class="jarvis-log" id="jarvis-log">
         <p>Esperando actividad...</p>
       </div>
 
       <div class="jarvis-metricas" id="jarvis-metricas">
         <p><strong>Activo:</strong> XAU/USD (Oro)</p>
-        <p><strong>Modo:</strong> <span class="modo">Real (Demo Pepperstone)</span></p>
+        <p><strong>Modo:</strong> Real (Demo Pepperstone)</p>
         <p><strong>Intervalo:</strong> 2 minutos</p>
       </div>
     </div>
   `;
 
   contenedor.dataset.rendered = "1";
-  configurarEventosJarvis();
-  iniciarMonitoreoLogs();
-  console.log("✅ [Jarvis Panel] Renderizado correctamente (modo real demo).");
+  iniciarMonitoreoJarvis();
+  console.log("✅ [Jarvis Panel] Renderizado con sistema de estado visual.");
 }
 
-// === Eventos: Iniciar / Detener ===
-function configurarEventosJarvis() {
-  const boton = document.getElementById("btn-toggle-jarvis");
-  if (!boton) return;
+// === Sistema de monitoreo de estado ===
+async function verificarEstadoJarvis() {
+  const indicador = document.getElementById("jarvis-indicador");
+  const texto = document.getElementById("jarvis-estado-texto");
+  const panelVida = document.querySelector(".borde-vida");
 
-  boton.addEventListener("click", async () => {
-    try {
-      if (jarvisActivo) {
-        await fetch(`${JARVIS_BACKEND}/api/jarvis/stop`);
-        jarvisActivo = false;
-        actualizarEstadoJarvis("🔴 Inactivo");
-        agregarLog("🛑 Jarvis Oro Pro detenido manualmente.");
-        boton.textContent = "Iniciar Jarvis";
-      } else {
-        await fetch(`${JARVIS_BACKEND}/api/jarvis/start`);
-        jarvisActivo = true;
-        actualizarEstadoJarvis("🟢 Activo");
-        agregarLog("🚀 Jarvis Oro Pro iniciado (modo real demo conectado a cTrader).");
-        boton.textContent = "Detener Jarvis";
-      }
-    } catch (e) {
-      console.warn("⚠️ [Jarvis] No se pudo alternar estado:", e?.message || e);
+  try {
+    const res = await fetch(`${JARVIS_BACKEND}/status_jarvis`);
+    const data = await res.json();
+
+    if (data.estado === "online") {
+      indicador.className = "indicador online";
+      texto.textContent = "Online";
+      panelVida.classList.remove("error");
+    } else if (data.estado === "warn") {
+      indicador.className = "indicador warn";
+      texto.textContent = "Sin datos recientes";
+      panelVida.classList.remove("error");
+    } else {
+      indicador.className = "indicador offline";
+      texto.textContent = "Offline";
+      panelVida.classList.add("error");
     }
-  });
+  } catch (err) {
+    indicador.className = "indicador offline";
+    texto.textContent = "Error conexión";
+    panelVida.classList.add("error");
+  }
 }
 
-// === Actualizar texto de estado ===
-function actualizarEstadoJarvis(estado) {
-  const estadoSpan = document.querySelector("#jarvis-panel .estado");
-  if (estadoSpan) estadoSpan.textContent = estado;
+function iniciarMonitoreoJarvis() {
+  verificarEstadoJarvis();
+  setInterval(verificarEstadoJarvis, 15000);
 }
 
-// === Agregar mensaje al log ===
+// === Agregar mensajes al log ===
 function agregarLog(mensaje) {
   const log = document.getElementById("jarvis-log");
   if (!log) return;
@@ -89,31 +92,8 @@ function agregarLog(mensaje) {
   log.prepend(p);
 }
 
-// === Monitorear logs de actividad ===
-function iniciarMonitoreoLogs() {
-  setInterval(async () => {
-    try {
-      const res = await fetch(`${JARVIS_BACKEND}/api/jarvis/estado`);
-      if (!res.ok) return;
-      const data = await res.json();
-
-      if (data?.activo) {
-        actualizarEstadoJarvis("🟢 Activo");
-      } else {
-        actualizarEstadoJarvis("🔴 Inactivo");
-      }
-
-      if (data?.ultimaOperacion) {
-        agregarLog(`📈 Última señal: ${data.ultimaOperacion.tipo} (${data.ultimaOperacion.motivo})`);
-      }
-    } catch (err) {
-      console.warn("⚠️ [Jarvis] No se pudo actualizar estado:", err?.message || err);
-    }
-  }, 10000);
-}
-
 // === Inicialización ===
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("🟢 [Jarvis] Integrando dentro de ULTRÓN (modo real demo)...");
+  console.log("🟢 [Jarvis] Panel activo dentro de ULTRÓN (modo autónomo 24/5).");
   renderJarvisPanel();
 });
