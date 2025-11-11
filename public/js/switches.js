@@ -1,6 +1,9 @@
 // === switches.js ===
-// Control de 5 estrategias con switch visual triple (OFF / STANDARD / RIESGO)
-// Versión final 29/oct/2025 con tooltip dinámico
+// Control visual de estrategias (OFF / STANDARD / RIESGO)
+// 🔄 Versión sincronizada con backend – 10/nov/2025
+// Cada cambio de switch se envía al backend (https://ultron-backend-zvtm.onrender.com)
+
+const URL_BACKEND = "https://ultron-backend-zvtm.onrender.com/api/estrategias";
 
 export function renderSwitches() {
   const barra = document.getElementById("barra-estrategias");
@@ -33,13 +36,23 @@ export function renderSwitches() {
 
     aplicarEstadoVisual(switchEl, estado);
 
-    switchEl.addEventListener("click", () => {
+    switchEl.addEventListener("click", async () => {
       estado = siguienteEstado(estado);
       aplicarEstadoVisual(switchEl, estado);
       localStorage.setItem(id, estado);
-      console.log(`🎚️ Estrategia ${id.replace("modo-", "")} => ${estado}`);
+
+      // === 🔄 Enviar actualización al backend ===
+      try {
+        await sincronizarConBackend();
+        console.log(`✅ Estrategias sincronizadas con backend (${estado})`);
+      } catch (err) {
+        console.warn("⚠️ Error al sincronizar estrategias con backend:", err.message);
+      }
     });
   });
+
+  // Sincronización inicial al renderizar
+  sincronizarConBackend();
 }
 
 // === Alterna entre OFF → STANDARD → RIESGO ===
@@ -75,4 +88,16 @@ export function obtenerEstadoEstrategias() {
     supertrendDoble: get(ids[3]),
     emaTriple: get(ids[4]),
   };
+}
+
+// === Enviar todos los estados actuales al backend ===
+async function sincronizarConBackend() {
+  const estados = obtenerEstadoEstrategias();
+  const res = await fetch(URL_BACKEND, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(estados),
+  });
+  if (!res.ok) throw new Error(`Respuesta HTTP ${res.status}`);
+  return res.json();
 }
