@@ -78,19 +78,27 @@
   background: rgba(20, 20, 20, 0.9);
 }
 
-/* Contenedor del borde brillante animado */
+/* === Pulso completo que recorre todo el borde === */
+.borde-chispa {
+  position: relative;
+  border-radius: 12px;
+  padding: 14px;
+  overflow: hidden;
+  border: 2px solid rgba(255, 153, 0, 0.15);
+}
+
 .borde-chispa::before {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: 12px;
-  border: 2px solid transparent;
+  padding: 2px;
   background: conic-gradient(
     from 0deg,
-    transparent 0deg,
-    transparent 85deg,
-    #ffb347 100deg,
-    transparent 115deg,
+    #ffb347 0deg,
+    transparent 60deg,
+    transparent 180deg,
+    #ffb347 240deg,
     transparent 360deg
   );
   -webkit-mask:
@@ -98,28 +106,28 @@
     linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
-  animation: borde-circular 6s linear infinite;
-  opacity: 0.8;
+  animation: rotarChispa 6s linear infinite;
+  opacity: 0.9;
   z-index: 1;
 }
 
-/* Estado activo: chispa brillante */
+/* Efecto dinámico */
 .borde-chispa.activo::before {
   opacity: 1;
   animation-play-state: running;
 }
 
-/* Estado error: chispa pausada y tenue */
 .borde-chispa.error::before {
   opacity: 0.1;
   animation-play-state: paused;
 }
 
-/* Animación del pulso que recorre el borde */
-@keyframes borde-circular {
+/* Animación continua 360° */
+@keyframes rotarChispa {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
 
 /* === Sección Log === */
 #jarvis-panel .jarvis-log {
