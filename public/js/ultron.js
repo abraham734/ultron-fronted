@@ -7,6 +7,7 @@ import { renderConfiguracionRapida, configurarEventoCalculo } from "./configurac
 import { renderSwitches, obtenerEstadoEstrategias } from "./switches.js";
 import { cargarHistorialDesdeStorage, registrarEntradaUltron } from "./historial.js";
 import { obtenerIntervaloActivo, guardarIntervaloActivo } from "./intervalosporactivo.js";
+import { cargarDiagnosticoMotor } from "./diagnostico_motor.js";
 
 // === URL dinámica del backend ===
 const BACKEND_URL = window.location.hostname.includes("vercel.app")
@@ -162,6 +163,12 @@ async function realizarAnalisis(simbolo) {
     `;
 
     configurarEventoCalculo(resultado.simbolo, resultado.entry || "1.0000");
+
+      // ===============================
+      // 🔍 Cargar diagnóstico del motor
+     // ===============================
+     await cargarDiagnosticoMotor(resultado.simbolo, resultado.intervalo); 
+    // ===============================
 
     // === Guardar entrada válida en historial ===
     const datosCompletos =

@@ -1,0 +1,135 @@
+/* === diagnostico.css === */
+/* Bloque de diagnóstico del motor Ultron */
+
+.bloque-diagnostico {
+  margin-top: 24px;
+  margin-bottom: 24px;
+  padding: 16px 20px;
+  border-radius: 14px;
+  background: #0b0f19;
+  box-shadow: 0 0 0 1px rgba(120, 180, 255, 0.18);
+}
+
+.diag-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.diag-header h2 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #e5f0ff;
+  margin: 0;
+}
+
+.diag-estado {
+  font-size: 13px;
+  color: #ffc857;
+}
+
+.diag-contenido {
+  font-size: 13px;
+  color: #d3d9e5;
+}
+
+.diag-placeholder {
+  margin: 0;
+  opacity: 0.8;
+}
+
+.diag-resumen-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.diag-label {
+  display: block;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #7f8bad;
+  margin-bottom: 2px;
+}
+
+.diag-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: #f1f5ff;
+}
+
+.diag-corte {
+  color: #ff9f6b;
+}
+
+.diag-tabla-wrapper {
+  max-height: 220px;
+  overflow: auto;
+  margin-bottom: 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(120, 180, 255, 0.18);
+}
+
+.diag-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.diag-tabla thead {
+  position: sticky;
+  top: 0;
+  background: #101623;
+}
+
+.diag-tabla th,
+.diag-tabla td {
+  padding: 6px 8px;
+  text-align: left;
+  border-bottom: 1px solid rgba(26, 34, 52, 0.9);
+}
+
+.diag-tabla th {
+  font-weight: 600;
+  color: #e5f0ff;
+}
+
+.diag-tabla td {
+  color: #c8d0e5;
+}
+
+.diag-tabla tr:nth-child(even) {
+  background: rgba(10, 16, 32, 0.85);
+}
+
+.diag-tabla tr:nth-child(odd) {
+  background: rgba(9, 14, 28, 0.85);
+}
+
+.diag-razonamiento {
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: radial-gradient(circle at top left, rgba(50, 180, 255, 0.15), transparent),
+    #080c18;
+  border: 1px solid rgba(120, 180, 255, 0.25);
+}
+
+.diag-razonamiento h4 {
+  margin: 0 0 6px 0;
+  font-size: 13px;
+  color: #e5f0ff;
+}
+
+.diag-razonamiento p {
+  margin: 2px 0;
+  font-size: 12px;
+  color: #d5ddf5;
+}
+
+.diag-error {
+  color: #ff7b7b;
+  margin: 0;
+}

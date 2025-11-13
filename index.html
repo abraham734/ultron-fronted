@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="/css/historial.css" />
   <link rel="stylesheet" href="/css/switches.css" />
   <link rel="stylesheet" href="/css/jarvis_panel.css" />
+  <link rel="stylesheet" href="/css/diagnostico.css" />
 </head>
 
 <body>
@@ -62,6 +63,22 @@
 
       <!-- Contenedor principal del análisis -->
       <section id="contenedor-activos" class="contenedor-activos"></section>
+
+      <!--contenedor shadow de motor ultron-->
+      <section id="ultron-diagnostico" class="bloque-diagnostico">
+      <div class="diag-header">
+      <h2>Diagnóstico interno del motor</h2>
+      <span id="diag-estado" class="diag-estado">Esperando análisis...</span>
+      </div>
+      <div id="diag-contenido" class="diag-contenido">
+      <p class="diag-placeholder">
+      Cuando selecciones un activo y Ultron ejecute el análisis,
+      aquí verás qué estrategias se activaron y dónde se corta el flujo interno.
+      </p>
+    </div>
+   </section>
+
+
 
       <!-- Panel Jarvis Oro Pro -->
       <section id="jarvis-panel"></section>
