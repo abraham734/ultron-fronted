@@ -1,7 +1,7 @@
 // === diagnostico_motor.js ===
-// Cliente frontend para mostrar el diagnóstico interno del motor Ultron
+// Cliente frontend compatible con Shadow Logger V2
 
-const URL_BACKEND = "https://ultron-backend-zvtm.onrender.com"; // ajusta si tu URL cambió
+const URL_BACKEND = "https://ultron-backend-zvtm.onrender.com";
 
 export async function cargarDiagnosticoMotor(simbolo, intervalo) {
   const contenedor = document.getElementById("ultron-diagnostico");
@@ -21,69 +21,68 @@ export async function cargarDiagnosticoMotor(simbolo, intervalo) {
     const resp = await fetch(url);
     const data = await resp.json();
 
-    if (!data.ok) {
+    // ================================
+    // 🔥 VALIDACIÓN DE SHADOW V2
+    // ================================
+    if (!data || !data.estrategias) {
       estadoEl.textContent = "Error en diagnóstico";
-      cuerpoEl.innerHTML = `<p class="diag-error">⚠️ ${data.motivo || data.error || "No se pudo obtener información del motor."}</p>`;
+      cuerpoEl.innerHTML = `<p class="diag-error">⚠️ Shadow no entregó datos válidos.</p>`;
       return;
     }
 
-    const { resumen, estrategias, razonamiento } = data;
+    estadoEl.textContent = `Activo: ${data.activo} | Intervalo: ${data.intervalo}`;
 
-    estadoEl.textContent = `Activo: ${resumen.activo} | Intervalo: ${resumen.intervalo}`;
-
-    // Resumen superior
+    // ================================
+    // 🔵 RESUMEN SUPERIOR
+    // ================================
     const resumenHtml = `
       <div class="diag-resumen-grid">
         <div>
-          <span class="diag-label">Precio actual</span>
-          <span class="diag-value">$${resumen.precioActual ?? "-"}</span>
+          <span class="diag-label">Velas</span>
+          <span class="diag-value">${data.ohlc?.total ?? "-"}</span>
         </div>
         <div>
-          <span class="diag-label">Velas procesadas</span>
-          <span class="diag-value">${resumen.velas}</span>
+          <span class="diag-label">Rango Prom.</span>
+          <span class="diag-value">${data.ohlc?.rangoPromedio ?? "-"}</span>
         </div>
         <div>
-          <span class="diag-label">Decisión final</span>
-          <span class="diag-value">${resumen.decisionFinal}</span>
+          <span class="diag-label">Punto corte</span>
+          <span class="diag-value diag-corte">
+            ${data.puntoCorte?.[0]?.detalle || "Sin corte"}
+          </span>
         </div>
         <div>
-          <span class="diag-label">Tipo de entrada</span>
-          <span class="diag-value">${resumen.tipoEntrada || "-"}</span>
+          <span class="diag-label">Decisión motor</span>
+          <span class="diag-value">${data.resultadoFinal?.decision || "-"}</span>
         </div>
         <div>
           <span class="diag-label">Sesión</span>
-          <span class="diag-value">${resumen.sesion || "-"}</span>
+          <span class="diag-value">${data.resultadoFinal?.session || "-"}</span>
         </div>
         <div>
-          <span class="diag-label">Punto de corte</span>
-          <span class="diag-value diag-corte">${
-            resumen.puntoCorte || "Sin corte aparente"
-          }</span>
+          <span class="diag-label">Hora</span>
+          <span class="diag-value">${new Date(data.timestamp).toLocaleTimeString()}</span>
         </div>
       </div>
     `;
 
-    // Tabla de estrategias
-    const filas = Object.entries(estrategias)
+    // ================================
+    // 🟣 TABLA DE ESTRATEGIAS
+    // ================================
+    const filas = Object.entries(data.estrategias)
       .map(([nombre, info]) => {
-        const estado = info.estado || "NO EJECUTADA";
-        const esValida =
-          info.esValida === true ? "Sí" : info.esValida === false ? "No" : "-";
-        const entry =
-          info.entry != null ? Number(info.entry).toFixed(5) : "-";
-        const stop = info.stop != null ? Number(info.stop).toFixed(5) : "-";
-        const llamadas = info.llamadas ? info.llamadas.length : 0;
-        const error = info.error || (info.llamadas && info.llamadas[0]?.error) || "";
+        const salida = info.salida || {};
+        const esValida = salida.esValida === true ? "Sí" : salida.esValida === false ? "No" : "-";
+        const entry = salida.entry ? Number(salida.entry).toFixed(5) : "-";
+        const stop = salida.stop ? Number(salida.stop).toFixed(5) : "-";
 
         return `
         <tr>
           <td>${nombre}</td>
-          <td>${estado}</td>
           <td>${esValida}</td>
           <td>${entry}</td>
           <td>${stop}</td>
-          <td>${llamadas}</td>
-          <td>${error || "-"}</td>
+          <td>${info.error || "-"}</td>
         </tr>`;
       })
       .join("");
@@ -94,39 +93,39 @@ export async function cargarDiagnosticoMotor(simbolo, intervalo) {
           <thead>
             <tr>
               <th>Estrategia</th>
-              <th>Estado</th>
               <th>esValida</th>
               <th>Entry</th>
               <th>Stop</th>
-              <th>Llamadas</th>
               <th>Error</th>
             </tr>
           </thead>
-          <tbody>
-            ${filas}
-          </tbody>
+          <tbody>${filas}</tbody>
         </table>
       </div>
     `;
 
-    // Bloque de razonamiento
+    // ================================
+    // 🧠 RAZONAMIENTO GLOBAL
+    // ================================
     let razonamientoHtml = "";
-    if (razonamiento && razonamiento.output) {
+    if (data.razonamiento?.output) {
       razonamientoHtml = `
         <div class="diag-razonamiento">
           <h4>Razonamiento global</h4>
-          <p><strong>Acción:</strong> ${razonamiento.output.accion}</p>
-          <p><strong>Confianza:</strong> ${
-            (razonamiento.output.confianza * 100).toFixed(1)
-          }%</p>
+          <p><strong>Acción:</strong> ${data.razonamiento.output.accion}</p>
+          <p><strong>Confianza:</strong> ${(data.razonamiento.output.confianza * 100).toFixed(1)}%</p>
         </div>
       `;
     }
 
+    // ================================
+    // 🔧 Render final
+    // ================================
     cuerpoEl.innerHTML = resumenHtml + tablaHtml + razonamientoHtml;
+
   } catch (err) {
     console.error("Error cargando diagnóstico:", err);
     estadoEl.textContent = "Error en diagnóstico";
-    cuerpoEl.innerHTML = `<p class="diag-error">❌ Error al conectar con el backend de diagnóstico.</p>`;
+    cuerpoEl.innerHTML = `<p class="diag-error">❌ Error al conectar con backend Shadow.</p>`;
   }
 }

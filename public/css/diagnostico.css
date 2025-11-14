@@ -8,6 +8,7 @@
   border-radius: 14px;
   background: #0b0f19;
   box-shadow: 0 0 0 1px rgba(120, 180, 255, 0.18);
+  overflow: hidden; /* 🔥 evita desbordamientos */
 }
 
 .diag-header {
@@ -26,6 +27,7 @@
 
 .diag-estado {
   font-size: 13px;
+  font-weight: 600;
   color: #ffc857;
 }
 
@@ -39,6 +41,7 @@
   opacity: 0.8;
 }
 
+/* 🔵 Resumen SHADOW */
 .diag-resumen-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -62,9 +65,10 @@
 }
 
 .diag-corte {
-  color: #ff9f6b;
+  color: #ff9f6b; /* punto de corte claro */
 }
 
+/* 🟣 Tabla de estrategias */
 .diag-tabla-wrapper {
   max-height: 220px;
   overflow: auto;
@@ -83,6 +87,7 @@
   position: sticky;
   top: 0;
   background: #101623;
+  z-index: 10;
 }
 
 .diag-tabla th,
@@ -109,12 +114,14 @@
   background: rgba(9, 14, 28, 0.85);
 }
 
+/* 🧠 Bloque de razonamiento global */
 .diag-razonamiento {
   padding: 10px 12px;
   border-radius: 10px;
   background: radial-gradient(circle at top left, rgba(50, 180, 255, 0.15), transparent),
     #080c18;
   border: 1px solid rgba(120, 180, 255, 0.25);
+  margin-top: 12px;
 }
 
 .diag-razonamiento h4 {
@@ -129,7 +136,22 @@
   color: #d5ddf5;
 }
 
+/* ❌ Errores */
 .diag-error {
   color: #ff7b7b;
   margin: 0;
+}
+
+/* 🟡 OPCIONAL – Logs internos del motor */
+.diag-logs {
+  margin-top: 16px;
+  padding: 10px;
+  border-radius: 10px;
+  background: #0a0f1a;
+  border: 1px solid rgba(120, 180, 255, 0.12);
+  font-size: 11px;
+  color: #8ca4c3;
+  max-height: 160px;
+  overflow-y: auto;
+  white-space: pre-wrap;
 }
