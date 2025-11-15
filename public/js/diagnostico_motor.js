@@ -18,13 +18,16 @@ export async function cargarDiagnosticoMotor(simbolo, intervalo) {
     const resp = await fetch(url);
     const data = await resp.json();
 
-    if (!data || !data.supertrend || !data.indicadores) {
+    // ============================================
+    // PROTECCIÓN PRINCIPAL
+    // ============================================
+    if (!data || !data.indicadores) {
       estadoEl.textContent = "Error en diagnóstico";
       cuerpoEl.innerHTML = `<p class="diag-error">⚠️ Shadow no entregó datos válidos.</p>`;
       return;
     }
 
-    estadoEl.textContent = `Activo: ${data.activo} | TF: ${data.intervalo}`;
+    estadoEl.textContent = `Activo: ${data.activo || simbolo} | TF: ${data.intervalo || intervalo}`;
 
     // =====================================================================================
     // 🟦 RESUMEN SUPERIOR
@@ -72,7 +75,6 @@ export async function cargarDiagnosticoMotor(simbolo, intervalo) {
     const estructuraHtml = `
       <div class="diag-razonamiento">
         <h4>Estructura Institucional</h4>
-
         <p><strong>BOS:</strong> ${e?.bos?.bos ?? "Sin BOS"}</p>
         <p><strong>Mitigación:</strong> ${e?.mitigacion ? "Sí" : "No"}</p>
         <p><strong>Pullback:</strong> ${e?.pullback ? "Sí" : "No"}</p>
@@ -81,31 +83,43 @@ export async function cargarDiagnosticoMotor(simbolo, intervalo) {
     `;
 
     // =====================================================================================
-    // 🟩 SUPERTREND REAL (estándar + riesgo)
+    // 🟩 SUPERTREND REAL (blindado)
     // =====================================================================================
-    const st = data.supertrend;
+    const st = data.supertrend || {};
+
+    const stdRap = st.estandar?.rapido || {};
+    const stdLen = st.estandar?.lento || {};
+
+    const riskRap = st.riesgo?.rapido || {};
+    const riskLen = st.riesgo?.lento || {};
+
     const stHtml = `
       <div class="diag-razonamiento">
         <h4>Supertrend</h4>
 
-        <p><strong>STD Rápido:</strong> (${st.estandar.rapido.estado}) ${st.estandar.rapido.valor?.toFixed(5)}</p>
-        <p><strong>STD Lento:</strong>  (${st.estandar.lento.estado}) ${st.estandar.lento.valor?.toFixed(5)}</p>
+        <p><strong>STD Rápido:</strong> (${stdRap.estado ?? "-"}) ${stdRap.valor?.toFixed?.(5) ?? "-"}</p>
+        <p><strong>STD Lento:</strong>  (${stdLen.estado ?? "-"}) ${stdLen.valor?.toFixed?.(5) ?? "-"}</p>
 
-        <p><strong>Riesgo Rápido:</strong> (${st.riesgo.rapido.estado}) ${st.riesgo.rapido.valor?.toFixed(5)}</p>
-        <p><strong>Riesgo Lento:</strong>  (${st.riesgo.lento.estado}) ${st.riesgo.lento.valor?.toFixed(5)}</p>
+        <p><strong>Riesgo Rápido:</strong> (${riskRap.estado ?? "-"}) ${riskRap.valor?.toFixed?.(5) ?? "-"}</p>
+        <p><strong>Riesgo Lento:</strong>  (${riskLen.estado ?? "-"}) ${riskLen.valor?.toFixed?.(5) ?? "-"}</p>
       </div>
     `;
 
     // =====================================================================================
     // 🟧 INDICADORES
     // =====================================================================================
-    const ind = data.indicadores;
+    const ind = data.indicadores || {};
+
     const indicadoresHtml = `
       <div class="diag-razonamiento">
         <h4>Indicadores</h4>
-        <p><strong>EMA 30 / 65 / 200:</strong> ${ind.ema.ema30} / ${ind.ema.ema65} / ${ind.ema.ema200}</p>
-        <p><strong>ADX:</strong> ${ind.adx?.toFixed(2)}</p>
-        <p><strong>ATR:</strong> ${ind.atr?.toFixed(5)}</p>
+        <p><strong>EMA 30 / 65 / 200:</strong> 
+          ${ind.ema?.ema30 ?? "-"} / 
+          ${ind.ema?.ema65 ?? "-"} / 
+          ${ind.ema?.ema200 ?? "-"}
+        </p>
+        <p><strong>ADX:</strong> ${ind.adx?.toFixed?.(2) ?? "-"}</p>
+        <p><strong>ATR:</strong> ${ind.atr?.toFixed?.(5) ?? "-"}</p>
         <p><strong>Squeeze:</strong> ${ind.squeeze?.direction ?? "-"}</p>
       </div>
     `;
@@ -113,7 +127,7 @@ export async function cargarDiagnosticoMotor(simbolo, intervalo) {
     // =====================================================================================
     // 🟦 TABLA DE ESTRATEGIAS
     // =====================================================================================
-    const filas = Object.entries(data.estrategias)
+    const filas = Object.entries(data.estrategias || {})
       .map(([nombre, info]) => {
         const out = info.salida || {};
         const esValida = out.esValida ? "Sí" : "No";
@@ -149,7 +163,7 @@ export async function cargarDiagnosticoMotor(simbolo, intervalo) {
     `;
 
     // =====================================================================================
-    // 🔵 RAZONAMIENTO GLOBAL (Modo V4)
+    // 🔵 RAZONAMIENTO GLOBAL
     // =====================================================================================
     let razonamientoHtml = "";
     if (data.resultadoFinal?.razones) {
