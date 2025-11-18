@@ -1,13 +1,14 @@
 // === jarvis_panel.js ===
-// Interfaz visual para Jarvis – Oro Pro (modo real demo, 24/5 activo)
-// Nueva versión con estado dinámico + chispa animada en el borde
-// Autor: Néstor & Quinto | Revisión: 10/nov/2025
+// Interfaz visual para Jarvis – Oro Pro (HFv3.0 Élite con sistema de estados)
+// Autor: Néstor & Quinto | Revisión final: 17/nov/2025
 
 const JARVIS_BACKEND = window.location.hostname.includes("vercel.app")
   ? "https://ultron-backend-zvtm.onrender.com"
   : "http://127.0.0.1:3000";
 
-// === Render del panel principal ===
+// ============================================================
+// RENDER DEL PANEL
+// ============================================================
 function renderJarvisPanel() {
   const contenedor = document.getElementById("jarvis-panel");
   if (!contenedor) {
@@ -15,7 +16,6 @@ function renderJarvisPanel() {
     return;
   }
 
-  // Evitar doble render
   if (contenedor.dataset.rendered === "1") {
     console.warn("⚠️ [Jarvis] Panel ya existente, omitiendo render.");
     return;
@@ -46,10 +46,12 @@ function renderJarvisPanel() {
 
   contenedor.dataset.rendered = "1";
   iniciarMonitoreoJarvis();
-  console.log("✅ [Jarvis Panel] Renderizado con estado visual y chispa dinámica.");
+  console.log("✅ [Jarvis Panel] Renderizado con estado visual dinámico.");
 }
 
-// === Sistema de monitoreo de estado ===
+// ============================================================
+// SISTEMA DE MONITOREO (LEE ESTADOS DEL BACKEND)
+// ============================================================
 async function verificarEstadoJarvis() {
   const indicador = document.getElementById("jarvis-indicador");
   const texto = document.getElementById("jarvis-estado-texto");
@@ -60,45 +62,71 @@ async function verificarEstadoJarvis() {
     const res = await fetch(`${JARVIS_BACKEND}/status_jarvis`);
     const data = await res.json();
 
-    if (data.estado === "online") {
+    // === 🔵 ESTADOS DEL BACKEND ============
+    // ONLINE
+    if (data.estado === "ONLINE") {
       indicador.className = "indicador online";
       texto.textContent = "Online";
       panel.classList.add("activo");
       panel.classList.remove("error");
-    } else if (data.estado === "warn") {
-      indicador.className = "indicador warn";
-      texto.textContent = "Sin datos recientes";
+    }
+    // FUERA_DE_SESION
+    else if (data.estado === "FUERA_DE_SESION") {
+      indicador.className = "indicador fuera";
+      texto.textContent = "Fuera de sesión (Londres + NY)";
       panel.classList.remove("activo");
       panel.classList.remove("error");
-    } else {
+    }
+    // SIN_DATOS
+    else if (data.estado === "SIN_DATOS") {
+      indicador.className = "indicador warn";
+      texto.textContent = "Sin datos (API / Candle vacía)";
+      panel.classList.remove("activo");
+      panel.classList.remove("error");
+    }
+    // ERROR
+    else if (data.estado === "ERROR") {
+      indicador.className = "indicador offline";
+      texto.textContent = "Error interno";
+      panel.classList.add("error");
+      panel.classList.remove("activo");
+    }
+    // Desconocido
+    else {
       indicador.className = "indicador offline";
       texto.textContent = "Offline";
-      panel.classList.remove("activo");
       panel.classList.add("error");
+      panel.classList.remove("activo");
     }
 
-    // Mostrar última lectura y precio
+    // === ACTUALIZAR ÚLTIMA LECTURA ============
     if (data.precioActual && data.ultimaLectura) {
       const hora = new Date(data.ultimaLectura).toLocaleTimeString();
       lectura.textContent = `Última lectura: ${data.precioActual.toFixed(2)} USD | ${hora}`;
     } else {
       lectura.textContent = "Última lectura: -- | --";
     }
+
   } catch (err) {
     indicador.className = "indicador offline";
     texto.textContent = "Error conexión";
-    panel.classList.remove("activo");
     panel.classList.add("error");
+    panel.classList.remove("activo");
     lectura.textContent = "Última lectura: -- | --";
   }
 }
 
+// ============================================================
+// INTERVALO DE ACTUALIZACIÓN
+// ============================================================
 function iniciarMonitoreoJarvis() {
   verificarEstadoJarvis();
-  setInterval(verificarEstadoJarvis, 15000);
+  setInterval(verificarEstadoJarvis, 10000); // cada 10s
 }
 
-// === Agregar mensajes al log ===
+// ============================================================
+// LOG DE EVENTOS
+// ============================================================
 function agregarLog(mensaje) {
   const log = document.getElementById("jarvis-log");
   if (!log) return;
@@ -107,8 +135,10 @@ function agregarLog(mensaje) {
   log.prepend(p);
 }
 
-// === Inicialización ===
+// ============================================================
+// INICIALIZACIÓN AUTOMÁTICA
+// ============================================================
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("🟢 [Jarvis] Panel activo dentro de ULTRÓN (modo autónomo 24/5).");
+  console.log("🟢 [Jarvis] Panel activo dentro de ULTRÓN (HFv3.0 Élite).");
   renderJarvisPanel();
 });
