@@ -48,6 +48,34 @@
   transition: all 0.3s ease;
 }
 
+/* === NUEVOS ESTADOS JARVIS HFv3.0 === */
+
+/* 🟢 Jarvis Online */
+.indicador.online {
+  background: #00ff80;
+  box-shadow: 0 0 10px #00ff80;
+}
+
+/* 🟡 Jarvis fuera de sesión (Londres + NY cerrado) */
+.indicador.fuera {
+  background: #ffe066;
+  box-shadow: 0 0 8px #ffe066;
+}
+
+/* 🟠 Jarvis sin datos de API (TwelveData fallando) */
+.indicador.sindatos {
+  background: #ffb347;
+  box-shadow: 0 0 10px #ffb347;
+  animation: parpadeo 1.2s infinite alternate;
+}
+
+/* 🔴 Error crítico en Jarvis */
+.indicador.error {
+  background: #ff4d4d;
+  box-shadow: 0 0 10px #ff4d4d;
+  animation: parpadeo 0.8s infinite alternate;
+}
+
 .indicador.online  { background: #00ff80; box-shadow: 0 0 8px #00ff80; }
 .indicador.warn    { background: #ffb347; box-shadow: 0 0 8px #ffb347; animation: parpadeo 1.5s infinite alternate; }
 .indicador.offline { background: #ff4d4d; box-shadow: 0 0 8px #ff4d4d; }
