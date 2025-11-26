@@ -198,3 +198,82 @@
 #jarvis-panel .jarvis-log::-webkit-scrollbar-thumb:hover {
   background-color: #f4c542;
 }
+
+
+/* ============================================================
+   NUEVOS BLOQUES JARVIS HFv3.6
+   (Lectura de mercado / Estado de señal / Última operación / Sistema)
+   Mantiene estética original Ultron/Jarvis
+   ============================================================ */
+
+/* Contenedor GRID 2x2 limpio */
+.jarvis-body {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 18px;
+  margin-top: 15px;
+}
+
+/* Cada BOX del nuevo panel */
+.jarvis-box {
+  background: #141821;
+  border: 1px solid #2c2f36;
+  padding: 14px 16px;
+  border-radius: 10px;
+  color: #d1d5db;
+  box-shadow: inset 0 0 8px rgba(255, 215, 0, 0.1);
+  font-size: 14px;
+  min-height: 115px;
+}
+
+/* Títulos de cada mini sección */
+.jarvis-box h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #f4c542;
+  text-shadow: 0 0 4px rgba(244, 197, 66, 0.3);
+}
+
+/* Párrafos dentro de cada box */
+.jarvis-box p {
+  margin: 4px 0;
+  line-height: 1.35;
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+/* Ajuste del borde chispa para contenedor más grande */
+.borde-chispa {
+  padding: 16px;
+  border-radius: 12px;
+}
+
+.borde-chispa::before {
+  border-radius: 12px;
+}
+
+/* Estado del sistema – separador visual */
+#estado-sistema p {
+  margin: 3px 0;
+}
+
+/* Última operación – destaca resultado TP o SL */
+#ultima-operacion p {
+  font-size: 13px;
+}
+#ultima-operacion .tp {
+  color: #00ff80;
+  font-weight: 600;
+}
+#ultima-operacion .sl {
+  color: #ff4d4d;
+  font-weight: 600;
+}
+
+/* Compatibilidad DXY en lectura del mercado */
+#lectura-mercado p {
+  font-size: 13px;
+}
+
