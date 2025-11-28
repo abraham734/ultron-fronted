@@ -148,7 +148,10 @@ function renderRaw(data) {
   const raw = data.raw || {};
   const ultimaCruda = raw.ultima || {};
 
-  const velasLimpias = Array.isArray(data.velas) ? data.velas : [];
+  const velasLimpias = Array.isArray(data.velas)
+  ? data.velas.filter(v => v && v.high != null && v.low != null && v.close != null)
+  : [];
+
   const ultimaLimpia = velasLimpias.at(-1) || {};
   const ultimas10 = velasLimpias.slice(-10);
 
