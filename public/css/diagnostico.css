@@ -1,22 +1,21 @@
-/* === diagnostico.css — Shadow 3.0 ===================================== */
-/* Bloque de diagnóstico del motor Ultron con pestañas CLEAN/RAW/QUALITY */
-/* ====================================================================== */
+/* === diagnostico.css — Shadow 4.0 ======================================= */
+/* Auditor del motor Ultron: CLEAN / RAW / QUALITY — Versión optimizada   */
+/* ======================================================================= */
 
 .bloque-diagnostico {
   margin-top: 24px;
   margin-bottom: 24px;
-  padding: 16px 20px;
+  padding: 18px 22px;
   border-radius: 14px;
   background: #0b0f19;
   box-shadow: 0 0 0 1px rgba(120, 180, 255, 0.18);
-  overflow: hidden;
 }
 
 .diag-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
 .diag-header h2 {
@@ -32,213 +31,119 @@
   color: #ffc857;
 }
 
-.diag-contenido {
-  font-size: 13px;
-  color: #d3d9e5;
-}
+/* ===================================================== */
+/* 🔵 TABS (CLEAN / RAW / QUALITY)                       */
+/* ===================================================== */
 
-.diag-placeholder {
-  margin: 0;
-  opacity: 0.8;
-}
-
-/* 🔵 Tabs tipo pastilla */
-
-.diag-tabs {
+.shadow-tabs {
   display: flex;
   gap: 8px;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
-.diag-tab {
+.shadow-tab {
   border: none;
+  padding: 6px 16px;
   border-radius: 999px;
-  padding: 6px 14px;
   font-size: 12px;
   font-weight: 600;
   background: #151b2b;
   color: #8fa1ce;
   cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+  transition: 0.18s ease;
 }
 
-.diag-tab.activo {
+.shadow-tab.active {
   background: #243454;
   color: #ffe9b3;
   box-shadow: 0 0 0 1px rgba(250, 200, 120, 0.6);
 }
 
-.diag-tabpanel {
+.shadow-panel {
   display: none;
 }
 
-.diag-tabpanel.activo {
+.shadow-panel.visible {
   display: block;
 }
 
-/* 🔵 Resumen CLEAN */
+/* ===================================================== */
+/* 🟦 CLEAN — Indicadores / Supertrend / Estructura      */
+/* ===================================================== */
 
-.diag-resumen-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 12px;
-  margin-bottom: 16px;
-}
-
-.diag-label {
-  display: block;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: #7f8bad;
-  margin-bottom: 2px;
-}
-
-.diag-value {
-  font-size: 13px;
-  font-weight: 600;
-  color: #f1f5ff;
-}
-
-/* 🟣 Tabla de condiciones CLEAN */
-
-.diag-shadow h3 {
+.shadow-panel h4 {
   margin: 0 0 8px 0;
-  font-size: 13px;
+  font-size: 14px;
+  font-weight: 600;
   color: #e5f0ff;
 }
 
-.diag-tabla {
-  width: 100%;
-  border-collapse: collapse;
+/* JSON limpio para lectura */
+.shadow-code {
+  background: #101622;
+  padding: 10px 12px;
+  border-radius: 10px;
   font-size: 12px;
+  color: #c8d2eb;
+  white-space: pre-wrap;
+  line-height: 1.33;
 }
 
-.diag-tabla thead {
-  background: #101623;
-}
+/* ===================================================== */
+/* 🟠 RAW — Últimas 10 velas, logs, errores              */
+/* ===================================================== */
 
-.diag-tabla th,
-.diag-tabla td {
-  padding: 6px 8px;
-  text-align: left;
-  border-bottom: 1px solid rgba(26, 34, 52, 0.9);
-}
-
-.diag-tabla th {
+.shadow-raw-title {
+  font-size: 14px;
   font-weight: 600;
-  color: #e5f0ff;
+  color: #ffe9b3;
+  margin-bottom: 6px;
 }
 
-.diag-tabla td {
-  color: #c8d0e5;
-}
-
-.diag-tabla tr:nth-child(even) {
-  background: rgba(10, 16, 32, 0.85);
-}
-
-.diag-tabla tr:nth-child(odd) {
-  background: rgba(9, 14, 28, 0.85);
-}
-
-/* 🟠 RAW – datos crudos */
-
-.diag-raw h3 {
-  margin: 0 0 8px 0;
-  font-size: 13px;
-  color: #e5f0ff;
-}
-
-.diag-raw-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(0, 1.5fr);
-  gap: 12px;
-}
-
-.diag-raw-pre {
+.shadow-raw-box {
   background: #080c16;
-  border-radius: 8px;
-  padding: 8px;
-  font-size: 11px;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 12px;
   color: #c6d2f2;
-  max-height: 200px;
-  overflow: auto;
+  max-height: 260px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  line-height: 1.33;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
 }
 
-.diag-raw-lista {
-  list-style: none;
-  padding: 0;
-  margin: 6px 0 0 0;
-  font-size: 12px;
+.shadow-section {
+  margin-bottom: 18px;
 }
 
-.diag-raw-lista li {
-  margin-bottom: 4px;
-}
+/* ===================================================== */
+/* 🟡 QUALITY — integridad del feed                      */
+/* ===================================================== */
 
-/* 🟡 QUALITY – score de integridad */
-
-.diag-quality h3 {
-  margin: 0 0 8px 0;
-  font-size: 13px;
+.shadow-quality-title {
+  font-size: 14px;
+  font-weight: 600;
   color: #e5f0ff;
+  margin-bottom: 6px;
 }
 
-.diag-quality-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.quality-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 700;
-}
-
-.quality-badge-ok {
-  background: rgba(46, 204, 113, 0.12);
-  color: #2ecc71;
-}
-
-.quality-badge-mid {
-  background: rgba(241, 196, 15, 0.12);
-  color: #f1c40f;
-}
-
-.quality-badge-bad {
-  background: rgba(231, 76, 60, 0.12);
-  color: #e74c3c;
-}
-
-.diag-quality-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 10px;
-  margin-bottom: 8px;
-}
-
-.diag-quality-detalle {
+.shadow-quality-box {
+  background: #080c16;
+  padding: 10px 12px;
+  border-radius: 10px;
+  color: #c6d2f2;
+  white-space: pre-wrap;
   font-size: 12px;
-  color: #c8d0e5;
+  line-height: 1.35;
 }
 
-.diag-quality-detalle p {
-  margin: 4px 0;
-}
-
-.diag-quality-detalle ul {
-  margin: 4px 0 0 16px;
-}
-
-/* ❌ Errores */
-
+/* ===================================================== */
+/* ❌ Errores                                            */
+/* ===================================================== */
 .diag-error {
   color: #ff7b7b;
+  font-size: 13px;
   margin: 0;
+  font-weight: 600;
 }
