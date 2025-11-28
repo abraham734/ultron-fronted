@@ -1,23 +1,12 @@
 // ==========================================================================
-// === diagnostico_motor.js – SHADOW 3.5 FUSIONADO ==========================
-// === Diagnóstico independiente del motor (Frontend) =======================
-// === Totalmente sincronizado con el escáner y con indicadores reales =====
+// === SHADOW 4.0 – Auditor Real del Motor (Frontend) ========================
+// === 100% datos del backend, sin cálculos locales =========================
 // ==========================================================================
 
-// === IMPORTS DE INDICADORES (FRONTEND) ===
-import { calcularEMA } from "./utils/ema.js";
-import { calcularADX } from "./utils/adx.js";
-import { calcularATR } from "./utils/atr.js";
-import { calcularSupertrend } from "./utils/supertrend.js";
-import { calcularSqueezeMomentum } from "./utils/indicadorsqueeze.js";
-import { estructuraGeneral } from "./utils/estructura.js";
-
-let shadowActivo = null;
-let shadowIntervalo = "1h";
 let shadowBloqueando = false;
 
 // ==========================================================================
-// 🟦 LEER ACTIVO ACTUAL DESDE LA BARRA DE ESCANEO
+// 🟦 LEER ACTIVO DESDE LA BARRA DE ESCANEO
 // ==========================================================================
 function shadowLeerActivoActual() {
   const el = document.getElementById("estado-escaneo");
@@ -25,30 +14,26 @@ function shadowLeerActivoActual() {
 
   const texto = el.textContent || "";
   const match = texto.match(/Escaneando:\s*([A-Z0-9\/\.\-]+)\s*–/i);
-
   if (!match) return null;
+
   return match[1].trim();
 }
 
 // ==========================================================================
-// 🟦 LEER INTERVALO REAL DEL ESCÁNER (FOLLOW MODE — OPCIÓN B)
+// 🟦 LEER INTERVALO DEL ESCÁNER
 // ==========================================================================
 function shadowLeerIntervaloScannerActual() {
   const el = document.getElementById("estado-escaneo");
   if (!el) return "1h";
 
   const texto = el.textContent || "";
-
-  // Busca: "– 30m", "– 10m", "– 1h", etc.
   const match = texto.match(/–\s*(\d+m|\dh)/i);
 
-  if (!match) return "1h";
-
-  return match[1].toLowerCase();
+  return match ? match[1].toLowerCase() : "1h";
 }
 
 // ==========================================================================
-// 🟥 FUNCIÓN PRINCIPAL
+// 🟥 FUNCIÓN PRINCIPAL – SOLO BACKEND
 // ==========================================================================
 export async function cargarDiagnosticoMotor(simbolo, intervalo) {
   if (shadowBloqueando) return;
@@ -61,72 +46,55 @@ export async function cargarDiagnosticoMotor(simbolo, intervalo) {
     estadoEl.innerText = `Shadow analizando ${simbolo} (${intervalo})…`;
 
     // ================================================================
-    // 1️⃣ OBTENER VELAS REALES DESDE BACKEND
+    // 1️⃣ OBTENER DATOS REALES DESDE EL BACKEND
     // ================================================================
     const url = `${import.meta.env.VITE_BACKEND_URL}/diagnostico?simbolo=${simbolo}&intervalo=${intervalo}`;
     const r = await fetch(url);
     const data = await r.json();
 
-    const velas = data?.raw || data?.datos || data?.ohlc?.ultimas || [];
-
-    if (!Array.isArray(velas) || velas.length < 10) {
-      cuerpoEl.innerHTML = `<p class="diag-error">No hay suficientes velas para análisis.</p>`;
+    if (!data) {
+      cuerpoEl.innerHTML = `<p class="diag-error">Sin datos del backend.</p>`;
       estadoEl.innerText = "Shadow sin datos";
       return;
     }
 
     // ================================================================
-    // 2️⃣ CALCULAR INDICADORES (FRONTEND)
+    // 2️⃣ EXTRAER DATOS DEL BACKEND (REAL)
     // ================================================================
-    const ema30 = calcularEMA(velas, 30).at(-1) || 0;
-    const ema65 = calcularEMA(velas, 65).at(-1) || 0;
-    const ema200 = calcularEMA(velas, 200).at(-1) || 0;
-
-    const adxArr = calcularADX(velas, 14);
-    const adx = adxArr?.at(-1) || 0;
-
-    const atrArr = calcularATR(velas, 14);
-    const atr = atrArr?.at(-1) || 0;
-
-    const squeeze = calcularSqueezeMomentum(velas) || null;
-
-    // Supertrend ESTÁNDAR
-    const stR = calcularSupertrend(velas, 10, 3).at(-1) || { estado: "OFF", valor: 0 };
-    const stL = calcularSupertrend(velas, 20, 6).at(-1) || { estado: "OFF", valor: 0 };
-
-    // Supertrend RIESGO
-    const stRR = calcularSupertrend(velas, 7, 2.5).at(-1) || { estado: "OFF", valor: 0 };
-    const stRL = calcularSupertrend(velas, 14, 4.5).at(-1) || { estado: "OFF", valor: 0 };
-
-    // Ruptura HL / LH real
-    const estructura = estructuraGeneral(velas);
-    const ruptura = estructura?.ruptura || "ninguna";
-    const distancia = estructura?.distancia || 0;
+    const velas = data.velas || []; // <<< ahora sí recibe TODAS las velas
+    const ohlc = data.ohlc || {};
+    const indicadores = data.indicadores || {};
+    const supertrend = data.supertrend || {};
+    const estructura = data.estructura || {};
+    const ruptura = data.ruptura || {};
+    const squeeze = data.squeeze || {};
+    const calidad = data.calidad || {};
+    const logs = data.logsInternos || [];
+    const errores = data.puntoCorte || [];
 
     // ================================================================
-    // 3️⃣ ANALIZAR CALIDAD DEL FEED
+    // Validación mínima
     // ================================================================
-    const calidad = analizarCalidadVelas(velas);
+    if (!Array.isArray(velas) || velas.length < 2) {
+      cuerpoEl.innerHTML = `<p class="diag-error">Backend no envió velas suficientes.</p>`;
+      estadoEl.innerText = "Shadow sin datos";
+      return;
+    }
 
     // ================================================================
-    // 4️⃣ RENDER
+    // 3️⃣ RENDER FINAL
     // ================================================================
     cuerpoEl.innerHTML = generarHTMLShadow({
       velas,
-      ema30,
-      ema65,
-      ema200,
-      adx,
-      atr,
-      squeeze,
-      stR,
-      stL,
-      stRR,
-      stRL,
-      ruptura,
-      distancia,
+      ohlc,
+      indicadores,
+      supertrend,
       estructura,
-      calidad
+      ruptura,
+      squeeze,
+      calidad,
+      logs,
+      errores
     });
 
     estadoEl.innerText = `Shadow activo – ${simbolo} (${intervalo})`;
@@ -139,24 +107,7 @@ export async function cargarDiagnosticoMotor(simbolo, intervalo) {
 }
 
 // ==========================================================================
-// 🟦 FUNCION CALIDAD DE VELAS
-// ==========================================================================
-function analizarCalidadVelas(velas) {
-  let sinHigh = 0, sinLow = 0, sinClose = 0, NaNval = 0, errHL = 0;
-
-  for (let v of velas) {
-    if (v.high == null) sinHigh++;
-    if (v.low == null) sinLow++;
-    if (v.close == null) sinClose++;
-    if (Number.isNaN(v.high) || Number.isNaN(v.low) || Number.isNaN(v.close)) NaNval++;
-    if (v.high < v.low) errHL++;
-  }
-
-  return { total: velas.length, sinHigh, sinLow, sinClose, NaNval, errHL };
-}
-
-// ==========================================================================
-// HTML PRINCIPAL DEL PANEL SHADOW (FUSIÓN 3.5)
+// HTML PRINCIPAL DEL PANEL SHADOW
 // ==========================================================================
 function generarHTMLShadow(d) {
   return `
@@ -166,55 +117,42 @@ function generarHTMLShadow(d) {
     <button id="tab-quality" class="shadow-tab">QUALITY</button>
   </div>
 
-  <!-- ============= CLEAN PANEL =================== -->
+  <!-- CLEAN -->
   <div id="shadow-clean" class="shadow-panel visible">
-    <h4>Condiciones de estrategia vs realidad</h4>
-    <table class="diag-tabla">
-      <thead>
-        <tr><th>Condición</th><th>Requerido</th><th>Actual</th><th>OK</th></tr>
-      </thead>
-      <tbody>
-        ${fila("ADX mínimo", "≥ 10", d.adx.toFixed(2), d.adx >= 10)}
-        ${fila("Velas necesarias", "≥ 50", d.velas.length, d.velas.length >= 50)}
-        ${fila("ST Riesgo alineado", "Rápido = Lento ≠ OFF",
-              `${d.stRR.estado}/${d.stRL.estado}`,
-              d.stRR.estado === d.stRL.estado && d.stRR.estado !== "OFF")}
-        ${fila("Ruptura swing", "HL_break / LH_break",
-              `${d.ruptura} / ${d.distancia.toFixed(2)}`,
-              d.ruptura !== "ninguna")}
-        ${fila("Estructura institucional",
-              "estructuraValida = true",
-              d.estructura.estructuraValida ? "Válida" : "NO válida",
-              d.estructura.estructuraValida)}
-      </tbody>
-    </table>
+    <h4>Valores REALES del motor</h4>
+
+    <h4>🟦 Indicadores</h4>
+    <pre>${JSON.stringify(d.indicadores, null, 2)}</pre>
+
+    <h4>🟩 Supertrend</h4>
+    <pre>${JSON.stringify(d.supertrend, null, 2)}</pre>
+
+    <h4>🟨 Estructura</h4>
+    <pre>${JSON.stringify(d.estructura, null, 2)}</pre>
+
+    <h4>🟥 Ruptura</h4>
+    <pre>${JSON.stringify(d.ruptura, null, 2)}</pre>
   </div>
 
-  <!-- ============= RAW PANEL =================== -->
+  <!-- RAW -->
   <div id="shadow-raw" class="shadow-panel">
-    <h4>Última vela (RAW)</h4>
-    <pre class="shadow-raw-box">${JSON.stringify(d.velas.at(-1), null, 2)}</pre>
+    <h4>Velas completas</h4>
+    <pre>${JSON.stringify(d.velas, null, 2)}</pre>
 
-    <h4>Errores detectados</h4>
-    <p>Total velas: ${d.calidad.total}</p>
-    <p>Sin HIGH: ${d.calidad.sinHigh}</p>
-    <p>Sin LOW: ${d.calidad.sinLow}</p>
-    <p>Sin CLOSE: ${d.calidad.sinClose}</p>
-    <p>Valores NaN: ${d.calidad.NaNval}</p>
-    <p>HIGH < LOW: ${d.calidad.errHL}</p>
+    <h4>Última vela</h4>
+    <pre>${JSON.stringify(d.ohlc.ultima, null, 2)}</pre>
+
+    <h4>Logs</h4>
+    <pre>${JSON.stringify(d.logs, null, 2)}</pre>
+
+    <h4>Errores</h4>
+    <pre>${JSON.stringify(d.errores, null, 2)}</pre>
   </div>
 
-  <!-- ============= QUALITY PANEL =================== -->
+  <!-- QUALITY -->
   <div id="shadow-quality" class="shadow-panel">
-    <h4>Calidad del feed</h4>
-    <p><strong>Total velas:</strong> ${d.calidad.total}</p>
-    <p><strong>Errores totales:</strong> ${
-      d.calidad.sinHigh +
-      d.calidad.sinLow +
-      d.calidad.sinClose +
-      d.calidad.NaNval +
-      d.calidad.errHL
-    }</p>
+    <h4>Calidad del Feed</h4>
+    <pre>${JSON.stringify(d.calidad, null, 2)}</pre>
   </div>
 
   <script>
@@ -234,27 +172,12 @@ function generarHTMLShadow(d) {
 }
 
 // ==========================================================================
-// FILA UTIL
-// ==========================================================================
-function fila(cond, req, act, ok) {
-  return `
-    <tr>
-      <td>${cond}</td>
-      <td>${req}</td>
-      <td>${act}</td>
-      <td>${ok ? "✔" : "✘"}</td>
-    </tr>
-  `;
-}
-
-// ==========================================================================
-// AUTO-SYNC CON ESCÁNER CADA 4s
+// AUTO-SYNC CADA 4s
 // ==========================================================================
 setInterval(() => {
   const activo = shadowLeerActivoActual();
   if (!activo) return;
 
   const tf = shadowLeerIntervaloScannerActual();
-
   cargarDiagnosticoMotor(activo, tf);
 }, 4000);
