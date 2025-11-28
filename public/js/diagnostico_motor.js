@@ -249,7 +249,7 @@ export async function cargarDiagnosticoMotor(_simbolo, _intervalo) {
   if (!cont || !estadoEl || !cuerpoEl) return;
 
   const simbolo = shadowLeerActivoActual() || _simbolo || "EUR/USD";
-  const intervalo = _intervalo || "1h";
+  const intervalo = _intervalo || "30min";
 
   estadoEl.textContent = `Analizando ${simbolo}...`;
 
@@ -298,6 +298,6 @@ const url = `${URL_BACKEND}/diagnostico?simbolo=${encodeURIComponent(simbolo)}&i
 setInterval(() => {
   const activo = shadowLeerActivoActual();
   if (activo) {
-    cargarDiagnosticoMotor(activo, "1h");
+    cargarDiagnosticoMotor(activo, "30min");
   }
 }, 4000);
