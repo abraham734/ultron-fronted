@@ -1,5 +1,5 @@
 /* === diagnostico.css === */
-/* Bloque de diagnóstico del motor Ultron */
+/* Bloque de diagnóstico del motor Ultron / SHADOW 2.0 */
 
 .bloque-diagnostico {
   margin-top: 24px;
@@ -8,7 +8,7 @@
   border-radius: 14px;
   background: #0b0f19;
   box-shadow: 0 0 0 1px rgba(120, 180, 255, 0.18);
-  overflow: hidden; /* 🔥 evita desbordamientos */
+  overflow: hidden; /* evita desbordamientos */
 }
 
 .diag-header {
@@ -41,7 +41,7 @@
   opacity: 0.8;
 }
 
-/* 🔵 Resumen SHADOW */
+/* 🔵 Resumen superior (velas, sesión, precio, ADX, ATR, confirmación) */
 .diag-resumen-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -64,30 +64,33 @@
   color: #f1f5ff;
 }
 
-.diag-corte {
-  color: #ff9f6b; /* punto de corte claro */
+/* 🟣 Contenedor principal de Shadow 2.0 */
+.diag-shadow {
+  margin-top: 10px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: radial-gradient(circle at top left, rgba(80, 140, 255, 0.16), transparent),
+    #080c18;
+  border: 1px solid rgba(120, 180, 255, 0.3);
 }
 
-/* 🟣 Tabla de estrategias */
-.diag-tabla-wrapper {
-  max-height: 220px;
-  overflow: auto;
-  margin-bottom: 16px;
-  border-radius: 10px;
-  border: 1px solid rgba(120, 180, 255, 0.18);
+.diag-shadow h3 {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #e5f0ff;
 }
 
+/* 🟩 Tabla comparativa de condiciones (Estrategia vs Realidad) */
 .diag-tabla {
   width: 100%;
   border-collapse: collapse;
   font-size: 12px;
+  margin-top: 4px;
 }
 
 .diag-tabla thead {
-  position: sticky;
-  top: 0;
   background: #101623;
-  z-index: 10;
 }
 
 .diag-tabla th,
@@ -100,40 +103,28 @@
 .diag-tabla th {
   font-weight: 600;
   color: #e5f0ff;
+  font-size: 12px;
 }
 
 .diag-tabla td {
   color: #c8d0e5;
 }
 
+/* Alternancia de filas para mejor lectura */
 .diag-tabla tr:nth-child(even) {
-  background: rgba(10, 16, 32, 0.85);
+  background: rgba(10, 16, 32, 0.9);
 }
 
 .diag-tabla tr:nth-child(odd) {
-  background: rgba(9, 14, 28, 0.85);
+  background: rgba(8, 12, 24, 0.95);
 }
 
-/* 🧠 Bloque de razonamiento global */
-.diag-razonamiento {
-  padding: 10px 12px;
-  border-radius: 10px;
-  background: radial-gradient(circle at top left, rgba(50, 180, 255, 0.15), transparent),
-    #080c18;
-  border: 1px solid rgba(120, 180, 255, 0.25);
-  margin-top: 12px;
-}
-
-.diag-razonamiento h4 {
-  margin: 0 0 6px 0;
-  font-size: 13px;
-  color: #e5f0ff;
-}
-
-.diag-razonamiento p {
-  margin: 2px 0;
-  font-size: 12px;
-  color: #d5ddf5;
+/* Columna de OK (✔ / ✖) centrada y un poco más ancha */
+.diag-tabla th:last-child,
+.diag-tabla td:last-child {
+  text-align: center;
+  width: 60px;
+  font-weight: 700;
 }
 
 /* ❌ Errores */
@@ -142,7 +133,7 @@
   margin: 0;
 }
 
-/* 🟡 OPCIONAL – Logs internos del motor */
+/* 🟡 (Opcional) bloque de logs si algún día lo vuelves a usar */
 .diag-logs {
   margin-top: 16px;
   padding: 10px;
