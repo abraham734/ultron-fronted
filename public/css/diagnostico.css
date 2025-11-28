@@ -1,5 +1,6 @@
-/* === diagnostico.css === */
-/* Bloque de diagnóstico del motor Ultron / SHADOW 2.0 */
+/* === diagnostico.css — Shadow 3.0 ===================================== */
+/* Bloque de diagnóstico del motor Ultron con pestañas CLEAN/RAW/QUALITY */
+/* ====================================================================== */
 
 .bloque-diagnostico {
   margin-top: 24px;
@@ -8,7 +9,7 @@
   border-radius: 14px;
   background: #0b0f19;
   box-shadow: 0 0 0 1px rgba(120, 180, 255, 0.18);
-  overflow: hidden; /* evita desbordamientos */
+  overflow: hidden;
 }
 
 .diag-header {
@@ -41,7 +42,42 @@
   opacity: 0.8;
 }
 
-/* 🔵 Resumen superior (velas, sesión, precio, ADX, ATR, confirmación) */
+/* 🔵 Tabs tipo pastilla */
+
+.diag-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.diag-tab {
+  border: none;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  background: #151b2b;
+  color: #8fa1ce;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.diag-tab.activo {
+  background: #243454;
+  color: #ffe9b3;
+  box-shadow: 0 0 0 1px rgba(250, 200, 120, 0.6);
+}
+
+.diag-tabpanel {
+  display: none;
+}
+
+.diag-tabpanel.activo {
+  display: block;
+}
+
+/* 🔵 Resumen CLEAN */
+
 .diag-resumen-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -64,29 +100,18 @@
   color: #f1f5ff;
 }
 
-/* 🟣 Contenedor principal de Shadow 2.0 */
-.diag-shadow {
-  margin-top: 10px;
-  padding: 12px 14px;
-  border-radius: 12px;
-  background: radial-gradient(circle at top left, rgba(80, 140, 255, 0.16), transparent),
-    #080c18;
-  border: 1px solid rgba(120, 180, 255, 0.3);
-}
+/* 🟣 Tabla de condiciones CLEAN */
 
 .diag-shadow h3 {
-  margin: 0 0 10px 0;
-  font-size: 14px;
-  font-weight: 600;
+  margin: 0 0 8px 0;
+  font-size: 13px;
   color: #e5f0ff;
 }
 
-/* 🟩 Tabla comparativa de condiciones (Estrategia vs Realidad) */
 .diag-tabla {
   width: 100%;
   border-collapse: collapse;
   font-size: 12px;
-  margin-top: 4px;
 }
 
 .diag-tabla thead {
@@ -103,46 +128,117 @@
 .diag-tabla th {
   font-weight: 600;
   color: #e5f0ff;
-  font-size: 12px;
 }
 
 .diag-tabla td {
   color: #c8d0e5;
 }
 
-/* Alternancia de filas para mejor lectura */
 .diag-tabla tr:nth-child(even) {
-  background: rgba(10, 16, 32, 0.9);
+  background: rgba(10, 16, 32, 0.85);
 }
 
 .diag-tabla tr:nth-child(odd) {
-  background: rgba(8, 12, 24, 0.95);
+  background: rgba(9, 14, 28, 0.85);
 }
 
-/* Columna de OK (✔ / ✖) centrada y un poco más ancha */
-.diag-tabla th:last-child,
-.diag-tabla td:last-child {
-  text-align: center;
-  width: 60px;
+/* 🟠 RAW – datos crudos */
+
+.diag-raw h3 {
+  margin: 0 0 8px 0;
+  font-size: 13px;
+  color: #e5f0ff;
+}
+
+.diag-raw-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1.5fr);
+  gap: 12px;
+}
+
+.diag-raw-pre {
+  background: #080c16;
+  border-radius: 8px;
+  padding: 8px;
+  font-size: 11px;
+  color: #c6d2f2;
+  max-height: 200px;
+  overflow: auto;
+}
+
+.diag-raw-lista {
+  list-style: none;
+  padding: 0;
+  margin: 6px 0 0 0;
+  font-size: 12px;
+}
+
+.diag-raw-lista li {
+  margin-bottom: 4px;
+}
+
+/* 🟡 QUALITY – score de integridad */
+
+.diag-quality h3 {
+  margin: 0 0 8px 0;
+  font-size: 13px;
+  color: #e5f0ff;
+}
+
+.diag-quality-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.quality-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
   font-weight: 700;
 }
 
+.quality-badge-ok {
+  background: rgba(46, 204, 113, 0.12);
+  color: #2ecc71;
+}
+
+.quality-badge-mid {
+  background: rgba(241, 196, 15, 0.12);
+  color: #f1c40f;
+}
+
+.quality-badge-bad {
+  background: rgba(231, 76, 60, 0.12);
+  color: #e74c3c;
+}
+
+.diag-quality-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.diag-quality-detalle {
+  font-size: 12px;
+  color: #c8d0e5;
+}
+
+.diag-quality-detalle p {
+  margin: 4px 0;
+}
+
+.diag-quality-detalle ul {
+  margin: 4px 0 0 16px;
+}
+
 /* ❌ Errores */
+
 .diag-error {
   color: #ff7b7b;
   margin: 0;
-}
-
-/* 🟡 (Opcional) bloque de logs si algún día lo vuelves a usar */
-.diag-logs {
-  margin-top: 16px;
-  padding: 10px;
-  border-radius: 10px;
-  background: #0a0f1a;
-  border: 1px solid rgba(120, 180, 255, 0.12);
-  font-size: 11px;
-  color: #8ca4c3;
-  max-height: 160px;
-  overflow-y: auto;
-  white-space: pre-wrap;
 }
