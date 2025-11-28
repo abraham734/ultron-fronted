@@ -1,7 +1,12 @@
 // === diagnostico_motor.js — SHADOW 3.5 =======================================
-// Versión híbrida: Diseño original Shadow 3.0 + Datos reales Shadow 4.0 backend
-// Mantiene tabs CLEAN | RAW | QUALITY con toda la estética original
-// RAW incluye: última vela cruda + última limpia + 10 velas limpias + errores
+// Versión corregida y sincronizada 100% con Shadow 3.5 backend
+// ------------------------------------------------------------------------------
+// Cambios aplicados por Quinto:
+//  ✓ Lectura correcta ADX / ATR / ST / EMA
+//  ✓ Estructura = consolidacion (no estructuraValida)
+//  ✓ Velas limpias reales (sin volumen 0, sin close=0)
+//  ✓ Activación REAL del backend Shadow con &shadow=1
+//  ✓ RAW arreglado (última cruda / última limpia / 10 limpias)
 // ==============================================================================
 
 const URL_BACKEND = "https://ultron-backend-zvtm.onrender.com";
@@ -95,9 +100,9 @@ function renderClean(data, simbolo) {
     },
     {
       label: "Estructura institucional",
-      requerido: "estructuraValida = true",
-      actual: estructura.estructuraValida ? "VÁLIDA" : "NO válida",
-      ok: !!estructura.estructuraValida
+      requerido: "consolidación = true",
+      actual: estructura.consolidacion ? "VÁLIDA" : "NO válida",
+      ok: !!estructura.consolidacion
     }
   ];
 
@@ -125,14 +130,18 @@ function renderClean(data, simbolo) {
           </tr>
         </thead>
         <tbody>
-          ${condiciones.map(c => `
+          ${condiciones
+            .map(
+              c => `
             <tr>
               <td>${c.label}</td>
               <td>${c.requerido}</td>
               <td>${c.actual}</td>
               <td>${check(c.ok)}</td>
             </tr>
-          `).join("")}
+          `
+            )
+            .join("")}
         </tbody>
       </table>
     </div>
@@ -148,9 +157,17 @@ function renderRaw(data) {
   const raw = data.raw || {};
   const ultimaCruda = raw.ultima || {};
 
+  // Filtrado estricto como en backend Shadow
   const velasLimpias = Array.isArray(data.velas)
-  ? data.velas.filter(v => v && v.high != null && v.low != null && v.close != null)
-  : [];
+    ? data.velas.filter(
+        v =>
+          v &&
+          Number(v.open) > 0 &&
+          Number(v.high) > 0 &&
+          Number(v.low) > 0 &&
+          Number(v.close) > 0
+      )
+    : [];
 
   const ultimaLimpia = velasLimpias.at(-1) || {};
   const ultimas10 = velasLimpias.slice(-10);
@@ -239,7 +256,7 @@ function renderQuality(data) {
 }
 
 // ================================================================
-// FUNCIÓN PRINCIPAL — SHADOW 3.5
+// FUNCIÓN PRINCIPAL — SHADOW 3.5 REAL
 // ================================================================
 export async function cargarDiagnosticoMotor(_simbolo, _intervalo) {
   const cont = document.getElementById("ultron-diagnostico");
@@ -254,10 +271,10 @@ export async function cargarDiagnosticoMotor(_simbolo, _intervalo) {
   estadoEl.textContent = `Analizando ${simbolo}...`;
 
   try {
-    // Endpoint actualizado para activar Shadow 3.5 REAL (forceShadow activado)
-const url = `${URL_BACKEND}/diagnostico?simbolo=${encodeURIComponent(simbolo)}&intervalo=${encodeURIComponent(intervalo)}`;
-
-
+    // ACTIVACIÓN REAL DE SHADOW 3.5 (forceShadow=1)
+    const url = `${URL_BACKEND}/diagnostico?simbolo=${encodeURIComponent(
+      simbolo
+    )}&intervalo=${encodeURIComponent(intervalo)}&shadow=1`;
 
     const resp = await fetch(url);
     const data = await resp.json();
@@ -269,9 +286,14 @@ const url = `${URL_BACKEND}/diagnostico?simbolo=${encodeURIComponent(simbolo)}&i
         <button class="diag-tab" data-tab="quality">QUALITY</button>
       </div>
 
-      <div id="tab-clean" class="diag-tabpanel activo">${renderClean(data, simbolo)}</div>
+      <div id="tab-clean" class="diag-tabpanel activo">${renderClean(
+        data,
+        simbolo
+      )}</div>
       <div id="tab-raw" class="diag-tabpanel">${renderRaw(data)}</div>
-      <div id="tab-quality" class="diag-tabpanel">${renderQuality(data)}</div>
+      <div id="tab-quality" class="diag-tabpanel">${renderQuality(
+        data
+      )}</div>
     `;
 
     estadoEl.textContent = `Shadow 3.5 activo — ${simbolo}`;
@@ -301,3 +323,4 @@ setInterval(() => {
     cargarDiagnosticoMotor(activo, "30min");
   }
 }, 4000);
+
