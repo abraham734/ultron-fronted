@@ -218,7 +218,7 @@ function renderQuality(data) {
 }
 
 // ================================================================
-// FUNCIÓN PRINCIPAL — Shadow 3.6 Frontend
+// FUNCIÓN PRINCIPAL — Shadow 3.6 Frontend (AJUSTADO)
 // ================================================================
 export async function cargarDiagnosticoMotor(_simbolo, _intervalo) {
   const cont = document.getElementById("ultron-diagnostico");
@@ -233,25 +233,47 @@ export async function cargarDiagnosticoMotor(_simbolo, _intervalo) {
   estadoEl.textContent = `Analizando ${simbolo}...`;
 
   try {
-    const url = `${URL_BACKEND}/diagnostico?simbolo=${encodeURIComponent(simbolo)}&intervalo=${encodeURIComponent(intervalo)}&shadow=1`;
+    const url = `${URL_BACKEND}/diagnostico?simbolo=${encodeURIComponent(
+      simbolo
+    )}&intervalo=${encodeURIComponent(intervalo)}&shadow=1`;
 
     const resp = await fetch(url);
     const data = await resp.json();
 
+    // ============================================================
+    // BLOQUE COMPLETO ENVUELTO para aplicar estilos correctamente
+    // ============================================================
     cuerpoEl.innerHTML = `
-      <div class="diag-tabs">
-        <button class="diag-tab activo" data-tab="clean">CLEAN</button>
-        <button class="diag-tab" data-tab="raw">RAW</button>
-        <button class="diag-tab" data-tab="quality">QUALITY</button>
-      </div>
+      <div class="bloque-diagnostico">
 
-      <div id="tab-clean" class="diag-tabpanel activo">${renderClean(data, simbolo)}</div>
-      <div id="tab-raw" class="diag-tabpanel">${renderRaw(data)}</div>
-      <div id="tab-quality" class="diag-tabpanel">${renderQuality(data)}</div>
+        <div class="diag-tabs">
+          <button class="diag-tab activo" data-tab="clean">CLEAN</button>
+          <button class="diag-tab" data-tab="raw">RAW</button>
+          <button class="diag-tab" data-tab="quality">QUALITY</button>
+        </div>
+
+        <div class="diag-wrapper">
+
+          <div id="tab-clean" class="diag-tabpanel activo">
+            ${renderClean(data, simbolo)}
+          </div>
+
+          <div id="tab-raw" class="diag-tabpanel">
+            ${renderRaw(data)}
+          </div>
+
+          <div id="tab-quality" class="diag-tabpanel">
+            ${renderQuality(data)}
+          </div>
+
+        </div>
+
+      </div>
     `;
 
     estadoEl.textContent = `Shadow 3.6 activo — ${simbolo}`;
 
+    // Activar tabs
     const tabButtons = cont.querySelectorAll(".diag-tab");
     tabButtons.forEach(btn => {
       btn.addEventListener("click", () => {
@@ -262,7 +284,11 @@ export async function cargarDiagnosticoMotor(_simbolo, _intervalo) {
   } catch (err) {
     console.error("Error cargando Shadow 3.6:", err);
     estadoEl.textContent = "Error en diagnóstico";
-    cuerpoEl.innerHTML = `<p class="diag-error">❌ Error al conectar con el backend Shadow.</p>`;
+    cuerpoEl.innerHTML = `
+      <div class="bloque-diagnostico">
+        <p class="diag-error">❌ Error al conectar con el backend Shadow.</p>
+      </div>
+    `;
   }
 }
 
