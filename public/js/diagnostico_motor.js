@@ -138,20 +138,21 @@ function generarHTMLShadow(d) {
     <pre>${JSON.stringify(d.ruptura, null, 2)}</pre>
   </div>
 
-  <!-- RAW -->
-  <div id="shadow-raw" class="shadow-panel">
-    <h4>Velas completas</h4>
-    <pre>${JSON.stringify(d.velas, null, 2)}</pre>
+ <!-- RAW -->
+<div id="shadow-raw" class="shadow-panel">
+  <h4>Últimas 10 velas</h4>
+  <pre>${JSON.stringify(d.velas.slice(-10), null, 2)}</pre>
 
-    <h4>Última vela</h4>
-    <pre>${JSON.stringify(d.ohlc.ultima, null, 2)}</pre>
+  <h4>Última vela</h4>
+  <pre>${JSON.stringify(d.ohlc.ultima, null, 2)}</pre>
 
-    <h4>Logs del backend</h4>
-    <pre>${JSON.stringify(d.logs, null, 2)}</pre>
+  <h4>Logs del backend</h4>
+  <pre>${JSON.stringify(d.logs, null, 2)}</pre>
 
-    <h4>Errores detectados</h4>
-    <pre>${JSON.stringify(d.errores, null, 2)}</pre>
-  </div>
+  <h4>Errores detectados</h4>
+  <pre>${JSON.stringify(d.errores, null, 2)}</pre>
+</div>
+
 
   <!-- QUALITY -->
   <div id="shadow-quality" class="shadow-panel">
