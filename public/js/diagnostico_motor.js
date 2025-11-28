@@ -1,9 +1,13 @@
 // ==========================================================================
 // === SHADOW 4.0 – Auditor Real del Motor (Frontend) ========================
 // === 100% datos del backend, sin cálculos locales =========================
+// === URL FIJA PARA EVITAR ERROR EN VERCEL =================================
 // ==========================================================================
 
 let shadowBloqueando = false;
+
+// URL FIJA DEL BACKEND (Opción A)
+const SHADOW_BACKEND_URL = "https://ultron-backend-zvtm.onrender.com";
 
 // ==========================================================================
 // 🟦 LEER ACTIVO DESDE LA BARRA DE ESCANEO
@@ -48,7 +52,7 @@ export async function cargarDiagnosticoMotor(simbolo, intervalo) {
     // ================================================================
     // 1️⃣ OBTENER DATOS REALES DESDE EL BACKEND
     // ================================================================
-    const url = `${import.meta.env.VITE_BACKEND_URL}/diagnostico?simbolo=${simbolo}&intervalo=${intervalo}`;
+    const url = `${SHADOW_BACKEND_URL}/diagnostico?simbolo=${simbolo}&intervalo=${intervalo}`;
     const r = await fetch(url);
     const data = await r.json();
 
@@ -142,10 +146,10 @@ function generarHTMLShadow(d) {
     <h4>Última vela</h4>
     <pre>${JSON.stringify(d.ohlc.ultima, null, 2)}</pre>
 
-    <h4>Logs</h4>
+    <h4>Logs del backend</h4>
     <pre>${JSON.stringify(d.logs, null, 2)}</pre>
 
-    <h4>Errores</h4>
+    <h4>Errores detectados</h4>
     <pre>${JSON.stringify(d.errores, null, 2)}</pre>
   </div>
 
