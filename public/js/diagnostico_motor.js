@@ -1,23 +1,18 @@
-// === diagnostico_motor.js — SHADOW 2.1 (Sincronizado con el escáner) =================
-// No toca backend, no toca motor, no toca escáner. Espía invisible y autónomo.
-// Lee el activo ACTUAL del escáner y actualiza Shadow en tiempo real.
+// === diagnostico_motor.js — SHADOW 2.2 ============================================
+// Espía numérico en tiempo real — NO depende del motor, NO depende de la sesión,
+// NO depende de la estrategia. Reporta datos crudos siempre. Totalmente autónomo.
 
 // =====================================================================================
 const URL_BACKEND = "https://ultron-backend-zvtm.onrender.com";
 
 // =====================================================================================
-// 🟦 ESPÍA SHADOW: Detecta el activo actual desde la barra de escaneo
+// 🟦 ESPÍA: Leer símbolo REAL del escáner (#estado-escaneo)
 // =====================================================================================
-
-// Ejemplo de texto dentro de #estado-escaneo:
-//  "📊 Escaneando: BTC/USD – Estrategia: Supertrend Doble (RIESGO)"
 function shadowLeerActivoActual() {
   const el = document.getElementById("estado-escaneo");
   if (!el) return null;
 
   const texto = el.textContent || "";
-
-  // Extraer símbolo entre "Escaneando: " y " –"
   const match = texto.match(/Escaneando:\s*([A-Z0-9\/\.-]+)\s*–/i);
   if (!match) return null;
 
@@ -25,47 +20,50 @@ function shadowLeerActivoActual() {
 }
 
 // =====================================================================================
-// 🧠 Inteligencia interna SHADOW (sin tocar motor/estrategias)
+// 🧠 INTELIGENCIA INTERNA SHADOW — INDIPENDIENTE DEL MOTOR
 // =====================================================================================
 
-function shadowDetectAnticipacion(razones = []) {
-  if (!razones.length) return false;
-  return razones.some(r =>
-    r.includes("Anticipación BUY") || r.includes("Anticipación SELL")
-  );
+// Si falta un número → siempre devolver 0
+function num(v) {
+  const n = Number(v);
+  return isNaN(n) ? 0 : n;
 }
 
-function shadowDetectFase(razones = []) {
-  if (!razones.length) return "neutra";
-  if (razones.some(r => r.includes("Observación"))) return "observacion";
-  if (razones.some(r => r.includes("Confirmación completa"))) return "entrada";
-  return "neutra";
+// Detección de rupturas reales con datos crudos (velas), NO del motor
+function shadowDetectRupturaCruda(ultima, anterior) {
+  if (!ultima || !anterior) {
+    return { tipo: "ninguna", direccion: "0", distancia: 0 };
+  }
+
+  const highNow = num(ultima.high);
+  const lowNow = num(ultima.low);
+  const highPrev = num(anterior.high);
+  const lowPrev = num(anterior.low);
+  const precioActual = num(ultima.close);
+
+  // Ruptura alcista
+  if (highNow > highPrev) {
+    const distancia = +(precioActual - highPrev).toFixed(2);
+    return { tipo: "HL_break", direccion: "BUY", distancia };
+  }
+
+  // Ruptura bajista
+  if (lowNow < lowPrev) {
+    const distancia = +(lowPrev - precioActual).toFixed(2) * -1;
+    return { tipo: "LH_break", direccion: "SELL", distancia };
+  }
+
+  // Sin ruptura
+  return { tipo: "ninguna", direccion: "0", distancia: 0 };
 }
 
-function shadowDetectRuptura(razones = []) {
-  const r = razones.find(r => r.includes("Ruptura swing detectada"));
-  if (!r) return { tipo: "ninguno", direccion: "-" };
-
-  if (r.includes("HL_break")) return { tipo: "HL_break", direccion: "buy" };
-  if (r.includes("LH_break")) return { tipo: "LH_break", direccion: "sell" };
-
-  return { tipo: "ninguno", direccion: "-" };
-}
-
-function shadowDetectConfirmacion(razones = []) {
-  const r = razones.find(r => r.includes("Confirmación completa"));
-  if (!r) return null;
-  if (r.includes("BUY")) return "buy";
-  if (r.includes("SELL")) return "sell";
-  return null;
-}
-
+// Chequeo ✔ o ✖
 function check(c) {
   return c ? "✔" : "✖";
 }
 
 // =====================================================================================
-// 🔥 FUNCIÓN PRINCIPAL DE SHADOW — SIEMPRE EN VIVO
+// 🟪 FUNCIÓN PRINCIPAL — SHADOW EN TIEMPO REAL (nunca se detiene)
 // =====================================================================================
 export async function cargarDiagnosticoMotor(_simbolo, _intervalo) {
   const cont = document.getElementById("ultron-diagnostico");
@@ -74,7 +72,7 @@ export async function cargarDiagnosticoMotor(_simbolo, _intervalo) {
 
   if (!cont || !estadoEl || !cuerpoEl) return;
 
-  // Tomamos el activo REAL del escáner
+  // Obtener activo REAL del escáner
   const simbolo = shadowLeerActivoActual() || _simbolo || "EUR/USD";
   const intervalo = _intervalo || "1h";
 
@@ -90,90 +88,67 @@ export async function cargarDiagnosticoMotor(_simbolo, _intervalo) {
     const data = await resp.json();
 
     // =================================================================================
-    // EXTRAER DATOS REALES (aunque NO haya salida)
+    // DATOS CRUDOS REALES
     // =================================================================================
+
     const stR = data.supertrend?.riesgo?.rapido || {};
     const stL = data.supertrend?.riesgo?.lento || {};
 
-    const adx = data.indicadores?.adx ?? "-";
-    const atr = data.indicadores?.atr ?? "-";
+    // Supertrend: estado + valor
+    const stRapidoEstado = stR.estado || "OFF";
+    const stRapidoValor = num(stR.supertrend);
+    const stLentoEstado = stL.estado || "OFF";
+    const stLentoValor = num(stL.supertrend);
 
-    const precioActual = data.ohlc?.ultima?.close ?? "-";
-    const velasTotal = data.ohlc?.total ?? "-";
+    const precioActual = num(data.ohlc?.ultima?.close);
+    const velasTotal = num(data.ohlc?.total);
+    const ultima = data.ohlc?.ultima || null;
+    const anterior = data.ohlc?.anterior || null; // si no existe, Shadow lo maneja
 
-    // Estrategia puede venir vacía, lo manejamos igual
-    const salida = data.estrategias?.supertrend_riesgo?.salida || {};
-    const razones = salida.razones || [];
+    const adx = num(data.indicadores?.adx);
+    const atr = num(data.indicadores?.atr);
 
-    const session =
-      salida.session ||
-      data.resultadoFinal?.session ||
-      "—";
-
-    // =================================================================================
-    // SHADOW reconstruye lógica aunque NO haya señal
-    // =================================================================================
-    const anticipacion = shadowDetectAnticipacion(razones);
-    const fase = shadowDetectFase(razones);
-    const ruptura = shadowDetectRuptura(razones);
-    const confirmacion = shadowDetectConfirmacion(razones);
+    // Ruptura real del mercado — NO del motor
+    const ruptura = shadowDetectRupturaCruda(ultima, anterior);
 
     // =================================================================================
-    // COMPARATIVA ESTRATEGIA vs REALIDAD
+    // CONDICIONES DE ESTRATEGIA (sin afectar motor)
     // =================================================================================
     const condiciones = [
       {
-        label: "Mercado abierto",
-        requerido: "Abierto",
-        actual: session,
-        ok: session !== "Cerrado"
+        label: "ADX >= 10",
+        requerido: ">= 10",
+        actual: adx,
+        ok: adx >= 10
       },
       {
-        label: "Mínimo 50 velas",
+        label: "Velas >= 50",
         requerido: ">= 50",
         actual: velasTotal,
         ok: velasTotal >= 50
       },
       {
-        label: "ADX suficiente (>=10)",
-        requerido: ">= 10",
-        actual: adx !== "-" ? adx.toFixed?.(1) : "-",
-        ok: adx >= 10
-      },
-      {
         label: "ST Rápido",
-        requerido: "BUY/SELL según estrategia",
-        actual: stR.estado ?? "-",
-        ok: stR.estado === salida.bias // coincidencia parcial
+        requerido: "Estado/Valor",
+        actual: `${stRapidoEstado} / ${stRapidoValor}`,
+        ok: true
       },
       {
         label: "ST Lento",
-        requerido: "BUY/SELL según estrategia",
-        actual: stL.estado ?? "-",
-        ok: stL.estado === salida.bias
+        requerido: "Estado/Valor",
+        actual: `${stLentoEstado} / ${stLentoValor}`,
+        ok: true
       },
       {
-        label: "Ruptura swing válida",
+        label: "Ruptura swing",
         requerido: "HL_break / LH_break",
-        actual: ruptura.tipo,
-        ok: ruptura.tipo !== "ninguno"
-      },
-      {
-        label: "Anticipación",
-        requerido: "TRUE",
-        actual: anticipacion,
-        ok: anticipacion === true
-      },
-      {
-        label: "Confirmación final",
-        requerido: "Coherencia total",
-        actual: salida.esValida ? "✔" : "✖",
-        ok: salida.esValida === true
+        actual: `${ruptura.tipo} / ${ruptura.direccion} / ${ruptura.distancia}`,
+        ok: ruptura.tipo !== "ninguna"
       }
     ];
 
     // =================================================================================
-    // RENDER DEL RESUMEN SUPERIOR
+    // RENDER — RESUMEN SUPERIOR
     // =================================================================================
     const resumenHtml = `
       <div class="diag-resumen-grid">
@@ -186,30 +161,30 @@ export async function cargarDiagnosticoMotor(_simbolo, _intervalo) {
           <span class="diag-value">${precioActual}</span>
         </div>
         <div>
-          <span class="diag-label">Sesión</span>
-          <span class="diag-value">${session}</span>
-        </div>
-        <div>
           <span class="diag-label">ADX</span>
-          <span class="diag-value">${adx !== "-" ? adx.toFixed?.(1) : "-"}</span>
+          <span class="diag-value">${adx}</span>
         </div>
         <div>
           <span class="diag-label">ATR</span>
-          <span class="diag-value">${atr !== "-" ? atr.toFixed?.(5) : "-"}</span>
+          <span class="diag-value">${atr}</span>
         </div>
         <div>
-          <span class="diag-label">Velas</span>
-          <span class="diag-value">${velasTotal}</span>
+          <span class="diag-label">Ruptura</span>
+          <span class="diag-value">${ruptura.tipo}</span>
+        </div>
+        <div>
+          <span class="diag-label">Distancia</span>
+          <span class="diag-value">${ruptura.distancia}</span>
         </div>
       </div>
     `;
 
     // =================================================================================
-    // RENDER DE LA TABLA COMPARATIVA
+    // RENDER — TABLA COMPARATIVA
     // =================================================================================
     const tablaShadow = `
       <div class="diag-shadow">
-        <h3>SHADOW 2.1 — Estrategia vs Realidad (Tiempo Real)</h3>
+        <h3>SHADOW 2.2 — Datos crudos en tiempo real</h3>
 
         <table class="diag-tabla">
           <thead>
@@ -248,13 +223,11 @@ export async function cargarDiagnosticoMotor(_simbolo, _intervalo) {
 }
 
 // =====================================================================================
-// 🔄 SHADOW SIEMPRE SIGUE EL ESCÁNER (1 actualización por ciclo)
+// 🔄 SHADOW SIEMPRE SIGUE AL ESCÁNER (tiempo real)
 // =====================================================================================
-
 setInterval(() => {
   const activo = shadowLeerActivoActual();
   if (activo) {
     cargarDiagnosticoMotor(activo, "1h");
   }
-}, 4000); // se actualiza cada 4 segundos para seguir el escáner
-
+}, 4000); // actualiza Shadow cada 4 segundos
