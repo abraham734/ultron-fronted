@@ -251,7 +251,9 @@ export async function cargarDiagnosticoMotor(_simbolo, _intervalo) {
   estadoEl.textContent = `Analizando ${simbolo}...`;
 
   try {
-    const url = `${URL_BACKEND}/diagnostico?simbolo=${encodeURIComponent(simbolo)}&intervalo=${encodeURIComponent(intervalo)}`;
+    // Endpoint actualizado para activar Shadow 3.5 REAL (forceShadow activado)
+const url = `${URL_BACKEND}/diagnostico-shadow?simbolo=${encodeURIComponent(simbolo)}&intervalo=${encodeURIComponent(intervalo)}&shadow=1`;
+
 
     const resp = await fetch(url);
     const data = await resp.json();

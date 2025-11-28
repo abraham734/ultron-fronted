@@ -1,5 +1,5 @@
 /* === diagnostico.css — Shadow 3.5 (AJUSTADO) ============================== */
-/* Compatible con renderClean, renderRaw, renderQuality del JS nuevo         */
+/* Estilo completo, moderno y limpio para CLEAN / RAW / QUALITY               */
 /* ========================================================================== */
 
 /* CONTENEDOR GENERAL */
@@ -56,10 +56,16 @@
 /* ========================================== */
 .diag-tabpanel {
   display: none;
+  animation: fadeIn 0.2s ease;
 }
 
 .diag-tabpanel.activo {
   display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* ========================================== */
@@ -68,7 +74,7 @@
 
 .diag-resumen-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(140px, 1fr));
+  grid-template-columns: repeat(3, minmax(120px, 1fr));
   gap: 16px;
   margin-bottom: 22px;
 }
@@ -85,10 +91,16 @@
   color: #f1f5ff;
 }
 
+.diag-shadow h3 {
+  color: #e5f0ff;
+  margin: 10px 0 10px 0;
+  font-size: 14px;
+}
+
 .diag-tabla {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 12px;
+  margin-top: 8px;
 }
 
 .diag-tabla th,
@@ -128,8 +140,9 @@
 
 .diag-raw-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 16px;
+  margin-bottom: 12px;
 }
 
 .diag-raw-pre {
@@ -138,7 +151,7 @@
   font-size: 11px;
   border-radius: 8px;
   color: #c6d2f2;
-  max-height: 200px;
+  max-height: 180px;
   overflow: auto;
   white-space: pre-wrap;
   box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
