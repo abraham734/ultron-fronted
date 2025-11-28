@@ -1,125 +1,57 @@
-/* === diagnostico.css — Shadow 3.5 (AJUSTADO) ============================== */
-/* Estilo completo, moderno y limpio para CLEAN / RAW / QUALITY               */
-/* ========================================================================== */
-
-/* CONTENEDOR GENERAL */
-.bloque-diagnostico {
-  margin-top: 24px;
-  padding: 20px 24px;
-  border-radius: 14px;
-  background: #0b0f19;
-  box-shadow: 0 0 0 1px rgba(120, 180, 255, 0.18);
-}
-
-/* HEADER */
-.diag-header h2 {
-  color: #e5f0ff;
-  font-size: 16px;
-  font-weight: 600;
-}
-
-#diag-estado {
-  color: #ffc857;
-  font-size: 13px;
-  font-weight: 600;
-}
-
 /* ========================================== */
-/* TABS                                        */
-/* ========================================== */
-.diag-tabs {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 18px;
-}
-
-.diag-tab {
-  background: #151b2b;
-  color: #8fa1ce;
-  border: none;
-  padding: 7px 16px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.15s;
-}
-
-.diag-tab.activo {
-  background: #243454;
-  color: #ffe9b3;
-  box-shadow: 0 0 0 1px rgba(250, 200, 120, 0.6);
-}
-
-/* ========================================== */
-/* PANEL ACTIVO                                */
-/* ========================================== */
-.diag-tabpanel {
-  display: none;
-  animation: fadeIn 0.2s ease;
-}
-
-.diag-tabpanel.activo {
-  display: block;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* ========================================== */
-/* CLEAN — TABLA + RESUMEN                     */
+/* CLEAN — TABLA PROFESIONAL Y ALINEADA       */
 /* ========================================== */
 
-.diag-resumen-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(120px, 1fr));
-  gap: 16px;
-  margin-bottom: 22px;
-}
-
-.diag-label {
-  font-size: 11px;
-  text-transform: uppercase;
-  color: #7f8bad;
-}
-
-.diag-value {
-  font-size: 13px;
-  font-weight: 600;
-  color: #f1f5ff;
-}
-
-.diag-shadow h3 {
-  color: #e5f0ff;
-  margin: 10px 0 10px 0;
-  font-size: 14px;
-}
-
+/* Alinear columnas con proporciones exactas */
 .diag-tabla {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 8px;
+  margin-top: 10px;
+  table-layout: fixed; /* clave para columnas limpias */
 }
 
-.diag-tabla th,
+/* Column widths */
+.diag-tabla th:nth-child(1),
+.diag-tabla td:nth-child(1) {
+  width: 40%;
+}
+
+.diag-tabla th:nth-child(2),
+.diag-tabla td:nth-child(2) {
+  width: 20%;
+}
+
+.diag-tabla th:nth-child(3),
+.diag-tabla td:nth-child(3) {
+  width: 30%;
+}
+
+.diag-tabla th:nth-child(4),
+.diag-tabla td:nth-child(4) {
+  width: 10%;
+  text-align: center;
+}
+
+/* Estilo visual consistente */
+.diag-tabla th {
+  background: #101623;
+  color: #e5f0ff;
+  font-size: 12px;
+  padding: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
 .diag-tabla td {
   padding: 8px 10px;
-  font-size: 12px;
-  border-bottom: 1px solid rgba(26, 34, 52, 0.9);
-}
-
-.diag-tabla th {
-  color: #e5f0ff;
-  font-weight: 600;
-  background: #101623;
-}
-
-.diag-tabla td {
   color: #c8d0e5;
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
+/* Filas alternadas */
 .diag-tabla tr:nth-child(odd) {
   background: rgba(14, 20, 38, 0.85);
 }
@@ -128,96 +60,10 @@
   background: rgba(9, 14, 28, 0.85);
 }
 
-/* ========================================== */
-/* RAW — Vela cruda + limpia + 10 velas        */
-/* ========================================== */
-
-.diag-raw h3 {
-  color: #e5f0ff;
-  margin: 16px 0 8px 0;
-  font-size: 14px;
-}
-
-.diag-raw-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 16px;
-  margin-bottom: 12px;
-}
-
-.diag-raw-pre {
-  background: #080c16;
-  padding: 10px;
-  font-size: 11px;
-  border-radius: 8px;
-  color: #c6d2f2;
-  max-height: 180px;
-  overflow: auto;
-  white-space: pre-wrap;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
-}
-
-.diag-raw-lista {
-  padding-left: 16px;
-  margin-top: 6px;
-}
-
-.diag-raw-lista li {
-  color: #c8d0e5;
-  margin-bottom: 4px;
-  font-size: 12px;
-}
-
-/* ========================================== */
-/* QUALITY                                     */
-/* ========================================== */
-.diag-quality h3 {
-  color: #e5f0ff;
-  margin-bottom: 10px;
-  font-size: 14px;
-}
-
-.diag-quality-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 14px;
-}
-
-.quality-badge {
-  padding: 4px 12px;
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 700;
-}
-
-.quality-badge-ok {
-  background: rgba(46, 204, 113, 0.12);
-  color: #2ecc71;
-}
-
-.quality-badge-mid {
-  background: rgba(241, 196, 15, 0.12);
-  color: #f1c40f;
-}
-
-.quality-badge-bad {
-  background: rgba(231, 76, 60, 0.12);
-  color: #e74c3c;
-}
-
-.diag-quality-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(100px, 1fr));
-  gap: 14px;
-  margin-bottom: 12px;
-}
-
-.diag-quality-detalle ul {
-  padding-left: 16px;
-}
-
-.diag-quality-detalle li {
-  color: #c8d0e5;
-  margin-bottom: 4px;
+/* Vista compacta */
+.diag-tabla td,
+.diag-tabla th {
+  height: 32px;
+  line-height: 16px;
+  vertical-align: middle;
 }
