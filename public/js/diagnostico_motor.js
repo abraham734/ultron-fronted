@@ -1,17 +1,14 @@
-// ==========================================================================
-// === SHADOW 4.0 – Auditor Real del Motor (Frontend) ========================
-// === 100% datos del backend, sin cálculos locales =========================
-// === URL FIJA PARA EVITAR ERROR EN VERCEL =================================
-// ==========================================================================
+// === diagnostico_motor.js — SHADOW 3.5 =======================================
+// Versión híbrida: Diseño original Shadow 3.0 + Datos reales Shadow 4.0 backend
+// Mantiene tabs CLEAN | RAW | QUALITY con toda la estética original
+// RAW incluye: última vela cruda + última limpia + 10 velas limpias + errores
+// ==============================================================================
 
-let shadowBloqueando = false;
+const URL_BACKEND = "https://ultron-backend-zvtm.onrender.com";
 
-// URL FIJA DEL BACKEND (Opción A)
-const SHADOW_BACKEND_URL = "https://ultron-backend-zvtm.onrender.com";
-
-// ==========================================================================
-// 🟦 LEER ACTIVO DESDE LA BARRA DE ESCANEO
-// ==========================================================================
+// ================================================================
+// Leer símbolo actual desde barra de escaneo
+// ================================================================
 function shadowLeerActivoActual() {
   const el = document.getElementById("estado-escaneo");
   if (!el) return null;
@@ -23,166 +20,278 @@ function shadowLeerActivoActual() {
   return match[1].trim();
 }
 
-// ==========================================================================
-// 🟦 LEER INTERVALO DEL ESCÁNER
-// ==========================================================================
-function shadowLeerIntervaloScannerActual() {
-  const el = document.getElementById("estado-escaneo");
-  if (!el) return "1h";
-
-  const texto = el.textContent || "";
-  const match = texto.match(/–\s*(\d+m|\dh)/i);
-
-  return match ? match[1].toLowerCase() : "1h";
+// Helpers
+function num(v) {
+  const n = Number(v);
+  return isNaN(n) ? 0 : n;
+}
+function check(c) {
+  return c ? "✔" : "✖";
 }
 
-// ==========================================================================
-// 🟥 FUNCIÓN PRINCIPAL – SOLO BACKEND
-// ==========================================================================
-export async function cargarDiagnosticoMotor(simbolo, intervalo) {
-  if (shadowBloqueando) return;
-  shadowBloqueando = true;
+// ================================================================
+// Tabs CLEAN / RAW / QUALITY
+// ================================================================
+function activarTab(tabId) {
+  const tabs = document.querySelectorAll(".diag-tab");
+  const panels = document.querySelectorAll(".diag-tabpanel");
 
-  try {
-    const estadoEl = document.getElementById("diag-estado");
-    const cuerpoEl = document.getElementById("diag-contenido");
+  tabs.forEach(t => t.classList.remove("activo"));
+  panels.forEach(p => p.classList.remove("activo"));
 
-    estadoEl.innerText = `Shadow analizando ${simbolo} (${intervalo})…`;
+  const activeTab = document.querySelector(`.diag-tab[data-tab="${tabId}"]`);
+  const activePanel = document.getElementById(`tab-${tabId}`);
 
-    // ================================================================
-    // 1️⃣ OBTENER DATOS REALES DESDE EL BACKEND
-    // ================================================================
-    const url = `${SHADOW_BACKEND_URL}/diagnostico?simbolo=${simbolo}&intervalo=${intervalo}`;
-    const r = await fetch(url);
-    const data = await r.json();
-
-    if (!data) {
-      cuerpoEl.innerHTML = `<p class="diag-error">Sin datos del backend.</p>`;
-      estadoEl.innerText = "Shadow sin datos";
-      return;
-    }
-
-    // ================================================================
-    // 2️⃣ EXTRAER DATOS DEL BACKEND (REAL)
-    // ================================================================
-    const velas = data.velas || []; // <<< ahora sí recibe TODAS las velas
-    const ohlc = data.ohlc || {};
-    const indicadores = data.indicadores || {};
-    const supertrend = data.supertrend || {};
-    const estructura = data.estructura || {};
-    const ruptura = data.ruptura || {};
-    const squeeze = data.squeeze || {};
-    const calidad = data.calidad || {};
-    const logs = data.logsInternos || [];
-    const errores = data.puntoCorte || [];
-
-    // ================================================================
-    // Validación mínima
-    // ================================================================
-    if (!Array.isArray(velas) || velas.length < 2) {
-      cuerpoEl.innerHTML = `<p class="diag-error">Backend no envió velas suficientes.</p>`;
-      estadoEl.innerText = "Shadow sin datos";
-      return;
-    }
-
-    // ================================================================
-    // 3️⃣ RENDER FINAL
-    // ================================================================
-    cuerpoEl.innerHTML = generarHTMLShadow({
-      velas,
-      ohlc,
-      indicadores,
-      supertrend,
-      estructura,
-      ruptura,
-      squeeze,
-      calidad,
-      logs,
-      errores
-    });
-
-    estadoEl.innerText = `Shadow activo – ${simbolo} (${intervalo})`;
-
-  } catch (e) {
-    console.error(e);
-  } finally {
-    shadowBloqueando = false;
-  }
+  if (activeTab) activeTab.classList.add("activo");
+  if (activePanel) activePanel.classList.add("activo");
 }
 
-// ==========================================================================
-// HTML PRINCIPAL DEL PANEL SHADOW
-// ==========================================================================
-function generarHTMLShadow(d) {
+// ================================================================
+// CLEAN — Condiciones de estrategia vs realidad
+// ================================================================
+function renderClean(data, simbolo) {
+  const ohlc = data.ohlc || {};
+  const indicadores = data.indicadores || {};
+  const supertrend = data.supertrend || {};
+  const ruptura = data.ruptura || {};
+  const estructura = data.estructura || {};
+
+  const precioActual = num(ohlc.precioActual);
+  const totalVelas = Array.isArray(data.velas) ? data.velas.length : 0;
+
+  const adx = num(indicadores.adx);
+  const atr = num(indicadores.atr);
+
+  const stRiskR = (supertrend.riesgo && supertrend.riesgo.rapido) || {};
+  const stRiskL = (supertrend.riesgo && supertrend.riesgo.lento) || {};
+
+  const condiciones = [
+    {
+      label: "ADX mínimo",
+      requerido: "≥ 10",
+      actual: adx.toFixed(2),
+      ok: adx >= 10
+    },
+    {
+      label: "Velas disponibles",
+      requerido: "≥ 50",
+      actual: totalVelas,
+      ok: totalVelas >= 50
+    },
+    {
+      label: "ST Riesgo alineado",
+      requerido: "Rápido = Lento ≠ OFF",
+      actual: `${stRiskR.estado || "OFF"} / ${stRiskL.estado || "OFF"}`,
+      ok:
+        stRiskR.estado &&
+        stRiskR.estado === stRiskL.estado &&
+        stRiskR.estado !== "OFF"
+    },
+    {
+      label: "Ruptura swing",
+      requerido: "HL_break o LH_break",
+      actual: `${ruptura.tipo || "ninguna"} / ${ruptura.direccion || "0"} / ${ruptura.distancia || 0}`,
+      ok: ruptura.tipo && ruptura.tipo !== "ninguna"
+    },
+    {
+      label: "Estructura institucional",
+      requerido: "estructuraValida = true",
+      actual: estructura.estructuraValida ? "VÁLIDA" : "NO válida",
+      ok: !!estructura.estructuraValida
+    }
+  ];
+
+  const resumenHtml = `
+    <div class="diag-resumen-grid">
+      <div><span class="diag-label">Activo</span><span class="diag-value">${simbolo}</span></div>
+      <div><span class="diag-label">Precio</span><span class="diag-value">${precioActual}</span></div>
+      <div><span class="diag-label">ADX</span><span class="diag-value">${adx.toFixed(2)}</span></div>
+      <div><span class="diag-label">ATR</span><span class="diag-value">${atr.toFixed(5)}</span></div>
+      <div><span class="diag-label">Ruptura</span><span class="diag-value">${ruptura.tipo || "ninguna"}</span></div>
+      <div><span class="diag-label">Distancia</span><span class="diag-value">${ruptura.distancia || 0}</span></div>
+    </div>
+  `;
+
+  const tablaCondiciones = `
+    <div class="diag-shadow">
+      <h3>Condiciones de estrategia vs realidad (CLEAN)</h3>
+      <table class="diag-tabla">
+        <thead>
+          <tr>
+            <th>Condición</th>
+            <th>Requerido</th>
+            <th>Actual</th>
+            <th>OK</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${condiciones.map(c => `
+            <tr>
+              <td>${c.label}</td>
+              <td>${c.requerido}</td>
+              <td>${c.actual}</td>
+              <td>${check(c.ok)}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  return resumenHtml + tablaCondiciones;
+}
+
+// ================================================================
+// RAW — vela cruda + vela limpia + 10 velas limpias + errores
+// ================================================================
+function renderRaw(data) {
+  const raw = data.raw || {};
+  const ultimaCruda = raw.ultima || {};
+
+  const velasLimpias = Array.isArray(data.velas) ? data.velas : [];
+  const ultimaLimpia = velasLimpias.at(-1) || {};
+  const ultimas10 = velasLimpias.slice(-10);
+
+  const calidad = data.calidad || {};
+
   return `
-  <div class="shadow-tabs">
-    <button id="tab-clean" class="shadow-tab active">CLEAN</button>
-    <button id="tab-raw" class="shadow-tab">RAW</button>
-    <button id="tab-quality" class="shadow-tab">QUALITY</button>
-  </div>
+    <div class="diag-raw">
+      <h3>Datos crudos desde API (RAW)</h3>
 
-  <!-- CLEAN -->
-  <div id="shadow-clean" class="shadow-panel visible">
-    <h4>Valores REALES del motor</h4>
+      <div class="diag-raw-grid">
 
-    <h4>🟦 Indicadores</h4>
-    <pre>${JSON.stringify(d.indicadores, null, 2)}</pre>
+        <div>
+          <span class="diag-label">Última vela CRUDA</span>
+          <pre class="diag-raw-pre">${JSON.stringify(ultimaCruda, null, 2)}</pre>
+        </div>
 
-    <h4>🟩 Supertrend</h4>
-    <pre>${JSON.stringify(d.supertrend, null, 2)}</pre>
+        <div>
+          <span class="diag-label">Última vela LIMPIA</span>
+          <pre class="diag-raw-pre">${JSON.stringify(ultimaLimpia, null, 2)}</pre>
+        </div>
 
-    <h4>🟨 Estructura</h4>
-    <pre>${JSON.stringify(d.estructura, null, 2)}</pre>
+      </div>
 
-    <h4>🟥 Ruptura</h4>
-    <pre>${JSON.stringify(d.ruptura, null, 2)}</pre>
-  </div>
+      <h3>Últimas 10 velas limpias</h3>
+      <pre class="diag-raw-pre">${JSON.stringify(ultimas10, null, 2)}</pre>
 
- <!-- RAW -->
-<div id="shadow-raw" class="shadow-panel">
-  <h4>Últimas 10 velas</h4>
-  <pre>${JSON.stringify(d.velas.slice(-10), null, 2)}</pre>
+      <h3>Errores detectados en velas</h3>
+      <ul class="diag-raw-lista">
+        <li>Total velas: <strong>${calidad.totalVelas || 0}</strong></li>
+        <li>Errores totales: <strong>${calidad.erroresTotales || 0}</strong></li>
+        <li>Sin HIGH: <strong>${calidad.sinHigh || 0}</strong></li>
+        <li>Sin LOW: <strong>${calidad.sinLow || 0}</strong></li>
+        <li>Sin CLOSE: <strong>${calidad.sinClose || 0}</strong></li>
+        <li>Valores NaN: <strong>${calidad.nanValores || 0}</strong></li>
+        <li>HIGH &lt; LOW: <strong>${calidad.highMenorLow || 0}</strong></li>
+      </ul>
 
-  <h4>Última vela</h4>
-  <pre>${JSON.stringify(d.ohlc.ultima, null, 2)}</pre>
-
-  <h4>Logs del backend</h4>
-  <pre>${JSON.stringify(d.logs, null, 2)}</pre>
-
-  <h4>Errores detectados</h4>
-  <pre>${JSON.stringify(d.errores, null, 2)}</pre>
-</div>
-
-
-  <!-- QUALITY -->
-  <div id="shadow-quality" class="shadow-panel">
-    <h4>Calidad del Feed</h4>
-    <pre>${JSON.stringify(d.calidad, null, 2)}</pre>
-  </div>
-
-  <script>
-    document.getElementById("tab-clean").onclick = () => swapTab("clean");
-    document.getElementById("tab-raw").onclick = () => swapTab("raw");
-    document.getElementById("tab-quality").onclick = () => swapTab("quality");
-
-    function swapTab(tab) {
-      document.querySelectorAll(".shadow-tab").forEach(x => x.classList.remove("active"));
-      document.querySelector("#tab-" + tab).classList.add("active");
-
-      document.querySelectorAll(".shadow-panel").forEach(x => x.classList.remove("visible"));
-      document.querySelector("#shadow-" + tab).classList.add("visible");
-    }
-  </script>
+    </div>
   `;
 }
 
-// ==========================================================================
-// AUTO-SYNC CADA 4s
-// ==========================================================================
+// ================================================================
+// QUALITY — integridad total del feed
+// ================================================================
+function renderQuality(data) {
+  const calidad = data.calidad || {};
+  const nivel = calidad.nivel || "DESCONOCIDO";
+
+  let badgeClass = "quality-badge-ok";
+  if (nivel === "REGULAR") badgeClass = "quality-badge-mid";
+  if (nivel === "CRÍTICA") badgeClass = "quality-badge-bad";
+
+  return `
+    <div class="diag-quality">
+      <h3>Calidad del feed de datos (QUALITY)</h3>
+
+      <div class="diag-quality-header">
+        <span class="diag-label">Calidad general</span>
+        <span class="quality-badge ${badgeClass}">${nivel}</span>
+      </div>
+
+      <div class="diag-quality-grid">
+        <div>
+          <span class="diag-label">Velas analizadas</span>
+          <span class="diag-value">${calidad.totalVelas || 0}</span>
+        </div>
+        <div>
+          <span class="diag-label">Errores totales</span>
+          <span class="diag-value">${calidad.erroresTotales || 0}</span>
+        </div>
+      </div>
+
+      <div class="diag-quality-detalle">
+        <p>Detalles del análisis RAW:</p>
+        <ul>
+          <li>Sin HIGH: <strong>${calidad.sinHigh || 0}</strong></li>
+          <li>Sin LOW: <strong>${calidad.sinLow || 0}</strong></li>
+          <li>Sin CLOSE: <strong>${calidad.sinClose || 0}</strong></li>
+          <li>Valores NaN: <strong>${calidad.nanValores || 0}</strong></li>
+          <li>HIGH &lt; LOW: <strong>${calidad.highMenorLow || 0}</strong></li>
+        </ul>
+      </div>
+    </div>
+  `;
+}
+
+// ================================================================
+// FUNCIÓN PRINCIPAL — SHADOW 3.5
+// ================================================================
+export async function cargarDiagnosticoMotor(_simbolo, _intervalo) {
+  const cont = document.getElementById("ultron-diagnostico");
+  const estadoEl = document.getElementById("diag-estado");
+  const cuerpoEl = document.getElementById("diag-contenido");
+
+  if (!cont || !estadoEl || !cuerpoEl) return;
+
+  const simbolo = shadowLeerActivoActual() || _simbolo || "EUR/USD";
+  const intervalo = _intervalo || "1h";
+
+  estadoEl.textContent = `Analizando ${simbolo}...`;
+
+  try {
+    const url = `${URL_BACKEND}/diagnostico?simbolo=${encodeURIComponent(simbolo)}&intervalo=${encodeURIComponent(intervalo)}`;
+
+    const resp = await fetch(url);
+    const data = await resp.json();
+
+    cuerpoEl.innerHTML = `
+      <div class="diag-tabs">
+        <button class="diag-tab activo" data-tab="clean">CLEAN</button>
+        <button class="diag-tab" data-tab="raw">RAW</button>
+        <button class="diag-tab" data-tab="quality">QUALITY</button>
+      </div>
+
+      <div id="tab-clean" class="diag-tabpanel activo">${renderClean(data, simbolo)}</div>
+      <div id="tab-raw" class="diag-tabpanel">${renderRaw(data)}</div>
+      <div id="tab-quality" class="diag-tabpanel">${renderQuality(data)}</div>
+    `;
+
+    estadoEl.textContent = `Shadow 3.5 activo — ${simbolo}`;
+
+    // Activar pestañas
+    const tabButtons = cont.querySelectorAll(".diag-tab");
+    tabButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const tabId = btn.getAttribute("data-tab");
+        activarTab(tabId);
+      });
+    });
+
+  } catch (err) {
+    console.error("Error cargando Shadow 3.5:", err);
+    estadoEl.textContent = "Error en diagnóstico";
+    cuerpoEl.innerHTML = `<p class="diag-error">❌ Error al conectar con el backend Shadow.</p>`;
+  }
+}
+
+// ================================================================
+// Auto-follow del escáner cada 4s
+// ================================================================
 setInterval(() => {
   const activo = shadowLeerActivoActual();
-  if (!activo) return;
-
-  const tf = shadowLeerIntervaloScannerActual();
-  cargarDiagnosticoMotor(activo, tf);
+  if (activo) {
+    cargarDiagnosticoMotor(activo, "1h");
+  }
 }, 4000);
