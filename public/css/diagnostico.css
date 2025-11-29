@@ -236,3 +236,33 @@
   color: #c8d0e5;
   margin-bottom: 4px;
 }
+
+/* Encabezados */
+#ultron-diagnostico .diag-tabla th {
+  background: #101623;
+  color: #e5f0ff;
+  font-size: 12px;
+
+  /* 🔥 Ajuste para ALINEACIÓN PERFECTA */
+  padding: 10px 12px;     /* igual que las celdas */
+  line-height: 16px;      /* igual que las celdas */
+  height: auto;           /* sin altura fija */
+  vertical-align: middle;
+}
+
+/* Celdas */
+#ultron-diagnostico .diag-tabla td {
+  padding: 10px 12px;
+  color: #c8d0e5;
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+/* 🔥 Eliminar la altura forzada que estaba causando el desfase */
+#ultron-diagnostico .diag-tabla th,
+#ultron-diagnostico .diag-tabla td {
+  height: auto;
+}
