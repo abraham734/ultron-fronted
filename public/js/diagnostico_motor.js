@@ -83,7 +83,7 @@ function renderClean(data, simbolo) {
     }
   ];
 
-  const resumenHtml = `
+  return `
     <div class="diag-resumen-grid">
       <div><span class="diag-label">Activo</span><span class="diag-value">${simbolo}</span></div>
       <div><span class="diag-label">Precio</span><span class="diag-value">${precioActual}</span></div>
@@ -92,11 +92,10 @@ function renderClean(data, simbolo) {
       <div><span class="diag-label">Ruptura</span><span class="diag-value">${ruptura.tipo}</span></div>
       <div><span class="diag-label">Distancia</span><span class="diag-value">${ruptura.distancia}</span></div>
     </div>
-  `;
 
-  const tablaCondiciones = `
     <div class="diag-shadow">
       <h3>Condiciones reales de la estrategia (CLEAN)</h3>
+
       <table class="diag-tabla">
         <thead>
           <tr>
@@ -119,8 +118,6 @@ function renderClean(data, simbolo) {
       </table>
     </div>
   `;
-
-  return resumenHtml + tablaCondiciones;
 }
 
 // ================================================================
