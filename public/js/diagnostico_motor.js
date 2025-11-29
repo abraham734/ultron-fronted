@@ -291,7 +291,7 @@ export async function cargarDiagnosticoMotor(_simbolo, _intervalo) {
 }
 
 // ================================================================
-// Auto-follow
+// Auto-follow del escáner
 // ================================================================
 setInterval(() => {
   const activo = shadowLeerActivoActual();
