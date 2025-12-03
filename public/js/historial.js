@@ -1,96 +1,84 @@
-// === historial.js ===
-// Sistema de notificaciones expandibles (acordeón) para Ultron
-// Se conecta al motorDecisionUltron y guarda señales en localStorage
+// === historial.js — Ultron TradingView Style ===
+// Reemplaza tarjetas por tabla con filas dinámicas
+// Mantiene localStorage y permite ✔ / ✖ / 🗑️ manual
 
-const contenedorHistorial = document.getElementById("historial-entradas");
+const tablaBody = document.querySelector("#tabla-historial tbody");
 
-// === Inicialización automática ===
-export function cargarHistorialDesdeStorage() {
-  const entradas = JSON.parse(localStorage.getItem("ultronHistorial")) || [];
-  entradas.forEach((entrada) => renderEntrada(entrada));
-  renderBotonBorrarTodo();
+// Validación preventiva
+if (!tablaBody) {
+  console.error("❌ No se encontró el cuerpo de la tabla historial.");
 }
 
-// === Registrar nueva señal ===
+// === Cargar historial al iniciar ===
+export function cargarHistorialDesdeStorage() {
+  const entradas = JSON.parse(localStorage.getItem("ultronHistorial")) || [];
+  entradas.forEach((entrada) => renderFila(entrada));
+}
+
+// === Registrar nueva entrada ===
 export function registrarEntradaUltron(entrada) {
-  renderEntrada(entrada);
+  renderFila(entrada);
 
   const historial = JSON.parse(localStorage.getItem("ultronHistorial")) || [];
   historial.push(entrada);
   localStorage.setItem("ultronHistorial", JSON.stringify(historial));
 }
 
-// === Render visual de una entrada tipo acordeón ===
-function renderEntrada({ activo, tipoEntrada, sl, tp1, tp2, tp3, fechaHora }) {
-  const tarjeta = document.createElement("div");
-  tarjeta.className = "entrada-tarjeta";
+// === Renderizar fila TABLA ===
+function renderFila({ fechaHora, activo, tipoEntrada, sentido, entry, sl, tp1, tp2, tp3 }) {
+  const fila = document.createElement("tr");
 
-  tarjeta.innerHTML = `
-    <div class="entrada-cabecera">
-      <div class="entrada-info">
-        <strong>📈 ${activo}</strong>
-        <span class="entrada-tipo">${tipoEntrada}</span>
-        <span class="entrada-fecha">${fechaHora}</span>
-      </div>
-      <div class="entrada-acciones">
-        <button class="btn-toggle">▼</button>
-        <button class="btn-borrar" title="Eliminar entrada">❌</button>
-      </div>
-    </div>
-    <div class="entrada-detalle oculto">
-      <p>🛑 <b>SL:</b> ${sl}</p>
-      <p>🎯 <b>TP1:</b> ${tp1}</p>
-      <p>🎯 <b>TP2:</b> ${tp2}</p>
-      <p>🎯 <b>TP3:</b> ${tp3}</p>
-    </div>
+  const dirClass = sentido?.toLowerCase() === "buy" ? "buy" : "sell";
+
+  fila.innerHTML = `
+    <td>${fechaHora}</td>
+    <td>${activo}</td>
+    <td>${tipoEntrada}</td>
+    <td class="${dirClass}">${sentido}</td>
+    <td>${entry}</td>
+    <td>${sl}</td>
+    <td>${tp1}</td>
+    <td>${tp2}</td>
+    <td>${tp3}</td>
+
+    <td><button class="btn-ok">✔</button></td>
+    <td><button class="btn-bad">✖</button></td>
+    <td><button class="btn-delete">🗑️</button></td>
   `;
 
-  // === Botón desplegar/ocultar detalle ===
-  const btnToggle = tarjeta.querySelector(".btn-toggle");
-  const detalle = tarjeta.querySelector(".entrada-detalle");
- btnToggle.addEventListener("click", () => {
-  const estaOculto = detalle.classList.contains("oculto");
-  document.querySelectorAll(".entrada-detalle").forEach((d) => d.classList.add("oculto"));
-  document.querySelectorAll(".btn-toggle").forEach((b) => b.classList.remove("abierto"));
-  if (estaOculto) {
-    detalle.classList.remove("oculto");
-    btnToggle.classList.add("abierto"); // 🔄 cambia ▶ a ▼
-  }
-});
-
-
-  // === Botón eliminar entrada ===
-  const btnBorrar = tarjeta.querySelector(".btn-borrar");
-  btnBorrar.addEventListener("click", () =>
-    eliminarEntrada(activo, fechaHora, tarjeta)
-  );
-
-  contenedorHistorial.appendChild(tarjeta);
-}
-
-// === Eliminar una entrada ===
-function eliminarEntrada(activo, fechaHora, tarjetaDOM) {
-  const historial = JSON.parse(localStorage.getItem("ultronHistorial")) || [];
-  const actualizado = historial.filter(
-    (entrada) => entrada.activo !== activo || entrada.fechaHora !== fechaHora
-  );
-  localStorage.setItem("ultronHistorial", JSON.stringify(actualizado));
-  tarjetaDOM.remove();
-}
-
-// === Borrar todo el historial ===
-function renderBotonBorrarTodo() {
-  const boton = document.createElement("button");
-  boton.textContent = "🧹 Borrar Todo el Historial";
-  boton.className = "btn-borrar-todo";
-
-  boton.addEventListener("click", () => {
-    if (confirm("¿Seguro que quieres borrar todo el historial?")) {
-      localStorage.removeItem("ultronHistorial");
-      contenedorHistorial.innerHTML = '<h3>📘 Historial de Entradas</h3>';
-      renderBotonBorrarTodo();
-    }
+  // === Botón ✔ ===
+  fila.querySelector(".btn-ok").addEventListener("click", () => {
+    fila.classList.add("resultado-ok");
+    fila.classList.remove("resultado-bad");
   });
 
-  contenedorHistorial.appendChild(boton);
+  // === Botón ✖ ===
+  fila.querySelector(".btn-bad").addEventListener("click", () => {
+    fila.classList.add("resultado-bad");
+    fila.classList.remove("resultado-ok");
+  });
+
+  // === Botón borrar individual ===
+  fila.querySelector(".btn-delete").addEventListener("click", () => {
+    fila.remove();
+    borrarEntradaDeStorage(fechaHora);
+  });
+
+  tablaBody.appendChild(fila);
+}
+
+// === Borrar una entrada del storage ===
+function borrarEntradaDeStorage(fecha) {
+  let historial = JSON.parse(localStorage.getItem("ultronHistorial")) || [];
+  historial = historial.filter(entry => entry.fechaHora !== fecha);
+  localStorage.setItem("ultronHistorial", JSON.stringify(historial));
+}
+
+// === Borrar TODO el historial ===
+const btnBorrarTodo = document.getElementById("btn-borrar-todo");
+if (btnBorrarTodo) {
+  btnBorrarTodo.addEventListener("click", () => {
+    tablaBody.innerHTML = "";
+    localStorage.removeItem("ultronHistorial");
+  });
 }

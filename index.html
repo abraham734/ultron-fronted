@@ -26,10 +26,7 @@
         <img src="/assets/ultron-logo.png" alt="Ultrón Logo" class="ultron-logo" />
       </div>
 
-      <div id="historial-entradas" class="sidebar-section">
-        <h3>📘 HISTORIAL DE ENTRADAS</h3>
-      </div>
-
+     
       <div class="sidebar-footer">
         <p><strong>Sistema Activo</strong><br />Monitoreando 24 horas</p>
       </div>
@@ -64,13 +61,35 @@
       <!-- Contenedor principal del análisis -->
       <section id="contenedor-activos" class="contenedor-activos"></section>
 
-      <!--contenedor shadow de motor ultron-->
-    <section id="ultron-diagnostico">
-  <div id="diag-contenido"></div>
-  <span id="diag-estado" class="diag-estado" style="display:block;margin-top:8px;"></span>
+  <!-- === PANEL HISTORIAL (NUEVO) === -->
+<section id="historial-panel" class="historial-panel">
+ <h3 class="titulo-historial">
+  <span>📘 Historial de Entradas</span>
+  <button id="btn-borrar-todo" class="btn-borrar-todo">🗑️ Borrar Todo</button>
+</h3>
+
+
+  <div class="tabla-contenedor">
+    <table id="tabla-historial">
+      <thead>
+        <tr>
+          <th>Fecha & Hora</th>
+          <th>Activo</th>
+          <th>Estrategia</th>
+          <th>Buy/Sell</th>
+          <th>Precio</th>
+          <th>SL</th>
+          <th>TP1</th>
+          <th>TP2</th>
+          <th>TP3</th>
+          <th>✔</th>
+          <th>✖</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
 </section>
-
-
 
 
       <!-- Panel Jarvis Oro Pro -->

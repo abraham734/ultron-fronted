@@ -1,162 +1,134 @@
-/* === historial.css === */
-/* Estilo visual mejorado con ícono dinámico para acordeón (Ultron) */
+/* === PANEL HISTORIAL (NUEVO) === */
 
-#historial-entradas {
+#historial-panel {
   padding: 1rem;
-  overflow-y: auto;
-  max-height: 90vh;
-  border-top: 1px solid #2c2f36;
+  background-color: #0d1117;
   color: #ffd700;
-  font-family: "Roboto", sans-serif;
+  border-top: 1px solid #2c2f36;
+  height: 420px;
 }
 
-#historial-entradas h3 {
+#historial-panel h3 {
+  text-align: center;
+  margin-bottom: 0.5rem;
   color: #ffc107;
-  font-size: 1rem;
-  margin-bottom: 1rem;
   text-transform: uppercase;
   letter-spacing: 1px;
+}
+
+/* === CONTENEDOR CON SCROLL === */
+.tabla-contenedor {
+  max-height: 350px;
+  overflow-y: auto;
+  border: 1px solid #2c2f36;
+}
+
+/* === TABLA === */
+#tabla-historial {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  color: #e0e0e0;
+}
+
+#tabla-historial thead {
+  background-color: #161b22;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+#tabla-historial th,
+#tabla-historial td {
+  padding: 6px 10px;
   text-align: center;
+  border-bottom: 1px solid #2c2f36;
 }
 
-/* === Tarjeta principal === */
-.entrada-tarjeta {
-  background-color: #10141d;
-  border-left: 4px solid #ffc107;
-  border-radius: 6px;
-  margin-bottom: 1rem;
-  padding: 0.6rem 0.75rem;
-  box-shadow: inset 0 0 4px rgba(255, 193, 7, 0.2);
-  transition: all 0.25s ease;
-}
-
-.entrada-tarjeta:hover {
+#tabla-historial tr:hover {
   background-color: #1a1e27;
-  transform: scale(1.01);
 }
 
-/* === Cabecera de entrada === */
-.entrada-cabecera {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: #ffffff;
-  font-size: 0.95rem;
-  margin-bottom: 0.4rem;
-  user-select: none;
+/* === BUY / SELL === */
+.buy {
+  color: #32cd32;
+  font-weight: bold;
 }
 
-.entrada-info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+.sell {
+  color: #ff4c4c;
+  font-weight: bold;
 }
 
-.entrada-info strong {
-  color: #ffd700;
-  font-size: 0.95rem;
-}
-
-.entrada-tipo {
-  color: #aaa;
-  font-size: 0.8rem;
-}
-
-.entrada-fecha {
-  color: #888;
-  font-size: 0.75rem;
-}
-
-/* === Botones (desplegar / borrar) === */
-.entrada-acciones {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.btn-toggle,
-.btn-borrar {
-  background: none;
+/* === Botones ✔ y ✖ === */
+.btn-ok,
+.btn-bad {
+  background: transparent;
   border: none;
   cursor: pointer;
-  font-size: 1.1rem;
-  transition: transform 0.25s, color 0.2s;
+  font-size: 1rem;
+  padding: 2px 6px;
 }
 
-.btn-toggle {
-  color: #ffd700;
-  transform: rotate(0deg);
+.btn-ok {
+  color: #32cd32;
 }
 
-.btn-toggle.abierto {
-  transform: rotate(90deg); /* ▶ → ▼ */
-  color: #fff;
-}
-
-.btn-toggle:hover {
-  color: #ffffff;
+.btn-ok:hover {
   transform: scale(1.2);
 }
 
-.btn-borrar {
-  color: #ff5555;
+.btn-bad {
+  color: #ff4c4c;
 }
 
-.btn-borrar:hover {
-  color: #ff2a2a;
-  transform: scale(1.1);
+.btn-bad:hover {
+  transform: scale(1.2);
 }
 
-/* === Detalle (acordeón) === */
-.entrada-detalle {
-  background-color: #0c0f18;
-  border-radius: 5px;
-  padding: 0.5rem;
-  margin-top: 0.4rem;
-  animation: fadeIn 0.25s ease-in-out;
+/* === FILA MARCADA === */
+.resultado-ok {
+  background-color: rgba(50, 205, 50, 0.15);
 }
 
-.entrada-detalle p {
-  font-size: 0.85rem;
-  color: #cccccc;
-  margin: 0.25rem 0;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+.resultado-bad {
+  background-color: rgba(255, 76, 76, 0.15);
 }
 
-.oculto {
-  display: none;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-5px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* === Botón global: limpiar historial === */
-.btn-borrar-todo {
-  width: 100%;
-  padding: 0.5rem;
-  margin-top: 1rem;
+.btn-delete {
+  background: transparent;
   border: none;
-  background-color: #2c2f36;
-  color: #ffc107;
-  font-weight: bold;
-  border-radius: 4px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  text-transform: uppercase;
+  font-size: 1rem;
+  color: #ff4c4c;
+}
+
+.btn-delete:hover {
+  transform: scale(1.2);
+}
+
+/* === Encabezado estilo TradingView === */
+.titulo-historial {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  padding: 0 5px;
+  font-size: 1rem;
+  color: #ffc107;
+}
+
+/* Botón borrar todo */
+.btn-borrar-todo {
+  background: #ff4c4c33;
+  border: 1px solid #ff4c4c;
+  color: #ff4c4c;
+  padding: 3px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
 }
 
 .btn-borrar-todo:hover {
-  background-color: #3a3f48;
-  color: #fff;
-  box-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+  background: #ff4c4c55;
 }
