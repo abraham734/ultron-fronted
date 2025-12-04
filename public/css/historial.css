@@ -1,8 +1,8 @@
 /* ==========================================================
-   🎨 ESTILOS AVANZADOS DEL HISTORIAL — ULTRÓN PRO
+   🎨 ESTILOS AVANZADOS DEL HISTORIAL — ULTRÓN PRO (CLEAN)
    ========================================================== */
 
-/* Contenedor */
+/* PANEL GENERAL */
 .historial-panel {
   background: #0c0f16;
   border: 1px solid #1e2533;
@@ -12,34 +12,35 @@
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
 }
 
-/* Título */
+/* TÍTULO */
 .historial-panel h3 {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 12px;
   font-size: 1.3rem;
   margin-bottom: 12px;
   color: #ffcc4d;
 }
 
-/* Contenedor scroll */
+/* CONTENEDOR — Scroll solo vertical, NO lateral */
 .tabla-contenedor {
-  max-height: 350px;
+  max-height: 380px;
+  width: 100%;
   overflow-y: auto;
-  overflow-x: auto;
+  overflow-x: hidden; /* 🔥 elimina scroll lateral */
   border-radius: 8px;
   border: 1px solid #222a35;
 }
 
-/* Tabla */
+/* TABLA */
 #tabla-historial {
   width: 100%;
   border-collapse: collapse;
-  min-width: 1100px;
-  font-size: 0.83rem;
+  font-size: 0.85rem;
 }
 
-/* Cabecera */
+/* CABECERA FIJA */
 #tabla-historial thead {
   background: #152030;
   position: sticky;
@@ -53,15 +54,20 @@
   font-weight: 600;
   color: #9fc7ff;
   border-bottom: 1px solid #243447;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* Filas */
+#tabla-historial thead th:last-child {
+  border-right: none;
+}
+
+/* FILAS */
 #tabla-historial tbody tr {
   transition: 0.2s ease;
   border-bottom: 1px solid #1c2330;
 }
 
-/* Alternancia */
+/* ALTERNANCIA */
 #tabla-historial tbody tr:nth-child(odd) {
   background: #0f141c;
 }
@@ -69,29 +75,42 @@
   background: #111822;
 }
 
-/* Hover */
+/* HOVER */
 #tabla-historial tbody tr:hover {
   background: #1a2230;
 }
 
-/* Celdas */
+/* CELDAS */
 #tabla-historial td {
   padding: 10px 12px;
   color: #d8d8d8;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* Buy/Sell color */
+#tabla-historial td:last-child {
+  border-right: none;
+}
+
+/* COLORES BUY / SELL */
 td.buy {
   color: #4aff9c;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 td.sell {
   color: #ff6b6b;
-  font-weight: 600;
+  font-weight: 700;
 }
 
-/* Botones ✔ ✖ 🗑 */
+/* RESULTADO SEÑAL (✔ / ✖ MARCADOS) */
+.resultado-ok {
+  background: rgba(0, 255, 100, 0.08) !important;
+}
+.resultado-bad {
+  background: rgba(255, 70, 70, 0.12) !important;
+}
+
+/* BOTONES ✔ ✖ 🗑 */
 .btn-ok,
 .btn-bad,
 .btn-delete {
@@ -110,59 +129,19 @@ td.sell {
 .btn-delete { color: #9faab6; }
 .btn-delete:hover { color: #c4ccd6; }
 
-/* Resultado marcado */
-.resultado-ok {
-  background: rgba(0, 255, 100, 0.08) !important;
-}
-.resultado-bad {
-  background: rgba(255, 70, 70, 0.12) !important;
-}
-
-/* Badges de activos */
-.badge-forex {
-  color: #61a9ff;
-  font-weight: bold;
-}
-.badge-xau {
-  color: #ffd34d;
-  font-weight: bold;
-}
-.badge-crypto {
-  color: #c78bff;
-  font-weight: bold;
-}
-.badge-stock {
-  color: #4df7c9;
-  font-weight: bold;
-}
-
-.tabla-contenedor {
-  width: 100%;
-  overflow-x: hidden;
-}
-
-#tabla-historial {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-#tabla-historial th,
-#tabla-historial td {
-  border-right: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 10px 12px;
-}
-
-#tabla-historial th:last-child,
-#tabla-historial td:last-child {
-  border-right: none;
-}
-
+/* DORADOS — ULTRÓN STYLE */
 .activo-dorado {
   color: #f0c14b;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .estrategia-dorada {
   color: #f7d774;
   font-weight: 600;
 }
+
+/* BADGES (opcional para futuro uso) */
+.badge-forex { color: #61a9ff; font-weight: bold; }
+.badge-xau   { color: #ffd34d; font-weight: bold; }
+.badge-crypto { color: #c78bff; font-weight: bold; }
+.badge-stock { color: #4df7c9; font-weight: bold; }
