@@ -27,12 +27,19 @@ export function registrarEntradaUltron(entrada) {
 // === Renderizar fila TABLA ===
 function renderFila({ fechaHora, activo, tipoEntrada, sentido, entry, sl, tp1, tp2, tp3 }) {
   const fila = document.createElement("tr");
-
   const dirClass = sentido?.toLowerCase() === "buy" ? "buy" : "sell";
+
+  function asignarColorActivo(activo) {
+  if (activo.includes("USD") || activo.includes("EUR")) return "badge-forex";
+  if (activo.includes("XAU")) return "badge-xau";
+  if (["BTC", "ETH", "SOL", "BNB"].some(c => activo.includes(c))) return "badge-crypto";
+  return "badge-stock"; // acciones por defecto
+}
+
 
   fila.innerHTML = `
     <td>${fechaHora}</td>
-    <td>${activo}</td>
+   <td class="${asignarColorActivo(activo)}">${activo}</td>
     <td>${tipoEntrada}</td>
     <td class="${dirClass}">${sentido}</td>
     <td>${entry}</td>

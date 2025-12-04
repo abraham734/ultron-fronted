@@ -1,134 +1,137 @@
-/* === PANEL HISTORIAL (NUEVO) === */
+/* ==========================================================
+   🎨 ESTILOS AVANZADOS DEL HISTORIAL — ULTRÓN PRO
+   ========================================================== */
 
-#historial-panel {
-  padding: 1rem;
-  background-color: #0d1117;
-  color: #ffd700;
-  border-top: 1px solid #2c2f36;
-  height: 420px;
+/* Contenedor */
+.historial-panel {
+  background: #0c0f16;
+  border: 1px solid #1e2533;
+  padding: 20px;
+  border-radius: 12px;
+  margin-top: 25px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
 }
 
-#historial-panel h3 {
-  text-align: center;
-  margin-bottom: 0.5rem;
-  color: #ffc107;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+/* Título */
+.historial-panel h3 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.3rem;
+  margin-bottom: 12px;
+  color: #ffcc4d;
 }
 
-/* === CONTENEDOR CON SCROLL === */
+/* Contenedor scroll */
 .tabla-contenedor {
   max-height: 350px;
   overflow-y: auto;
-  border: 1px solid #2c2f36;
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid #222a35;
 }
 
-/* === TABLA === */
+/* Tabla */
 #tabla-historial {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.85rem;
-  color: #e0e0e0;
+  min-width: 1100px;
+  font-size: 0.83rem;
 }
 
+/* Cabecera */
 #tabla-historial thead {
-  background-color: #161b22;
+  background: #152030;
   position: sticky;
   top: 0;
-  z-index: 5;
+  z-index: 2;
 }
 
-#tabla-historial th,
+#tabla-historial thead th {
+  padding: 10px 12px;
+  text-align: left;
+  font-weight: 600;
+  color: #9fc7ff;
+  border-bottom: 1px solid #243447;
+}
+
+/* Filas */
+#tabla-historial tbody tr {
+  transition: 0.2s ease;
+  border-bottom: 1px solid #1c2330;
+}
+
+/* Alternancia */
+#tabla-historial tbody tr:nth-child(odd) {
+  background: #0f141c;
+}
+#tabla-historial tbody tr:nth-child(even) {
+  background: #111822;
+}
+
+/* Hover */
+#tabla-historial tbody tr:hover {
+  background: #1a2230;
+}
+
+/* Celdas */
 #tabla-historial td {
-  padding: 6px 10px;
-  text-align: center;
-  border-bottom: 1px solid #2c2f36;
+  padding: 10px 12px;
+  color: #d8d8d8;
 }
 
-#tabla-historial tr:hover {
-  background-color: #1a1e27;
+/* Buy/Sell color */
+td.buy {
+  color: #4aff9c;
+  font-weight: 600;
 }
 
-/* === BUY / SELL === */
-.buy {
-  color: #32cd32;
-  font-weight: bold;
+td.sell {
+  color: #ff6b6b;
+  font-weight: 600;
 }
 
-.sell {
-  color: #ff4c4c;
-  font-weight: bold;
-}
-
-/* === Botones ✔ y ✖ === */
+/* Botones ✔ ✖ 🗑 */
 .btn-ok,
-.btn-bad {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  font-size: 1rem;
-  padding: 2px 6px;
-}
-
-.btn-ok {
-  color: #32cd32;
-}
-
-.btn-ok:hover {
-  transform: scale(1.2);
-}
-
-.btn-bad {
-  color: #ff4c4c;
-}
-
-.btn-bad:hover {
-  transform: scale(1.2);
-}
-
-/* === FILA MARCADA === */
-.resultado-ok {
-  background-color: rgba(50, 205, 50, 0.15);
-}
-
-.resultado-bad {
-  background-color: rgba(255, 76, 76, 0.15);
-}
-
+.btn-bad,
 .btn-delete {
-  background: transparent;
+  cursor: pointer;
+  font-size: 1rem;
+  background: none;
   border: none;
-  cursor: pointer;
-  font-size: 1rem;
-  color: #ff4c4c;
 }
 
-.btn-delete:hover {
-  transform: scale(1.2);
+.btn-ok { color: #4aff9c; }
+.btn-ok:hover { color: #70ffb3; }
+
+.btn-bad { color: #ff6b6b; }
+.btn-bad:hover { color: #ff8c8c; }
+
+.btn-delete { color: #9faab6; }
+.btn-delete:hover { color: #c4ccd6; }
+
+/* Resultado marcado */
+.resultado-ok {
+  background: rgba(0, 255, 100, 0.08) !important;
+}
+.resultado-bad {
+  background: rgba(255, 70, 70, 0.12) !important;
 }
 
-/* === Encabezado estilo TradingView === */
-.titulo-historial {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-  padding: 0 5px;
-  font-size: 1rem;
-  color: #ffc107;
+/* Badges de activos */
+.badge-forex {
+  color: #61a9ff;
+  font-weight: bold;
 }
-
-/* Botón borrar todo */
-.btn-borrar-todo {
-  background: #ff4c4c33;
-  border: 1px solid #ff4c4c;
-  color: #ff4c4c;
-  padding: 3px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.8rem;
+.badge-xau {
+  color: #ffd34d;
+  font-weight: bold;
 }
-
-.btn-borrar-todo:hover {
-  background: #ff4c4c55;
+.badge-crypto {
+  color: #c78bff;
+  font-weight: bold;
+}
+.badge-stock {
+  color: #4df7c9;
+  font-weight: bold;
 }
