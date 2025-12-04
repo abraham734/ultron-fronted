@@ -186,16 +186,19 @@ async function realizarAnalisis(simbolo) {
 // 🔵 PANEL DIAGNÓSTICO LIVE — FORMATO B (ICONOS)
 // ============================================================
 function renderPanelDiagnostico(resultado) {
-  const simbolo = resultado.simbolo;
+  const diag = resultado.diagnostico || {};
+
+  const simbolo = resultado.simbolo || "—";
   const precio = resultado.precioActual || resultado.entry || "—";
   const sesion = resultado.session || "—";
-  const momentum = resultado.momentum || "—";
-  const supertrend = resultado.supertrendTrend || "—";
-  const tendencia = resultado.tendenciaGeneral || "—";
-  const squeeze = resultado.squeeze?.squeezeOn ? "Activo" : "No";
-  const bos = resultado.bosDirection || "—";
-  const volatilidad = resultado.volatilidad || "—";
-  const lectura = resultado.ultimaLectura || "Sin lectura";
+
+  const tendencia = diag.tendencia || "—";
+  const momentum = diag.momentum ?? "—";
+  const supertrend = diag.supertrend || "—";
+  const squeeze = diag.squeeze ? "Activo" : "No";
+  const volatilidad = diag.volatilidad ?? "—";
+  const velas = diag.velas || "—";
+
   const razon = resultado.razones?.[0] || "—";
 
   return `
@@ -217,17 +220,16 @@ function renderPanelDiagnostico(resultado) {
     </div>
 
     <div class="diag-fila">
-      <div class="diag-col">🎯 <strong>BOS Dirección:</strong> ${bos}</div>
       <div class="diag-col">🟣 <strong>Squeeze:</strong> ${squeeze}</div>
+      <div class="diag-col">🌪 <strong>Volatilidad:</strong> ${volatilidad}</div>
     </div>
 
     <div class="diag-fila">
-      <div class="diag-col">🌪 <strong>Volatilidad:</strong> ${volatilidad}</div>
-      <div class="diag-col">⏳ <strong>Velas:</strong> ${resultado.velas || "200"}</div>
+      <div class="diag-col">⏳ <strong>Velas:</strong> ${velas}</div>
+      <div class="diag-col">—</div>
     </div>
 
     <div class="diag-footer">
-      <p>📝 <strong>Última lectura:</strong> ${lectura}</p>
       <p>🤖 <strong>Razón de Ultron:</strong> ${razon}</p>
     </div>
 
