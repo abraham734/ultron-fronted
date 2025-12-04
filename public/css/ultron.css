@@ -23,7 +23,7 @@ body {
    ========================================================== */
 .layout-ultron {
   display: grid;
-  grid-template-columns: 250px 1fr 260px; /* Sidebar / Main / Watchlist */
+  grid-template-columns: 150px 1fr 260px; /* Sidebar / Main / Watchlist */
   grid-template-areas: "sidebar main watchlist";
   height: 100vh;
   overflow: hidden;
@@ -340,6 +340,19 @@ body {
 }
 
 
+.sidebar {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.ultron-logo {
+  width: 50px;
+  height: 50px;
+}
+
+.ultron-title {
+  font-size: 1.1rem;
+}
 
 
 
