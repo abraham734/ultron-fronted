@@ -178,15 +178,18 @@ async function realizarAnalisis(simbolo) {
       (resultado.entry || resultado.precioActual);
 
     if (datosCompletos) {
-      registrarEntradaUltron({
-        activo: resultado.simbolo,
-        tipoEntrada: resultado.tipoEntrada,
-        sl: resultado.stop,
-        tp1: resultado.tp1,
-        tp2: resultado.tp2,
-        tp3: resultado.tp3,
-        fechaHora: new Date().toLocaleString("es-MX", { timeZone: "America/Mexico_City" }),
-      });
+     registrarEntradaUltron({
+  activo: resultado.simbolo,
+  tipoEntrada: resultado.tipoEntrada,
+  sentido: resultado.sentido || resultado.tipoOperacion || "-",   // Buy / Sell
+  entry: resultado.entry || resultado.precioActual || "-",         // Precio real
+  sl: resultado.stop,
+  tp1: resultado.tp1,
+  tp2: resultado.tp2,
+  tp3: resultado.tp3,
+  fechaHora: new Date().toLocaleString("es-MX", { timeZone: "America/Mexico_City" })
+});
+
       console.log("🗃️ ✅ Entrada registrada:", resultado.simbolo);
     } else {
       console.log("🚫 Entrada omitida por datos incompletos:", resultado.simbolo);
