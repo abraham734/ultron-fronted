@@ -37,9 +37,9 @@ function renderFila({ fechaHora, activo, tipoEntrada, sentido, entry, sl, tp1, t
     <td class="${dirClass}">${sentido}</td>
     <td>${entry}</td>
     <td>${sl}</td>
-    <td>${tp1}</td>
-    <td>${tp2}</td>
-    <td>${tp3}</td>
+    <td>${Number(tp1).toFixed(4)}</td>
+    <td>${Number(tp2).toFixed(4)}</td>
+    <td>${Number(tp3).toFixed(4)}</td>
 
     <td><button class="btn-ok">✔</button></td>
     <td><button class="btn-bad">✖</button></td>

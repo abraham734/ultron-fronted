@@ -318,7 +318,26 @@ body {
   }
 }
 
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #10131a;
+  color: #ffffff;
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
 
+.tabla-contenedor {
+  max-width: 100%;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+
+#tabla-historial {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px;
+}
 
 
 
