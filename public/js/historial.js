@@ -39,8 +39,9 @@ function renderFila({ fechaHora, activo, tipoEntrada, sentido, entry, sl, tp1, t
 
   fila.innerHTML = `
     <td>${fechaHora}</td>
-   <td class="${asignarColorActivo(activo)}">${activo}</td>
-    <td>${tipoEntrada}</td>
+   <td class="activo-dorado">${activo}</td>
+   <td class="estrategia-dorada">${tipoEntrada}</td>
+
     <td class="${dirClass}">${sentido}</td>
     <td>${entry}</td>
     <td>${sl}</td>

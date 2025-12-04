@@ -135,3 +135,34 @@ td.sell {
   color: #4df7c9;
   font-weight: bold;
 }
+
+.tabla-contenedor {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+#tabla-historial {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#tabla-historial th,
+#tabla-historial td {
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 10px 12px;
+}
+
+#tabla-historial th:last-child,
+#tabla-historial td:last-child {
+  border-right: none;
+}
+
+.activo-dorado {
+  color: #f0c14b;
+  font-weight: 600;
+}
+
+.estrategia-dorada {
+  color: #f7d774;
+  font-weight: 600;
+}
