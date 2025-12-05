@@ -186,51 +186,93 @@ async function realizarAnalisis(simbolo) {
 // 🔵 PANEL DIAGNÓSTICO LIVE — FORMATO B (ICONOS)
 // ============================================================
 function renderPanelDiagnostico(resultado) {
+  // === Datos recibidos desde backend ===
   const diag = resultado.diagnostico || {};
-
+  const razones = resultado.razones || [];
+  const squeeze = resultado.squeeze || {};
   const simbolo = resultado.simbolo || "—";
+
   const precio = resultado.precioActual || resultado.entry || "—";
   const sesion = resultado.session || "—";
+  const intervalo = resultado.intervalo || "—";
 
+  // === Diagnóstico técnico ===
   const tendencia = diag.tendencia || "—";
   const momentum = diag.momentum ?? "—";
   const supertrend = diag.supertrend || "—";
-  const squeeze = diag.squeeze ? "Activo" : "No";
   const volatilidad = diag.volatilidad ?? "—";
   const velas = diag.velas || "—";
 
-  const razon = resultado.razones?.[0] || "—";
+  // === Squeeze extendido ===
+  const squeezeEstado = squeeze.squeezeOn ? "ON" : (squeeze.squeezeOff ? "OFF" : "—");
+  const squeezeDir = squeeze.direction || "—";
+  const squeezeMom = squeeze.momentum ?? "—";
+
+  // === Razones formateadas ===
+  const listaRazones = razones.length
+    ? razones.map(r => `<li>• ${r}</li>`).join("")
+    : "<li>— Sin razones reportadas —</li>";
 
   return `
-  <section id="diagnostico-panel" class="diagnostico-panel">
+  <section id="diagnostico-panel" class="diagnostico-panel ultron-render">
 
-    <div class="diag-header">
+    <header class="diag-header">
       <span class="diag-titulo">🔍 Diagnóstico — ${simbolo}</span>
       <span class="diag-precio">💹 ${precio}</span>
+    </header>
+
+    <div class="diag-meta">
+      <p><strong>📡 Sesión:</strong> ${sesion}</p>
+      <p><strong>⏱ Intervalo:</strong> ${intervalo}</p>
+      <p><strong>🕯 Velas:</strong> ${velas}</p>
     </div>
 
-    <div class="diag-fila">
-      <div class="diag-col">🌐 <strong>Sesión:</strong> ${sesion}</div>
-      <div class="diag-col">🧭 <strong>Tendencia:</strong> ${tendencia}</div>
+    <hr>
+
+    <div class="diag-grid">
+
+      <div class="diag-item">
+        <span>🧭 Tendencia</span>
+        <strong>${tendencia}</strong>
+      </div>
+
+      <div class="diag-item">
+        <span>⚡ Momentum</span>
+        <strong>${momentum}</strong>
+      </div>
+
+      <div class="diag-item">
+        <span>📊 Supertrend</span>
+        <strong>${supertrend}</strong>
+      </div>
+
+      <div class="diag-item">
+        <span>🌪 Volatilidad (ATR)</span>
+        <strong>${volatilidad}</strong>
+      </div>
+
+      <div class="diag-item">
+        <span>🟣 Squeeze</span>
+        <strong>${squeezeEstado}</strong>
+      </div>
+
+      <div class="diag-item">
+        <span>🌀 Dir. Squeeze</span>
+        <strong>${squeezeDir}</strong>
+      </div>
+
+      <div class="diag-item">
+        <span>📈 Mom. Squeeze</span>
+        <strong>${squeezeMom}</strong>
+      </div>
+
     </div>
 
-    <div class="diag-fila">
-      <div class="diag-col">⚡ <strong>Momentum:</strong> ${momentum}</div>
-      <div class="diag-col">📊 <strong>Supertrend:</strong> ${supertrend}</div>
-    </div>
+    <hr>
 
-    <div class="diag-fila">
-      <div class="diag-col">🟣 <strong>Squeeze:</strong> ${squeeze}</div>
-      <div class="diag-col">🌪 <strong>Volatilidad:</strong> ${volatilidad}</div>
-    </div>
-
-    <div class="diag-fila">
-      <div class="diag-col">⏳ <strong>Velas:</strong> ${velas}</div>
-      <div class="diag-col">—</div>
-    </div>
-
-    <div class="diag-footer">
-      <p>🤖 <strong>Razón de Ultron:</strong> ${razon}</p>
+    <div class="diag-razones">
+      <h4>🤖 Razones del Motor:</h4>
+      <ul>${listaRazones}</ul>
     </div>
 
   </section>
