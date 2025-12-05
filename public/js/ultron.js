@@ -186,98 +186,91 @@ async function realizarAnalisis(simbolo) {
 // 🔵 PANEL DIAGNÓSTICO LIVE — FORMATO B (ICONOS)
 // ============================================================
 function renderPanelDiagnostico(resultado) {
-  // === Datos recibidos desde backend ===
   const diag = resultado.diagnostico || {};
+  const dx = resultado.diagnosticoExtendido || {};
+  const sq = resultado.squeeze || {};
   const razones = resultado.razones || [];
-  const squeeze = resultado.squeeze || {};
-  const simbolo = resultado.simbolo || "—";
 
-  const precio = resultado.precioActual || resultado.entry || "—";
-  const sesion = resultado.session || "—";
-  const intervalo = resultado.intervalo || "—";
+  // Dinámicos
+  const tendenciaClass =
+    diag.tendencia === "Alcista" ? "valor-alcista"
+    : diag.tendencia === "Bajista" ? "valor-bajista"
+    : "valor-neutral";
 
-  // === Diagnóstico técnico ===
-  const tendencia = diag.tendencia || "—";
-  const momentum = diag.momentum ?? "—";
-  const supertrend = diag.supertrend || "—";
-  const volatilidad = diag.volatilidad ?? "—";
-  const velas = diag.velas || "—";
-
-  // === Squeeze extendido ===
-  const squeezeEstado = squeeze.squeezeOn ? "ON" : (squeeze.squeezeOff ? "OFF" : "—");
-  const squeezeDir = squeeze.direction || "—";
-  const squeezeMom = squeeze.momentum ?? "—";
-
-  // === Razones formateadas ===
-  const listaRazones = razones.length
-    ? razones.map(r => `<li>• ${r}</li>`).join("")
-    : "<li>— Sin razones reportadas —</li>";
+  const biasClass =
+    dx.bias?.toLowerCase() === "buy" ? "etiqueta-buy"
+    : dx.bias?.toLowerCase() === "sell" ? "etiqueta-sell"
+    : "valor-neutral";
 
   return `
-  <section id="diagnostico-panel" class="diagnostico-panel ultron-render">
+  <section class="tarjeta-analisis">
 
-    <header class="diag-header">
-      <span class="diag-titulo">🔍 Diagnóstico — ${simbolo}</span>
-      <span class="diag-precio">💹 ${precio}</span>
-    </header>
-
-    <div class="diag-meta">
-      <p><strong>📡 Sesión:</strong> ${sesion}</p>
-      <p><strong>⏱ Intervalo:</strong> ${intervalo}</p>
-      <p><strong>🕯 Velas:</strong> ${velas}</p>
+    <!-- ========================= -->
+    <!-- LÍNEA PRINCIPAL -->
+    <!-- ========================= -->
+    <div class="linea-principal">
+      <span class="activo-bloque">${resultado.simbolo}</span>
+      <span class="activo-precio">${resultado.precioActual}</span>
+      <span class="estrategia-bloque estado ${
+        resultado.tipoEntrada?.includes("Sell") ? "rojo"
+        : resultado.tipoEntrada?.includes("Buy") ? "verde"
+        : "gris"
+      }">
+        ${resultado.tipoEntrada || "—"}
+      </span>
     </div>
 
-    <hr>
-
-    <div class="diag-grid">
-
-      <div class="diag-item">
-        <span>🧭 Tendencia</span>
-        <strong>${tendencia}</strong>
-      </div>
-
-      <div class="diag-item">
-        <span>⚡ Momentum</span>
-        <strong>${momentum}</strong>
-      </div>
-
-      <div class="diag-item">
-        <span>📊 Supertrend</span>
-        <strong>${supertrend}</strong>
-      </div>
-
-      <div class="diag-item">
-        <span>🌪 Volatilidad (ATR)</span>
-        <strong>${volatilidad}</strong>
-      </div>
-
-      <div class="diag-item">
-        <span>🟣 Squeeze</span>
-        <strong>${squeezeEstado}</strong>
-      </div>
-
-      <div class="diag-item">
-        <span>🌀 Dir. Squeeze</span>
-        <strong>${squeezeDir}</strong>
-      </div>
-
-      <div class="diag-item">
-        <span>📈 Mom. Squeeze</span>
-        <strong>${squeezeMom}</strong>
-      </div>
-
+    <!-- ========================= -->
+    <!-- CONTEXTO -->
+    <!-- ========================= -->
+    <div class="linea-contexto">
+      🌐 <strong>Sesión:</strong> ${resultado.session || "—"} &nbsp; | &nbsp;
+      ⏱ <strong>Intervalo:</strong> ${resultado.intervalo || "—"} &nbsp; | &nbsp;
+      🕯 <strong>Velas:</strong> ${diag.velas || dx.velasUsadas || "—"}
     </div>
 
-    <hr>
+    <!-- ========================= -->
+    <!-- DIAGNÓSTICO TÉCNICO -->
+    <!-- ========================= -->
+    <div class="linea-lectura">
+      🧭 Tendencia: <strong class="${tendenciaClass}">${diag.tendencia}</strong> &nbsp; | &nbsp;
+      ⚡ Momentum: <strong>${diag.momentum ?? "—"}</strong> &nbsp; | &nbsp;
+      🌪 ATR: <strong>${diag.volatilidad ?? "—"}</strong> &nbsp; | &nbsp;
+      🟣 Squeeze:
+      <span class="etiqueta-sq">${sq.squeezeOn ? "ON" : "OFF"}</span>
+    </div>
 
-    <div class="diag-razones">
-      <h4>🤖 Razones del Motor:</h4>
-      <ul>${listaRazones}</ul>
+    <!-- ========================= -->
+    <!-- DIAGNÓSTICO INSTITUCIONAL -->
+    <!-- ========================= -->
+    <div class="linea-lectura">
+      📈 ST Rápido: <strong>${dx.supertrendRapido}</strong> &nbsp; | &nbsp;
+      📉 ST Lento: <strong>${dx.supertrendLento}</strong> &nbsp; | &nbsp;
+      🎯 SWING: <strong>${dx.swing}</strong> &nbsp; | &nbsp;
+      🚨 Ruptura: <strong>${dx.ruptura}</strong>
+    </div>
+
+    <div class="linea-lectura">
+      📡 ADX: <strong>${dx.adx}</strong> &nbsp; | &nbsp;
+      🌀 Bias:
+      <span class="${biasClass}">
+        ${dx.bias}
+      </span> &nbsp; | &nbsp;
+      📊 Mom. Squeeze: <strong>${sq.momentum ?? "—"}</strong>
+    </div>
+
+    <!-- ========================= -->
+    <!-- RAZONES DEL MOTOR -->
+    <!-- ========================= -->
+    <div class="linea-razones">
+      <strong>🤖 Razones:</strong><br>
+      ${razones.length ? razones.join("<br>") : "— No hubo señal válida"}
     </div>
 
   </section>
   `;
 }
+
 
 // ============================================================
 // 🔴🟢 PARPADEO BUY / SELL (1 MINUTO)
