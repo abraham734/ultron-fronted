@@ -151,37 +151,41 @@ function renderPanelDiagnostico(resultado) {
   const diag = resultado.diagnostico || {};
 
   // 🔥 Normalización fuerte
-  const dx = {
-    supertrendRapido:
-      resultado?.diagnosticoExtendido?.supertrendRapido ??
-      resultado?.stRapido ??
-      "—",
+// 🔥 Diagnóstico extendido REAL desde el backend
+const dx = resultado.diagnosticoExtendido || {};
 
-    supertrendLento:
-      resultado?.diagnosticoExtendido?.supertrendLento ??
-      resultado?.stLento ??
-      "—",
+// Normalización fuerte para evitar valores vacíos
+dx.supertrendRapido = dx.supertrendRapido ?? "—";
+dx.supertrendLento  = dx.supertrendLento  ?? "—";
+dx.swing            = dx.swing            ?? "—";
+dx.ruptura          = dx.ruptura          ?? "—";
+dx.adx              = dx.adx              ?? "—";
+dx.bias             = dx.bias             ?? "—";
 
-    swing:
-      resultado?.diagnosticoExtendido?.swing ??
-      resultado?.swing ??
-      "—",
+// Momentum y volatilidad toman primero diagnóstico extendido,
+// luego diagnóstico base, luego fallback.
+dx.momentum =
+  dx.momentum ??
+  resultado.diagnostico?.momentum ??
+  "—";
 
-    ruptura:
-      resultado?.diagnosticoExtendido?.ruptura ??
-      resultado?.breakout ??
-      "—",
+dx.volatilidad =
+  dx.volatilidad ??
+  resultado.diagnostico?.volatilidad ??
+  "—";
 
-    adx:
-      resultado?.diagnosticoExtendido?.adx ??
-      resultado?.adx ??
-      "—",
+// Razones reales desde la estrategia
+dx.razones =
+  dx.razones && dx.razones.length
+    ? dx.razones
+    : resultado.razones && resultado.razones.length
+    ? resultado.razones
+    : ["— No hubo señal válida"];
 
-    bias:
-      resultado?.diagnosticoExtendido?.bias ??
-      resultado?.sentido ??
-      "—",
-  };
+// Modo y velas
+dx.modo        = dx.modo ?? "—";
+dx.velasUsadas = dx.velasUsadas ?? resultado.diagnostico?.velas ?? "—";
+
 
   const sq = resultado.squeeze || {};
   const razones = resultado.razones || [];
