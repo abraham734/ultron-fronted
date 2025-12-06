@@ -230,12 +230,24 @@ dx.velasUsadas = dx.velasUsadas ?? resultado.diagnostico?.velas ?? "—";
     </div>
 
     <!-- DIAGNÓSTICO TÉCNICO -->
-    <div class="linea-lectura">
-      🧭 Tendencia: <strong class="${tendenciaClass}">${diag.tendencia}</strong> &nbsp; | &nbsp;
-      ⚡ Momentum: <strong>${diag.momentum ?? "—"}</strong> &nbsp; | &nbsp;
-      🌪 ATR: <strong>${diag.volatilidad ?? "—"}</strong> &nbsp; | &nbsp;
-      🟣 Squeeze: <span class="etiqueta-sq">${sq.squeezeOn ? "ON" : "OFF"}</span>
-    </div>
+<div class="linea-lectura">
+  🧭 Tendencia: <strong class="${tendenciaClass}">
+    ${diag.tendencia ?? "—"}
+  </strong> &nbsp; | &nbsp;
+
+  ⚡ Momentum: <strong>
+    ${dx.momentum ?? diag.momentum ?? "—"}
+  </strong> &nbsp; | &nbsp;
+
+  🌪 ATR: <strong>
+    ${dx.volatilidad ?? diag.volatilidad ?? "—"}
+  </strong> &nbsp; | &nbsp;
+
+  🟣 Squeeze: <span class="etiqueta-sq">
+    ${sq.squeezeOn ? "ON" : "OFF"}
+  </span>
+</div>
+
 
     <!-- DIAGNÓSTICO INSTITUCIONAL -->
     <div class="linea-lectura">
