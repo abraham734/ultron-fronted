@@ -251,11 +251,16 @@ dx.velasUsadas = dx.velasUsadas ?? resultado.diagnostico?.velas ?? "—";
       📊 Mom. Squeeze: <strong>${sq.momentum ?? "—"}</strong>
     </div>
 
-    <!-- RAZONES -->
+        <!-- RAZONES -->
     <div class="linea-razones">
       <strong>🤖 Razones:</strong><br>
-      ${razones.length ? razones.join("<br>") : "— No hubo señal válida"}
+      ${
+        dx.razones && dx.razones.length
+          ? dx.razones.join("<br>")
+          : "— No hubo señal válida"
+      }
     </div>
+
 
   </section>
   `;
