@@ -202,8 +202,11 @@ function renderPanelDiagnostico(resultado) {
     : dx.bias?.toLowerCase() === "sell" ? "etiqueta-sell"
     : "valor-neutral";
 
+  // ============================================================
+  // 🔥 PANEL RENDER — CORREGIDO CON ID REQUERIDO
+  // ============================================================
   return `
-  <section class="tarjeta-analisis">
+  <section id="diagnostico-panel" class="tarjeta-analisis">
 
     <!-- ========================= -->
     <!-- LÍNEA PRINCIPAL -->
@@ -211,6 +214,7 @@ function renderPanelDiagnostico(resultado) {
     <div class="linea-principal">
       <span class="activo-bloque">${resultado.simbolo}</span>
       <span class="activo-precio">${resultado.precioActual}</span>
+
       <span class="estrategia-bloque estado ${
         resultado.tipoEntrada?.includes("Sell") ? "rojo"
         : resultado.tipoEntrada?.includes("Buy") ? "verde"
@@ -226,16 +230,16 @@ function renderPanelDiagnostico(resultado) {
     <div class="linea-contexto">
       🌐 <strong>Sesión:</strong> ${resultado.session || "—"} &nbsp; | &nbsp;
       ⏱ <strong>Intervalo:</strong> ${resultado.intervalo || "—"} &nbsp; | &nbsp;
-      🕯 <strong>Velas:</strong> ${diag.velas || dx.velasUsadas || "—"}
+      🕯 <strong>Velas:</strong> ${dx.velasUsadas || diag.velas || "—"}
     </div>
 
     <!-- ========================= -->
     <!-- DIAGNÓSTICO TÉCNICO -->
     <!-- ========================= -->
     <div class="linea-lectura">
-      🧭 Tendencia: <strong class="${tendenciaClass}">${diag.tendencia}</strong> &nbsp; | &nbsp;
+      🧭 Tendencia: <strong class="${tendenciaClass}">${diag.tendencia || "—"}</strong> &nbsp; | &nbsp;
       ⚡ Momentum: <strong>${diag.momentum ?? "—"}</strong> &nbsp; | &nbsp;
-      🌪 ATR: <strong>${diag.volatilidad ?? "—"}</strong> &nbsp; | &nbsp;
+      🌪 ATR: <strong>${diag.volatilidad ?? dx.volatilidad ?? "—"}</strong> &nbsp; | &nbsp;
       🟣 Squeeze:
       <span class="etiqueta-sq">${sq.squeezeOn ? "ON" : "OFF"}</span>
     </div>
@@ -244,18 +248,20 @@ function renderPanelDiagnostico(resultado) {
     <!-- DIAGNÓSTICO INSTITUCIONAL -->
     <!-- ========================= -->
     <div class="linea-lectura">
-      📈 ST Rápido: <strong>${dx.supertrendRapido}</strong> &nbsp; | &nbsp;
-      📉 ST Lento: <strong>${dx.supertrendLento}</strong> &nbsp; | &nbsp;
-      🎯 SWING: <strong>${dx.swing}</strong> &nbsp; | &nbsp;
-      🚨 Ruptura: <strong>${dx.ruptura}</strong>
+      📈 ST Rápido: <strong>${dx.supertrendRapido || "—"}</strong> &nbsp; | &nbsp;
+      📉 ST Lento: <strong>${dx.supertrendLento || "—"}</strong> &nbsp; | &nbsp;
+      🎯 SWING: <strong>${dx.swing || "—"}</strong> &nbsp; | &nbsp;
+      🚨 Ruptura: <strong>${dx.ruptura || "—"}</strong>
     </div>
 
     <div class="linea-lectura">
-      📡 ADX: <strong>${dx.adx}</strong> &nbsp; | &nbsp;
+      📡 ADX: <strong>${dx.adx || "—"}</strong> &nbsp; | &nbsp;
+
       🌀 Bias:
       <span class="${biasClass}">
-        ${dx.bias}
+        ${dx.bias || "—"}
       </span> &nbsp; | &nbsp;
+
       📊 Mom. Squeeze: <strong>${sq.momentum ?? "—"}</strong>
     </div>
 
