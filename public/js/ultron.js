@@ -23,7 +23,7 @@ let timeoutParpadeo = null;
 // ============================================================
 document.addEventListener("DOMContentLoaded", () => {
   renderSwitches();
-  cargarHistorialDesdeStorage();
+  
   verificarConexionBackend();
 
   const selectorIntervalo = document.getElementById("selector-intervalo");
