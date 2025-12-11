@@ -1,147 +1,191 @@
-/* ==========================================================
-   🎨 ESTILOS AVANZADOS DEL HISTORIAL — ULTRÓN PRO (CLEAN)
-   ========================================================== */
+/* ============================================================
+   🔱 ULTRON — HISTORIAL MODO C (Estilo B – Dark Crystal)
+   Diseño profesional con neones y alto contraste
+   ============================================================ */
 
-/* PANEL GENERAL */
-.historial-panel {
-  background: #0c0f16;
-  border: 1px solid #1e2533;
-  padding: 20px;
-  border-radius: 12px;
-  margin-top: 25px;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+/* --- Panel Principal --- */
+#historial-panel {
+    margin-top: 20px;
+    padding: 20px;
+    background: rgba(10, 10, 15, 0.85);
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.08);
+    border: 1px solid rgba(0, 255, 255, 0.12);
 }
 
-/* TÍTULO */
-.historial-panel h3 {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  font-size: 1.3rem;
-  margin-bottom: 12px;
-  color: #ffcc4d;
+/* --- Título --- */
+.titulo-historial {
+    color: #9be8ff;
+    text-shadow: 0 0 6px #0099ff;
+    font-size: 20px;
+    margin-bottom: 12px;
 }
 
-/* CONTENEDOR — Scroll solo vertical, NO lateral */
+/* --- Contenedor de filtros --- */
+.historial-filtros {
+    display: flex;
+    justify-content: start;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+    padding: 12px;
+    background: rgba(0, 10, 20, 0.45);
+    border-radius: 10px;
+    border: 1px solid rgba(0, 150, 255, 0.12);
+}
+
+.filtro-bloque {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.filtro-bloque label {
+    color: #c8e6ff;
+    font-size: 12px;
+}
+
+.filtro-bloque select,
+.filtro-bloque input {
+    background: #0e1822;
+    color: #d3efff;
+    border: 1px solid #1a3a55;
+    border-radius: 6px;
+    padding: 6px 8px;
+    font-size: 13px;
+    outline: none;
+}
+
+.filtro-bloque select:hover,
+.filtro-bloque input:hover {
+    border-color: #2992ff;
+}
+
+/* --- Botones --- */
+.btn-filtrar,
+.btn-sem-actual {
+    background: #003355;
+    border: 1px solid #1177cc;
+    color: #c8e6ff;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-filtrar:hover,
+.btn-sem-actual:hover {
+    background: #005088;
+    border-color: #33aaff;
+}
+
+.btn-sem-actual {
+    background: #5522aa;
+    border-color: #8844ff;
+}
+
+.btn-sem-actual:hover {
+    background: #6b33cc;
+}
+
+/* ============================================================
+   🔵 Tabla de historial
+   ============================================================ */
+
 .tabla-contenedor {
-  max-height: 380px;
-  width: 100%;
-  overflow-y: auto;
-  overflow-x: hidden; /* 🔥 elimina scroll lateral */
-  border-radius: 8px;
-  border: 1px solid #222a35;
+    overflow-x: auto;
 }
 
-/* TABLA */
-#tabla-historial {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.85rem;
+.tabla-historial {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    overflow: hidden;
+    border-radius: 8px;
+    background: rgba(5, 10, 15, 0.75);
+    box-shadow: 0 0 12px rgba(0, 255, 255, 0.05);
 }
 
-/* CABECERA FIJA */
-#tabla-historial thead {
-  background: #152030;
-  position: sticky;
-  top: 0;
-  z-index: 2;
+.tabla-historial thead {
+    background: #0d2030;
+    border-bottom: 1px solid #113d55;
 }
 
-#tabla-historial thead th {
-  padding: 10px 12px;
-  text-align: left;
-  font-weight: 600;
-  color: #9fc7ff;
-  border-bottom: 1px solid #243447;
-  border-right: 1px solid rgba(255, 255, 255, 0.08);
+.tabla-historial th {
+    color: #8ed9ff;
+    padding: 10px;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 600;
 }
 
-#tabla-historial thead th:last-child {
-  border-right: none;
+/* --- Filas --- */
+.tabla-historial tbody tr {
+    border-bottom: 1px solid rgba(0, 60, 100, 0.25);
+    transition: background 0.2s;
 }
 
-/* FILAS */
-#tabla-historial tbody tr {
-  transition: 0.2s ease;
-  border-bottom: 1px solid #1c2330;
+.tabla-historial tbody tr:hover {
+    background: rgba(0, 90, 150, 0.18);
 }
 
-/* ALTERNANCIA */
-#tabla-historial tbody tr:nth-child(odd) {
-  background: #0f141c;
-}
-#tabla-historial tbody tr:nth-child(even) {
-  background: #111822;
-}
-
-/* HOVER */
-#tabla-historial tbody tr:hover {
-  background: #1a2230;
+/* --- Celdas --- */
+.tabla-historial td {
+    padding: 8px 10px;
+    color: #d4eeff;
+    font-size: 13px;
 }
 
-/* CELDAS */
-#tabla-historial td {
-  padding: 10px 12px;
-  color: #d8d8d8;
-  border-right: 1px solid rgba(255, 255, 255, 0.08);
+/* ============================================================
+   🎨 Colores especiales del contenido
+   ============================================================ */
+
+/* --- Activo (azul eléctrico) --- */
+.hist-activo {
+    color: #5cc7ff;
+    font-weight: 600;
+    text-shadow: 0 0 4px #1aaaff;
 }
 
-#tabla-historial td:last-child {
-  border-right: none;
+/* --- Estrategia (morado Ultron) --- */
+.hist-estrategia {
+    color: #c29bff;
+    font-weight: 600;
+    text-shadow: 0 0 4px #bb77ff;
 }
 
-/* COLORES BUY / SELL */
-td.buy {
-  color: #4aff9c;
-  font-weight: 700;
+/* --- BUY (verde neón) --- */
+.hist-buy {
+    color: #00ff99;
+    font-weight: 700;
+    text-shadow: 0 0 6px #00ff99;
 }
 
-td.sell {
-  color: #ff6b6b;
-  font-weight: 700;
+/* --- SELL (rojo neón) --- */
+.hist-sell {
+    color: #ff5577;
+    font-weight: 700;
+    text-shadow: 0 0 6px #ff3344;
 }
 
-/* RESULTADO SEÑAL (✔ / ✖ MARCADOS) */
-.resultado-ok {
-  background: rgba(0, 255, 100, 0.08) !important;
-}
-.resultado-bad {
-  background: rgba(255, 70, 70, 0.12) !important;
+/* --- Riesgo (etiquetas) --- */
+.hist-riesgo-alto {
+    color: #ff4444;
+    font-weight: 600;
 }
 
-/* BOTONES ✔ ✖ 🗑 */
-.btn-ok,
-.btn-bad,
-.btn-delete {
-  cursor: pointer;
-  font-size: 1rem;
-  background: none;
-  border: none;
+.hist-riesgo-medio {
+    color: #ffbb33;
+    font-weight: 600;
 }
 
-.btn-ok { color: #4aff9c; }
-.btn-ok:hover { color: #70ffb3; }
-
-.btn-bad { color: #ff6b6b; }
-.btn-bad:hover { color: #ff8c8c; }
-
-.btn-delete { color: #9faab6; }
-.btn-delete:hover { color: #c4ccd6; }
-
-/* DORADOS — ULTRÓN STYLE */
-.activo-dorado {
-  color: #f0c14b;
-  font-weight: 700;
+.hist-riesgo-bajo {
+    color: #44ff88;
+    font-weight: 600;
 }
 
-.estrategia-dorada {
-  color: #f7d774;
-  font-weight: 600;
+/* --- Fecha pequeña --- */
+.hist-fecha {
+    color: #b6d1e8;
+    font-size: 12px;
 }
-
-/* BADGES (opcional para futuro uso) */
-.badge-forex { color: #61a9ff; font-weight: bold; }
-.badge-xau   { color: #ffd34d; font-weight: bold; }
-.badge-crypto { color: #c78bff; font-weight: bold; }
-.badge-stock { color: #4df7c9; font-weight: bold; }

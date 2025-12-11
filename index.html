@@ -61,35 +61,64 @@
       <!-- Contenedor principal del análisis -->
       <section id="contenedor-activos" class="contenedor-activos"></section>
 
-  <!-- === PANEL HISTORIAL (NUEVO) === -->
-<section id="historial-panel" class="historial-panel">
- <h3 class="titulo-historial">
-  <span>📘 Historial de Entradas</span>
-  <button id="btn-borrar-todo" class="btn-borrar-todo">🗑️ Borrar Todo</button>
-</h3>
 
+      <!--panel de historial nuevo-->
+ <section id="historial-panel" class="historial-panel">
+
+  <h3 class="titulo-historial">
+    📘 Historial de Entradas
+  </h3>
+
+  <div class="historial-filtros">
+
+    <div class="filtro-bloque">
+      <label>Semana:</label>
+      <select id="selector-semana"></select>
+    </div>
+
+    <div class="filtro-bloque">
+      <label>Mes:</label>
+      <select id="selector-mes"></select>
+    </div>
+
+    <div class="filtro-bloque">
+      <label>Desde:</label>
+      <input type="date" id="fecha-desde">
+    </div>
+
+    <div class="filtro-bloque">
+      <label>Hasta:</label>
+      <input type="date" id="fecha-hasta">
+    </div>
+
+    <button id="btn-filtrar-rango" class="btn-filtrar">Filtrar</button>
+    <button id="btn-semana-actual" class="btn-sem-actual">Semana Actual</button>
+
+  </div>
 
   <div class="tabla-contenedor">
-    <table id="tabla-historial">
+    <table class="tabla-historial">
       <thead>
         <tr>
-          <th>Fecha & Hora</th>
+          <th>Fecha</th>
           <th>Activo</th>
           <th>Estrategia</th>
-          <th>Buy/Sell</th>
-          <th>Precio</th>
+          <th>Bias</th>
+          <th>Entry</th>
           <th>SL</th>
           <th>TP1</th>
           <th>TP2</th>
           <th>TP3</th>
-          <th>✔</th>
-          <th>✖</th>
+          <th>Riesgo</th>
         </tr>
       </thead>
-      <tbody></tbody>
+
+      <tbody id="tabla-historial-body"></tbody>
     </table>
   </div>
+
 </section>
+
 
 
       <!-- Panel Jarvis Oro Pro -->
