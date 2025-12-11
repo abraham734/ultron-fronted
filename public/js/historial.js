@@ -203,3 +203,41 @@ async function iniciarHistorial() {
 }
 
 iniciarHistorial();
+
+
+// ============================================================
+// 🔥 MODO B – DETECCIÓN AUTOMÁTICA DE NUEVAS ENTRADAS
+// ============================================================
+
+let ultimoIDConocido = null;
+
+async function verificarNuevaEntrada() {
+  try {
+    const res = await fetch(`${API_URL}/nueva`);
+    const data = await res.json();
+
+    if (!data.ultimaEntradaID) return;
+
+    // Si es la primera vez, lo guardamos
+    if (!ultimoIDConocido) {
+      ultimoIDConocido = data.ultimaEntradaID;
+      return;
+    }
+
+    // Si cambió → hubo nueva entrada
+    if (data.ultimaEntradaID !== ultimoIDConocido) {
+      ultimoIDConocido = data.ultimaEntradaID;
+
+      console.log("🔥 Nueva señal detectada — Actualizando historial...");
+      const semanaActual = obtenerSemanaActual();
+      selectorSemana.value = semanaActual;
+      cargarSemana(semanaActual);
+    }
+
+  } catch (err) {
+    console.error("❌ Error verificando nueva entrada:", err);
+  }
+}
+
+// Ejecutar cada 5 segundos (configurable)
+setInterval(verificarNuevaEntrada, 5000);
