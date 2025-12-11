@@ -4,9 +4,10 @@
 
 import { activos } from "./data.js";
 import { renderSwitches, obtenerEstadoEstrategias } from "./switches.js";
-import { cargarHistorialDesdeStorage, registrarEntradaUltron } from "./historial.js";
 import { obtenerIntervaloActivo, guardarIntervaloActivo } from "./intervalosporactivo.js";
 import { cargarDiagnosticoMotor } from "./diagnostico_motor.js";
+import { registrarEntradaUltron } from "./historial.js";
+
 
 // === URL dinámica del backend ===
 const BACKEND_URL = window.location.hostname.includes("vercel.app")
