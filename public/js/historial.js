@@ -226,13 +226,16 @@ async function verificarNuevaEntrada() {
 
     // Si cambió → hubo nueva entrada
     if (data.ultimaEntradaID !== ultimoIDConocido) {
-      ultimoIDConocido = data.ultimaEntradaID;
+  ultimoIDConocido = data.ultimaEntradaID;
 
-      console.log("🔥 Nueva señal detectada — Actualizando historial...");
-      const semanaActual = obtenerSemanaActual();
-      selectorSemana.value = semanaActual;
-      cargarSemana(semanaActual);
-    }
+  console.log("🔥 Nueva señal detectada — refrescando historial");
+
+  const semanaActual = obtenerSemanaActual();
+  selectorSemana.value = semanaActual;
+
+  await cargarSemana(semanaActual);
+}
+
 
   } catch (err) {
     console.error("❌ Error verificando nueva entrada:", err);
