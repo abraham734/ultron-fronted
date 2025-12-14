@@ -175,13 +175,16 @@ dx.volatilidad =
   resultado.diagnostico?.volatilidad ??
   "—";
 
-// Razones reales desde la estrategia
+// FIX: si hay señal OPERAR, usar SOLO las razones del resultado
 dx.razones =
-  dx.razones && dx.razones.length
+  resultado.decision === "OPERAR"
+    ? resultado.razones
+    : dx.razones && dx.razones.length
     ? dx.razones
     : resultado.razones && resultado.razones.length
     ? resultado.razones
     : ["— No hubo señal válida"];
+
 
 // Modo y velas
 dx.modo        = dx.modo ?? "—";
