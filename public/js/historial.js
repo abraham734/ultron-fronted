@@ -1,7 +1,7 @@
 // ============================================================
-// 🔱 ULTRON – HISTORIAL FRONTEND (v4.0 PRO TABULAR MODE)
+// 🔱 ULTRON – HISTORIAL FRONTEND (v4.1 PRO TABULAR MODE)
 // Tabla profesional con filtros por semana, mes y rango de fechas.
-// Compatible con backend: /api/historial/*
+// Fuente única de verdad: Backend /api/historial/*
 // ============================================================
 
 const API_URL = "https://ultron-backend-zvtm.onrender.com/api/historial";
@@ -15,21 +15,19 @@ const btnFiltrarRango = document.getElementById("btn-filtrar-rango");
 const btnSemanaActual = document.getElementById("btn-semana-actual");
 
 // ============================================================
-// 🟢 Obtener semana actual (para autoselección)
+// 🟢 Obtener semana ISO actual
 // ============================================================
 function obtenerSemanaActual() {
   const hoy = new Date();
   const año = hoy.getUTCFullYear();
-
   const inicio = new Date(Date.UTC(año, 0, 1));
   const diff = (hoy - inicio) / 86400000;
   const semana = Math.ceil((diff + inicio.getUTCDay() + 1) / 7);
-
   return `${año}-W${semana}`;
 }
 
 // ============================================================
-// 🟣 Cargar historial completo (para construir listados)
+// 🟣 Cargar historial completo
 // ============================================================
 async function cargarHistorialCompleto() {
   const res = await fetch(API_URL);
@@ -37,13 +35,13 @@ async function cargarHistorialCompleto() {
 }
 
 // ============================================================
-// 🔵 Rellenar selector de semanas dinámicamente
+// 🔵 Inicializar selector de semanas
 // ============================================================
 async function inicializarSelectorSemanas() {
   const db = await cargarHistorialCompleto();
   selectorSemana.innerHTML = "";
 
-  const semanas = Object.keys(db).sort().reverse(); // semanas recientes primero
+  const semanas = Object.keys(db).sort().reverse();
 
   semanas.forEach(sem => {
     const opt = document.createElement("option");
@@ -52,16 +50,15 @@ async function inicializarSelectorSemanas() {
     selectorSemana.appendChild(opt);
   });
 
-  // seleccionar semana actual si existe
   const actual = obtenerSemanaActual();
   if (semanas.includes(actual)) {
     selectorSemana.value = actual;
-    cargarSemana(actual);
+    await cargarSemana(actual);
   }
 }
 
 // ============================================================
-// 🔵 Rellenar selector de meses (formato YYYY-MM)
+// 🔵 Inicializar selector de meses (YYYY-MM)
 // ============================================================
 async function inicializarSelectorMes() {
   const db = await cargarHistorialCompleto();
@@ -75,10 +72,8 @@ async function inicializarSelectorMes() {
     });
   });
 
-  const lista = Array.from(meses).sort().reverse();
-
   selectorMes.innerHTML = "";
-  lista.forEach(m => {
+  Array.from(meses).sort().reverse().forEach(m => {
     const opt = document.createElement("option");
     opt.value = m;
     opt.textContent = m;
@@ -87,7 +82,7 @@ async function inicializarSelectorMes() {
 }
 
 // ============================================================
-// 🟦 Cargar datos de una semana específica
+// 🟦 Cargar semana específica
 // ============================================================
 async function cargarSemana(claveSemana) {
   const [año, semana] = claveSemana.split("-W");
@@ -97,7 +92,7 @@ async function cargarSemana(claveSemana) {
 }
 
 // ============================================================
-// 🟧 Cargar datos de un mes
+// 🟧 Cargar mes completo
 // ============================================================
 async function cargarMes(mes) {
   const db = await cargarHistorialCompleto();
@@ -105,8 +100,9 @@ async function cargarMes(mes) {
 
   Object.values(db).forEach(sem => {
     sem.forEach(ent => {
-      const fecha = ent.timestamp.slice(0, 7); // YYYY-MM
-      if (fecha === mes) resultados.push(ent);
+      if (ent.timestamp.slice(0, 7) === mes) {
+        resultados.push(ent);
+      }
     });
   });
 
@@ -114,25 +110,27 @@ async function cargarMes(mes) {
 }
 
 // ============================================================
-// 🟨 Rango de fechas
+// 🟨 Cargar rango de fechas
 // ============================================================
 async function cargarRango(desde, hasta) {
-  const url = `${API_URL}/rango?desde=${desde}&hasta=${hasta}`;
-  const res = await fetch(url);
+  const res = await fetch(`${API_URL}/rango?desde=${desde}&hasta=${hasta}`);
   const datos = await res.json();
   renderTabla(datos);
 }
 
 // ============================================================
-// 🟩 Renderizar TABLA PROFESIONAL ULTRON
+// 🟩 Renderizar tabla ULTRON
 // ============================================================
 function renderTabla(lista) {
   tablaBody.innerHTML = "";
 
   if (!lista || lista.length === 0) {
     tablaBody.innerHTML = `
-      <tr><td colspan="10" class="historial-vacio">No hay registros en este periodo</td></tr>
-    `;
+      <tr>
+        <td colspan="10" class="historial-vacio">
+          No hay registros en este periodo
+        </td>
+      </tr>`;
     return;
   }
 
@@ -142,15 +140,20 @@ function renderTabla(lista) {
     const fila = document.createElement("tr");
     fila.classList.add("fila-historial");
 
+    // 🔧 Normalizar bias para visualización
+    const biasRaw = (ent.bias || "").toUpperCase();
+    const biasFinal =
+      biasRaw === "BUY" ? "COMPRA" :
+      biasRaw === "SELL" ? "VENTA" :
+      biasRaw || "-";
+
     fila.innerHTML = `
       <td class="hist-fecha">${new Date(ent.timestamp).toLocaleString("es-MX")}</td>
-
       <td class="hist-activo">${ent.simbolo}</td>
-
       <td class="hist-estrategia">${ent.tipoEntrada}</td>
 
-      <td class="${ent.bias === "COMPRA" ? "hist-buy" : "hist-sell"}">
-        ${ent.bias}
+      <td class="${biasFinal === "COMPRA" ? "hist-buy" : "hist-sell"}">
+        ${biasFinal}
       </td>
 
       <td>${ent.entry ?? "-"}</td>
@@ -172,7 +175,6 @@ function renderTabla(lista) {
   });
 }
 
-
 // ============================================================
 // 🔧 EVENTOS
 // ============================================================
@@ -185,32 +187,52 @@ selectorMes.addEventListener("change", () => {
 });
 
 btnFiltrarRango.addEventListener("click", () => {
+  if (!selectorDesde.value || !selectorHasta.value) {
+    alert("Selecciona ambas fechas");
+    return;
+  }
   cargarRango(selectorDesde.value, selectorHasta.value);
 });
 
 btnSemanaActual.addEventListener("click", () => {
   const actual = obtenerSemanaActual();
-  selectorSemana.value = actual;
-  cargarSemana(actual);
+  const opciones = Array.from(selectorSemana.options).map(o => o.value);
+
+  if (opciones.includes(actual)) {
+    selectorSemana.value = actual;
+    cargarSemana(actual);
+  } else {
+    tablaBody.innerHTML = `
+      <tr>
+        <td colspan="10" class="historial-vacio">
+          No hay registros en la semana actual
+        </td>
+      </tr>`;
+  }
 });
 
 // ============================================================
 // 🚀 Inicialización
 // ============================================================
+let ultimoIDConocido = null;
+
 async function iniciarHistorial() {
   await inicializarSelectorSemanas();
   await inicializarSelectorMes();
+
+  // 🔥 Sincronizar polling con estado real del backend
+  try {
+    const res = await fetch(`${API_URL}/nueva`);
+    const data = await res.json();
+    ultimoIDConocido = data.ultimaEntradaID || null;
+  } catch {}
 }
 
 iniciarHistorial();
 
-
 // ============================================================
-// 🔥 MODO B – DETECCIÓN AUTOMÁTICA DE NUEVAS ENTRADAS
+// 🔥 POLLING — detección automática de nuevas entradas
 // ============================================================
-
-let ultimoIDConocido = null;
-
 async function verificarNuevaEntrada() {
   try {
     const res = await fetch(`${API_URL}/nueva`);
@@ -218,29 +240,28 @@ async function verificarNuevaEntrada() {
 
     if (!data.ultimaEntradaID) return;
 
-    // Si es la primera vez, lo guardamos
     if (!ultimoIDConocido) {
       ultimoIDConocido = data.ultimaEntradaID;
       return;
     }
 
-    // Si cambió → hubo nueva entrada
     if (data.ultimaEntradaID !== ultimoIDConocido) {
-  ultimoIDConocido = data.ultimaEntradaID;
+      ultimoIDConocido = data.ultimaEntradaID;
 
-  console.log("🔥 Nueva señal detectada — refrescando historial");
+      console.log("🔥 Nueva señal detectada — refrescando historial");
 
-  const semanaActual = obtenerSemanaActual();
-  selectorSemana.value = semanaActual;
+      const semanaActual = obtenerSemanaActual();
+      const opciones = Array.from(selectorSemana.options).map(o => o.value);
 
-  await cargarSemana(semanaActual);
-}
-
-
+      if (opciones.includes(semanaActual)) {
+        selectorSemana.value = semanaActual;
+        await cargarSemana(semanaActual);
+      }
+    }
   } catch (err) {
     console.error("❌ Error verificando nueva entrada:", err);
   }
 }
 
-// Ejecutar cada 5 segundos (configurable)
+// Ejecutar cada 5 segundos
 setInterval(verificarNuevaEntrada, 5000);
