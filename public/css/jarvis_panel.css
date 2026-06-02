@@ -1,5 +1,8 @@
-/* === jarvis_panel.css (versión final con chispa de borde completa) === */
-/* Autor: Néstor & Quinto – Revisión 10/nov/2025 */
+/* === jarvis_panel.css (HFv4.0 + Historial de Rentabilidad) === */
+
+/* ============================================================
+   BASE DEL PANEL
+   ============================================================ */
 
 #jarvis-panel {
   background: #0d1017;
@@ -15,7 +18,10 @@
   max-width: 100%;
 }
 
-/* === Cabecera === */
+/* ============================================================
+   CABECERA
+   ============================================================ */
+
 #jarvis-panel .jarvis-header {
   display: flex;
   justify-content: space-between;
@@ -32,7 +38,10 @@
   margin: 0;
 }
 
-/* === Estado visual === */
+/* ============================================================
+   INDICADOR DE ESTADO
+   ============================================================ */
+
 .jarvis-status {
   display: flex;
   align-items: center;
@@ -48,60 +57,36 @@
   transition: all 0.3s ease;
 }
 
-/* === NUEVOS ESTADOS JARVIS HFv3.0 === */
-
-/* 🟢 Jarvis Online */
-.indicador.online {
-  background: #00ff80;
-  box-shadow: 0 0 10px #00ff80;
-}
-
-/* 🟡 Jarvis fuera de sesión (Londres + NY cerrado) */
-.indicador.fuera {
-  background: #ffe066;
-  box-shadow: 0 0 8px #ffe066;
-}
-
-/* 🟠 Jarvis sin datos de API (TwelveData fallando) */
-.indicador.sindatos {
-  background: #ffb347;
-  box-shadow: 0 0 10px #ffb347;
-  animation: parpadeo 1.2s infinite alternate;
-}
-
-/* 🔴 Error crítico en Jarvis */
-.indicador.error {
-  background: #ff4d4d;
-  box-shadow: 0 0 10px #ff4d4d;
-  animation: parpadeo 0.8s infinite alternate;
-}
-
-.indicador.online  { background: #00ff80; box-shadow: 0 0 8px #00ff80; }
+.indicador.online  { background: #00ff80; box-shadow: 0 0 10px #00ff80; }
+.indicador.fuera   { background: #ffe066; box-shadow: 0 0 8px #ffe066; }
 .indicador.warn    { background: #ffb347; box-shadow: 0 0 8px #ffb347; animation: parpadeo 1.5s infinite alternate; }
 .indicador.offline { background: #ff4d4d; box-shadow: 0 0 8px #ff4d4d; }
+.indicador.error   { background: #ff4d4d; box-shadow: 0 0 10px #ff4d4d; animation: parpadeo 0.8s infinite alternate; }
 
 @keyframes parpadeo {
-  0% { opacity: 0.6; }
+  0%   { opacity: 0.6; }
   100% { opacity: 1; }
 }
 
-/* === Cuerpo del panel === */
-#jarvis-panel .jarvis-body {
+/* ============================================================
+   CUERPO — GRID DE BLOQUES TÁCTICOS
+   ============================================================ */
+
+.jarvis-body {
   display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 20px;
-  position: relative;
-  border-radius: 12px;
-  overflow: hidden;
-  transition: box-shadow 0.4s ease;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 18px;
+  margin-top: 15px;
 }
 
-/* === Borde chispa (animación alrededor del panel) === */
+/* Borde chispa animado */
 .borde-chispa {
   position: relative;
   border: 2px solid rgba(255, 153, 0, 0.2);
   border-radius: 12px;
   overflow: hidden;
+  padding: 16px;
+  transition: box-shadow 0.4s ease;
 }
 
 .borde-chispa::before {
@@ -110,7 +95,6 @@
   inset: 0;
   border-radius: 12px;
   border: 2px solid transparent;
-  /* La “chispa” dorada */
   background: linear-gradient(90deg, transparent, #ffae42, transparent) no-repeat;
   background-size: 300% 100%;
   animation: moverChispa 6s linear infinite;
@@ -122,99 +106,15 @@
   -webkit-mask-composite: xor;
 }
 
-/* === Animación de desplazamiento de la chispa === */
 @keyframes moverChispa {
-  0% { background-position: 300% 0; }
+  0%   { background-position: 300% 0; }
   100% { background-position: -300% 0; }
 }
 
-/* === Estado dinámico === */
-.borde-chispa.activo::before {
-  opacity: 1;
-  animation-play-state: running;
-}
+.borde-chispa.activo::before { opacity: 1;   animation-play-state: running; }
+.borde-chispa.error::before  { opacity: 0.3; animation-play-state: paused; }
 
-.borde-chispa.error::before {
-  opacity: 0.3;
-  animation-play-state: paused;
-}
-
-
-
-/* === Sección Log === */
-#jarvis-panel .jarvis-log {
-  background: #141821;
-  border: 1px solid #2c2f36;
-  padding: 12px;
-  height: 230px;
-  overflow-y: auto;
-  font-size: 13px;
-  color: #a7b2c0;
-  border-radius: 8px;
-  box-shadow: inset 0 0 8px rgba(0, 255, 255, 0.15);
-}
-
-#jarvis-panel .jarvis-log p {
-  margin: 4px 0;
-  border-left: 2px solid #00ffff3a;
-  padding-left: 6px;
-}
-
-/* === Sección Métricas === */
-#jarvis-panel .jarvis-metricas {
-  background: #141821;
-  border: 1px solid #2c2f36;
-  padding: 12px 15px;
-  font-size: 14px;
-  color: #d1d5db;
-  border-radius: 8px;
-  box-shadow: inset 0 0 8px rgba(255, 215, 0, 0.15);
-}
-
-#jarvis-panel .jarvis-metricas p {
-  margin: 6px 0;
-  display: flex;
-  justify-content: space-between;
-}
-
-#jarvis-panel .jarvis-metricas strong {
-  color: #f4c542;
-}
-
-#ultima-lectura {
-  font-size: 13px;
-  color: #9aa3b0;
-  margin-top: 6px;
-  font-style: italic;
-  text-align: right;
-}
-
-/* Scrollbar */
-#jarvis-panel .jarvis-log::-webkit-scrollbar { width: 6px; }
-#jarvis-panel .jarvis-log::-webkit-scrollbar-thumb {
-  background-color: #3a3f4b;
-  border-radius: 10px;
-}
-#jarvis-panel .jarvis-log::-webkit-scrollbar-thumb:hover {
-  background-color: #f4c542;
-}
-
-
-/* ============================================================
-   NUEVOS BLOQUES JARVIS HFv3.6
-   (Lectura de mercado / Estado de señal / Última operación / Sistema)
-   Mantiene estética original Ultron/Jarvis
-   ============================================================ */
-
-/* Contenedor GRID 2x2 limpio */
-.jarvis-body {
-  display: grid !important;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 18px;
-  margin-top: 15px;
-}
-
-/* Cada BOX del nuevo panel */
+/* Cada bloque táctico */
 .jarvis-box {
   background: #141821;
   border: 1px solid #2c2f36;
@@ -226,54 +126,240 @@
   min-height: 115px;
 }
 
-/* Títulos de cada mini sección */
 .jarvis-box h3 {
-  margin-top: 0;
-  margin-bottom: 10px;
+  margin: 0 0 10px 0;
   font-size: 15px;
   font-weight: 600;
   color: #f4c542;
   text-shadow: 0 0 4px rgba(244, 197, 66, 0.3);
 }
 
-/* Párrafos dentro de cada box */
 .jarvis-box p {
   margin: 4px 0;
   line-height: 1.35;
   white-space: normal;
   overflow-wrap: break-word;
-}
-
-/* Ajuste del borde chispa para contenedor más grande */
-.borde-chispa {
-  padding: 16px;
-  border-radius: 12px;
-}
-
-.borde-chispa::before {
-  border-radius: 12px;
-}
-
-/* Estado del sistema – separador visual */
-#estado-sistema p {
-  margin: 3px 0;
-}
-
-/* Última operación – destaca resultado TP o SL */
-#ultima-operacion p {
-  font-size: 13px;
-}
-#ultima-operacion .tp {
-  color: #00ff80;
-  font-weight: 600;
-}
-#ultima-operacion .sl {
-  color: #ff4d4d;
-  font-weight: 600;
-}
-
-/* Compatibilidad DXY en lectura del mercado */
-#lectura-mercado p {
   font-size: 13px;
 }
 
+/* Última operación */
+.uo-fila {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+
+.uo-detalle {
+  font-size: 12px;
+  color: #9aa3b0;
+}
+
+/* ============================================================
+   BADGES — BUY / SELL
+   ============================================================ */
+
+.jarvis-badge {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.jarvis-badge-buy  { background: #0e3320; color: #00ff80; border: 1px solid #00ff8055; }
+.jarvis-badge-sell { background: #3a0d0d; color: #ff4d4d; border: 1px solid #ff4d4d55; }
+
+/* ============================================================
+   RESULTADOS — TP / SL / TIMEOUT / ACTIVA
+   ============================================================ */
+
+/* En bloque última operación (texto simple) */
+.jarvis-res-tp      { color: #00ff80; font-weight: 700; }
+.jarvis-res-sl      { color: #ff4d4d; font-weight: 700; }
+.jarvis-res-timeout { color: #ffb347; font-weight: 700; }
+
+/* En tabla (badges) */
+.jarvis-res-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.jarvis-res-badge.jarvis-res-tp      { background: #0e3320; color: #00ff80; border: 1px solid #00ff8044; }
+.jarvis-res-badge.jarvis-res-sl      { background: #3a0d0d; color: #ff4d4d; border: 1px solid #ff4d4d44; }
+.jarvis-res-badge.jarvis-res-timeout { background: #2e1f00; color: #ffb347; border: 1px solid #ffb34744; }
+.jarvis-res-badge.jarvis-res-activa  { background: #1a1f2e; color: #7ca8ff; border: 1px solid #7ca8ff44; }
+
+/* PnL colores */
+.jarvis-pnl-pos { color: #00ff80; font-weight: 600; }
+.jarvis-pnl-neg { color: #ff4d4d; font-weight: 600; }
+
+/* ============================================================
+   SECCIÓN DE RENTABILIDAD
+   ============================================================ */
+
+.jarvis-rentabilidad {
+  margin-top: 24px;
+  border-top: 1px solid #2c2f36;
+  padding-top: 20px;
+}
+
+.jarvis-rentabilidad-titulo {
+  font-size: 15px;
+  font-weight: 600;
+  color: #f4c542;
+  margin: 0 0 16px 0;
+  letter-spacing: 0.03em;
+}
+
+/* --- Grid de métricas --- */
+
+.jarvis-metricas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.jm-card {
+  background: #141821;
+  border: 1px solid #2c2f36;
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.jm-label {
+  font-size: 11px;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.jm-valor {
+  font-size: 20px;
+  font-weight: 700;
+  color: #d1d5db;
+}
+
+.jm-valor.verde { color: #00ff80; }
+.jm-valor.rojo  { color: #ff4d4d; }
+
+/* --- Filtros --- */
+
+.jarvis-filtros {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: #9aa3b0;
+}
+
+.jarvis-filtros select {
+  background: #141821;
+  border: 1px solid #2c2f36;
+  color: #d1d5db;
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-family: 'Consolas', monospace;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.jarvis-filtros select:focus {
+  outline: none;
+  border-color: #f4c542;
+}
+
+.jarvis-filtros button {
+  background: #1c2130;
+  border: 1px solid #2c2f36;
+  color: #f4c542;
+  border-radius: 6px;
+  padding: 5px 12px;
+  font-family: 'Consolas', monospace;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.jarvis-filtros button:hover {
+  background: #232b3e;
+  border-color: #f4c542;
+}
+
+/* --- Tabla de señales --- */
+
+.jarvis-tabla-wrapper {
+  overflow-x: auto;
+}
+
+.jarvis-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.jarvis-tabla thead th {
+  text-align: left;
+  padding: 8px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid #2c2f36;
+  background: #0d1017;
+}
+
+.jarvis-tabla tbody tr {
+  border-bottom: 1px solid #1a1f2e;
+  transition: background 0.15s;
+}
+
+.jarvis-tabla tbody tr:hover {
+  background: #141821;
+}
+
+.jarvis-tabla tbody tr:last-child {
+  border-bottom: none;
+}
+
+.jarvis-tabla td {
+  padding: 8px 10px;
+  color: #d1d5db;
+  vertical-align: middle;
+}
+
+.jarvis-td-fecha    { color: #6b7280; font-size: 11px; white-space: nowrap; }
+.jarvis-td-mono     { font-family: 'Consolas', monospace; }
+.jarvis-td-duracion { color: #9aa3b0; text-align: center; }
+
+.jarvis-tabla-vacia {
+  text-align: center;
+  color: #4b5563;
+  padding: 24px;
+  font-style: italic;
+}
+
+/* ============================================================
+   SCROLLBAR
+   ============================================================ */
+
+.jarvis-tabla-wrapper::-webkit-scrollbar { height: 5px; }
+.jarvis-tabla-wrapper::-webkit-scrollbar-thumb {
+  background-color: #3a3f4b;
+  border-radius: 10px;
+}
+.jarvis-tabla-wrapper::-webkit-scrollbar-thumb:hover {
+  background-color: #f4c542;
+}

@@ -37,7 +37,7 @@
       <header class="main-header">
         <h2>Análisis Estratégico en Tiempo Real</h2>
 
-        <!-- 🔽 Selector de Intervalos -->
+        <!-- Selector de Intervalos -->
         <select id="selector-intervalo" class="selector-intervalo">
           <option value="10m">10m</option>
           <option value="30m">30m</option>
@@ -61,65 +61,88 @@
       <!-- Contenedor principal del análisis -->
       <section id="contenedor-activos" class="contenedor-activos"></section>
 
+      <!-- Historial de Entradas v5.0 -->
+      <section id="historial-panel" class="historial-panel">
 
-      <!--panel de historial nuevo-->
- <section id="historial-panel" class="historial-panel">
+        <h3 class="titulo-historial">📘 Historial de Entradas</h3>
 
-  <h3 class="titulo-historial">
-    📘 Historial de Entradas
-  </h3>
+        <!-- Métricas -->
+        <div class="hist-metricas-grid">
+          <div class="hist-metrica-card">
+            <span class="hist-metrica-label">Total señales</span>
+            <span class="hist-metrica-valor" id="hm-total">—</span>
+          </div>
+          <div class="hist-metrica-card">
+            <span class="hist-metrica-label">Win rate</span>
+            <span class="hist-metrica-valor" id="hm-winrate">—</span>
+          </div>
+          <div class="hist-metrica-card">
+            <span class="hist-metrica-label">R:R promedio</span>
+            <span class="hist-metrica-valor" id="hm-rr">—</span>
+          </div>
+          <div class="hist-metrica-card">
+            <span class="hist-metrica-label">P&amp;L neto</span>
+            <span class="hist-metrica-valor" id="hm-pnl">—</span>
+          </div>
+        </div>
 
-  <div class="historial-filtros">
+        <!-- Filtros -->
+        <div class="historial-filtros">
 
-    <div class="filtro-bloque">
-      <label>Semana:</label>
-      <select id="selector-semana"></select>
-    </div>
+          <div class="filtro-bloque">
+            <label>Semana:</label>
+            <select id="selector-semana"></select>
+          </div>
 
-    <div class="filtro-bloque">
-      <label>Mes:</label>
-      <select id="selector-mes"></select>
-    </div>
+          <div class="filtro-bloque">
+            <label>Mes:</label>
+            <select id="selector-mes"></select>
+          </div>
 
-    <div class="filtro-bloque">
-      <label>Desde:</label>
-      <input type="date" id="fecha-desde">
-    </div>
+          <div class="filtro-bloque">
+            <label>Activo:</label>
+            <select id="selector-activo"></select>
+          </div>
 
-    <div class="filtro-bloque">
-      <label>Hasta:</label>
-      <input type="date" id="fecha-hasta">
-    </div>
+          <div class="filtro-bloque">
+            <label>Desde:</label>
+            <input type="date" id="fecha-desde">
+          </div>
 
-    <button id="btn-filtrar-rango" class="btn-filtrar">Filtrar</button>
-    <button id="btn-semana-actual" class="btn-sem-actual">Semana Actual</button>
+          <div class="filtro-bloque">
+            <label>Hasta:</label>
+            <input type="date" id="fecha-hasta">
+          </div>
 
-  </div>
+          <button id="btn-filtrar-rango" class="btn-filtrar">Filtrar</button>
+          <button id="btn-semana-actual" class="btn-sem-actual">Semana Actual</button>
 
-  <div class="tabla-contenedor">
-    <table class="tabla-historial">
-      <thead>
-        <tr>
-          <th>Fecha</th>
-          <th>Activo</th>
-          <th>Estrategia</th>
-          <th>Bias</th>
-          <th>Entry</th>
-          <th>SL</th>
-          <th>TP1</th>
-          <th>TP2</th>
-          <th>TP3</th>
-          <th>Riesgo</th>
-        </tr>
-      </thead>
+        </div>
 
-      <tbody id="tabla-historial-body"></tbody>
-    </table>
-  </div>
+        <!-- Tabla -->
+        <div class="tabla-contenedor">
+          <table class="tabla-historial">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Activo</th>
+                <th>Estrategia</th>
+                <th>Bias</th>
+                <th>Entry</th>
+                <th>SL</th>
+                <th>TP1</th>
+                <th>TP2</th>
+                <th>TP3</th>
+                <th>Resultado</th>
+                <th>R:R</th>
+                <th>Riesgo</th>
+              </tr>
+            </thead>
+            <tbody id="tabla-historial-body"></tbody>
+          </table>
+        </div>
 
-</section>
-
-
+      </section>
 
       <!-- Panel Jarvis Oro Pro -->
       <section id="jarvis-panel"></section>
@@ -143,8 +166,8 @@
 
   <!-- Panel Jarvis -->
   <script type="module" src="/js/jarvis_panel.js"></script>
-  <!-- 🔥 DIAGNÓSTICO DEL MOTOR (IMPORTANTE) -->
-<script type="module" src="/js/diagnostico_motor.js"></script>
+  <!-- DIAGNÓSTICO DEL MOTOR -->
+  <script type="module" src="/js/diagnostico_motor.js"></script>
 
 </body>
 </html>
