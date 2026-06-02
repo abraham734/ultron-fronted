@@ -1,108 +1,39 @@
 /* ============================================================
-   ULTRON — HISTORIAL v2.1 FUSIÓN MATE (MINIMALISTA)
-   Diseño oscuro profesional estilo dashboard de trading
+   🔱 ULTRON — HISTORIAL v5.0 (Estilo Legible – Dark Neutral)
+   Azul mate, separadores visibles, colores funcionales solo
+   donde importa: bias, resultado, riesgo.
    ============================================================ */
 
 /* --- Panel Principal --- */
 #historial-panel {
     margin-top: 20px;
-    padding: 24px 28px;
-    background: #111318;
-    border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.07);
-}
-
-/* ============================================================
-   HEADER DEL PANEL (título + filtros en la misma línea)
-   ============================================================ */
-
-.historial-header {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    flex-wrap: wrap;
-    margin-bottom: 22px;
-}
-
-.titulo-historial {
-    color: #e8eef5;
-    font-size: 17px;
-    font-weight: 600;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    white-space: nowrap;
-    margin-right: auto;
-}
-
-/* ============================================================
-   TARJETAS DE MÉTRICAS (fila superior)
-   ============================================================ */
-
-.hist-metricas-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 14px;
-    margin-bottom: 22px;
-}
-
-@media (max-width: 900px) {
-    .hist-metricas-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-.hist-metrica-card {
-    background: #181c24;
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    padding: 20px;
+    background: #0d1117;
     border-radius: 12px;
-    padding: 16px 18px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    position: relative;
-    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+    border: 1px solid #1e2a35;
 }
 
-.hist-metrica-label {
-    font-size: 11px;
-    color: #6b7a8d;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-weight: 500;
+/* --- Título --- */
+.titulo-historial {
+    color: #c9d8e8;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    letter-spacing: 0.02em;
 }
 
-.hist-metrica-valor {
-    font-size: 26px;
-    font-weight: 700;
-    color: #e8eef5;
-    font-family: 'Consolas', 'SF Mono', monospace;
-    line-height: 1;
-}
-
-.hist-metrica-valor.hm-verde   { color: #22d98a; }
-.hist-metrica-valor.hm-rojo    { color: #f0566a; }
-.hist-metrica-valor.hm-amarillo { color: #f4c542; }
-
-/* Mini sparkline dentro de la card */
-.hist-metrica-sparkline {
-    position: absolute;
-    bottom: 10px;
-    right: 12px;
-    opacity: 0.35;
-}
-
-/* ============================================================
-   BARRA DE FILTROS (compacta)
-   ============================================================ */
-
+/* --- Contenedor de filtros --- */
 .historial-filtros {
     display: flex;
-    align-items: center;
-    gap: 10px;
+    justify-content: start;
+    gap: 12px;
     flex-wrap: wrap;
     margin-bottom: 18px;
+    padding: 12px 14px;
+    background: #0a0f16;
+    border-radius: 8px;
+    border: 1px solid #1e2a35;
 }
 
 .filtro-bloque {
@@ -112,67 +43,65 @@
 }
 
 .filtro-bloque label {
-    color: #6b7a8d;
+    color: #6b7f92;
     font-size: 11px;
-    font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.05em;
 }
 
 .filtro-bloque select,
 .filtro-bloque input {
-    background: #1c2130;
-    color: #cdd6e0;
-    border: 1px solid rgba(255, 255, 255, 0.10);
-    border-radius: 8px;
-    padding: 7px 10px;
+    background: #111820;
+    color: #c9d8e8;
+    border: 1px solid #253444;
+    border-radius: 6px;
+    padding: 6px 8px;
     font-size: 13px;
     outline: none;
-    transition: border-color 0.15s;
-    min-width: 130px;
+    transition: border-color 0.2s;
 }
 
 .filtro-bloque select:hover,
 .filtro-bloque input:hover,
 .filtro-bloque select:focus,
 .filtro-bloque input:focus {
-    border-color: rgba(50, 140, 255, 0.5);
+    border-color: #4a7fa5;
 }
 
-/* --- Botones de filtro --- */
+/* --- Botones --- */
 .btn-filtrar,
 .btn-sem-actual {
-    background: #1c2130;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    color: #b8c8d8;
+    align-self: flex-end;
+    background: #152030;
+    border: 1px solid #2e4a63;
+    color: #8eb8d4;
     padding: 7px 14px;
-    border-radius: 8px;
+    border-radius: 6px;
     cursor: pointer;
     font-size: 13px;
-    font-weight: 500;
-    transition: all 0.15s;
-    align-self: flex-end;
+    transition: background 0.2s, border-color 0.2s;
 }
 
 .btn-filtrar:hover {
-    background: #243050;
-    border-color: rgba(50, 140, 255, 0.4);
-    color: #e8eef5;
+    background: #1e3248;
+    border-color: #4a7fa5;
+    color: #c9d8e8;
 }
 
 .btn-sem-actual {
-    background: #1e1638;
-    border-color: rgba(130, 80, 255, 0.35);
-    color: #c29bff;
+    background: #1a1040;
+    border-color: #3d2a80;
+    color: #a890e0;
 }
 
 .btn-sem-actual:hover {
-    background: #2a1d50;
-    border-color: rgba(130, 80, 255, 0.6);
+    background: #251555;
+    border-color: #6644bb;
+    color: #c8b8f0;
 }
 
 /* ============================================================
-   TABLA DE HISTORIAL
+   TABLA
    ============================================================ */
 
 .tabla-contenedor {
@@ -181,173 +110,204 @@
 
 .tabla-historial {
     width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 6px;
-    background: transparent;
+    border-collapse: collapse;
+    margin-top: 8px;
+    background: #0a0f16;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
-/* --- Encabezados --- */
-.tabla-historial thead tr {
-    background: transparent;
+/* Cabecera */
+.tabla-historial thead {
+    background: #111820;
+    border-bottom: 2px solid #1e2a35;
 }
 
 .tabla-historial th {
-    color: #4e5d6e;
-    padding: 8px 12px;
+    color: #6b7f92;
+    padding: 10px 12px;
     text-align: left;
-    font-size: 12px;
-    font-weight: 500;
+    font-size: 11px;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
-    border-bottom: none;
+    letter-spacing: 0.05em;
     white-space: nowrap;
 }
 
-/* --- Filas tipo tarjeta con borde izquierdo de color --- */
+/* Filas */
 .tabla-historial tbody tr {
-    background: #161b24;
-    cursor: default;
-    transition: background 0.15s, transform 0.1s;
-    position: relative;
+    border-bottom: 1px solid #141c26;
+    transition: background 0.15s;
+}
+
+.tabla-historial tbody tr:last-child {
+    border-bottom: none;
 }
 
 .tabla-historial tbody tr:hover {
-    background: #1c2335;
-    transform: translateY(-1px);
+    background: #111820;
 }
 
-/* Borde izquierdo de color según tipo de operación */
-.tabla-historial tbody tr.fila-compra td:first-child {
-    border-left: 3px solid #22d98a;
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-}
-
-.tabla-historial tbody tr.fila-venta td:first-child {
-    border-left: 3px solid #f0566a;
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-}
-
-.tabla-historial tbody tr.fila-neutral td:first-child {
-    border-left: 3px solid #7c6db5;
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-}
-
-/* Bordes de la fila */
-.tabla-historial tbody td {
-    padding: 13px 12px;
-    color: #c8d8e8;
+/* Celdas — texto base neutro legible */
+.tabla-historial td {
+    padding: 9px 12px;
+    color: #b8ccd8;
     font-size: 13px;
-    border-top: 1px solid rgba(255, 255, 255, 0.04);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-    white-space: nowrap;
-}
-
-.tabla-historial tbody td:first-child {
-    padding-left: 16px;
-}
-
-.tabla-historial tbody td:last-child {
-    border-right: 1px solid rgba(255, 255, 255, 0.04);
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
+    vertical-align: middle;
 }
 
 /* ============================================================
-   CONTENIDO DE LAS CELDAS
+   COLUMNAS ESPECÍFICAS
    ============================================================ */
 
-/* --- Fecha --- */
+/* Fecha */
 .hist-fecha {
-    color: #7a8a9a;
+    color: #526272;
     font-size: 12px;
-    font-family: 'Consolas', monospace;
-    line-height: 1.5;
+    white-space: nowrap;
 }
 
-/* --- Activo con ícono --- */
-.hist-activo-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.hist-activo-icono {
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
-    font-weight: 700;
-    flex-shrink: 0;
-}
-
-.hist-activo-icono.ico-crypto  { background: #f7931a22; color: #f7931a; border: 1px solid #f7931a44; }
-.hist-activo-icono.ico-forex   { background: #3b8ddd22; color: #5ba8ff; border: 1px solid #3b8ddd44; }
-.hist-activo-icono.ico-stock   { background: #22d98a22; color: #22d98a; border: 1px solid #22d98a44; }
-.hist-activo-icono.ico-index   { background: #f4c54222; color: #f4c542; border: 1px solid #f4c54244; }
-
+/* Activo — destacado pero sin neón */
 .hist-activo {
-    color: #dbeaff;
+    color: #7ab8d4;
     font-weight: 600;
-    font-size: 13px;
 }
 
-/* --- Estrategia --- */
+/* Estrategia — lila suave */
 .hist-estrategia {
-    color: #a78bfa;
+    color: #9d84c8;
     font-weight: 500;
-    font-size: 13px;
 }
 
-/* --- Badges COMPRA / VENTA --- */
-.hist-badge-lado {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 4px 11px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.04em;
+/* Precios mono */
+.hist-mono {
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 12px;
+    color: #8fa8bc;
 }
+
+/* R:R */
+.hist-rr {
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 12px;
+    color: #a89050;
+    font-weight: 600;
+}
+
+/* ============================================================
+   BIAS — COMPRA / VENTA
+   Badge con fondo sutil, sin text-shadow
+   ============================================================ */
 
 .hist-buy {
-    background: rgba(34, 217, 138, 0.12);
-    color: #22d98a;
-    border: 1px solid rgba(34, 217, 138, 0.3);
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 4px;
+    background: #0d2a1a;
+    color: #4dbb88;
+    border: 1px solid #1e5c38;
+    font-weight: 700;
+    font-size: 12px;
 }
 
 .hist-sell {
-    background: rgba(240, 86, 106, 0.12);
-    color: #f0566a;
-    border: 1px solid rgba(240, 86, 106, 0.3);
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 4px;
+    background: #2a0d14;
+    color: #cc5566;
+    border: 1px solid #5c1e28;
+    font-weight: 700;
+    font-size: 12px;
 }
 
-/* --- Precios (Entry, SL, TPs) --- */
-.hist-mono {
-    font-family: 'Consolas', 'SF Mono', monospace;
-    font-size: 12.5px;
-    color: #c8d8e8;
+/* ============================================================
+   RIESGO
+   ============================================================ */
+
+.hist-riesgo-alto {
+    color: #cc4444;
+    font-weight: 600;
+    font-size: 12px;
 }
 
-.hist-mono.precio-sl   { color: #f0566a; }
-.hist-mono.precio-tp   { color: #22d98a; }
-.hist-mono.precio-entry { color: #e8eef5; font-weight: 500; }
+.hist-riesgo-medio {
+    color: #c89030;
+    font-weight: 600;
+    font-size: 12px;
+}
 
-/* --- Badges de resultado --- */
-.hist-res-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    min-width: 80px;
-    padding: 5px 12px;
+.hist-riesgo-bajo {
+    color: #4daa70;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+/* ============================================================
+   MÉTRICAS (cabecera del historial)
+   ============================================================ */
+
+.hist-metricas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.hist-metrica-card {
+    background: #0a0f16;
+    border: 1px solid #1e2a35;
     border-radius: 8px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.hist-metrica-label {
+    font-size: 11px;
+    color: #526272;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.hist-metrica-valor {
+    font-size: 22px;
+    font-weight: 700;
+    color: #c9d8e8;
+    font-family: 'Consolas', monospace;
+}
+
+.hist-metrica-valor.hm-verde   { color: #4dbb88; }
+.hist-metrica-valor.hm-rojo    { color: #cc5566; }
+.hist-metrica-valor.hm-amarillo { color: #c89030; }
+
+/* ============================================================
+   SELECTOR DE ACTIVO
+   ============================================================ */
+
+#selector-activo {
+    background: #111820;
+    color: #c9d8e8;
+    border: 1px solid #253444;
+    border-radius: 6px;
+    padding: 6px 8px;
+    font-size: 13px;
+    outline: none;
+}
+
+#selector-activo:hover {
+    border-color: #4a7fa5;
+}
+
+/* ============================================================
+   BADGES DE RESULTADO
+   ============================================================ */
+
+.hist-res-badge {
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 4px;
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.03em;
@@ -355,39 +315,39 @@
 }
 
 .hist-res-tp {
-    background: rgba(34, 217, 138, 0.1);
-    color: #22d98a;
-    border: 1px solid rgba(34, 217, 138, 0.25);
+    background: #0d2a1a;
+    color: #4dbb88;
+    border: 1px solid #1e5c38;
 }
 
 .hist-res-tp2 {
-    background: rgba(0, 200, 100, 0.12);
-    color: #00dd88;
-    border: 1px solid rgba(0, 200, 100, 0.3);
+    background: #0d2a1a;
+    color: #3dcc88;
+    border: 1px solid #1e6040;
 }
 
 .hist-res-tp3 {
-    background: rgba(244, 197, 66, 0.1);
-    color: #f4c542;
-    border: 1px solid rgba(244, 197, 66, 0.28);
+    background: #1e1800;
+    color: #c89030;
+    border: 1px solid #5c4010;
 }
 
 .hist-res-sl {
-    background: rgba(240, 86, 106, 0.1);
-    color: #f0566a;
-    border: 1px solid rgba(240, 86, 106, 0.25);
+    background: #2a0d14;
+    color: #cc5566;
+    border: 1px solid #5c1e28;
 }
 
 .hist-res-pendiente {
-    background: rgba(80, 130, 220, 0.1);
-    color: #7ca8ff;
-    border: 1px solid rgba(80, 130, 220, 0.22);
+    background: #101828;
+    color: #5a7fa0;
+    border: 1px solid #1e3448;
 }
 
 .hist-res-activa {
-    background: rgba(130, 80, 255, 0.1);
-    color: #c29bff;
-    border: 1px solid rgba(130, 80, 255, 0.28);
+    background: #140d2a;
+    color: #8870cc;
+    border: 1px solid #3a2870;
     animation: parpadeoSuave 2s infinite alternate;
 }
 
@@ -396,63 +356,11 @@
     100% { opacity: 1; }
 }
 
-/* --- R:R --- */
-.hist-rr {
-    font-family: 'Consolas', 'SF Mono', monospace;
-    font-size: 12.5px;
-    color: #f4c542;
-    font-weight: 600;
-}
-
-.hist-rr.rr-positivo { color: #22d98a; }
-.hist-rr.rr-negativo { color: #f0566a; }
-
-/* --- Etiquetas de riesgo --- */
-.hist-riesgo-alto   { color: #f0566a; font-weight: 600; font-size: 12px; }
-.hist-riesgo-medio  { color: #f4c542; font-weight: 600; font-size: 12px; }
-.hist-riesgo-bajo   { color: #22d98a; font-weight: 600; font-size: 12px; }
-
-/* ============================================================
-   ESTADO VACÍO
-   ============================================================ */
-
+/* Fila vacía */
 .historial-vacio {
     text-align: center;
-    color: #3a4a5a;
-    padding: 36px;
-    font-size: 14px;
+    color: #2e3f50;
+    padding: 24px;
     font-style: italic;
-}
-
-/* ============================================================
-   PIE DE TABLA (nota informativa)
-   ============================================================ */
-
-.historial-nota {
-    margin-top: 14px;
-    text-align: center;
-    color: #3d4e5e;
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-}
-
-/* ============================================================
-   SELECTOR DE ACTIVO (adicional)
-   ============================================================ */
-
-#selector-activo {
-    background: #1c2130;
-    color: #cdd6e0;
-    border: 1px solid rgba(255, 255, 255, 0.10);
-    border-radius: 8px;
-    padding: 7px 10px;
     font-size: 13px;
-    outline: none;
-}
-
-#selector-activo:hover {
-    border-color: rgba(50, 140, 255, 0.5);
 }
