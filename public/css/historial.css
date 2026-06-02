@@ -96,44 +96,105 @@
     overflow-x: auto;
 }
 
+/* ============================================================
+   🔵 Tabla Mate 2.1
+   ============================================================ */
+
 .tabla-historial {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0 8px;
     margin-top: 10px;
-    overflow: hidden;
-    border-radius: 8px;
-    background: rgba(5, 10, 15, 0.75);
-    box-shadow: 0 0 12px rgba(0, 255, 255, 0.05);
+    background: transparent;
 }
 
 .tabla-historial thead {
-    background: #0d2030;
-    border-bottom: 1px solid #113d55;
+    background: transparent;
 }
 
 .tabla-historial th {
-    color: #8ed9ff;
-    padding: 10px;
+    color: #9fb8ca;
+    padding: 10px 12px;
     text-align: left;
     font-size: 13px;
     font-weight: 600;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
-/* --- Filas --- */
+/* --- Filas tipo tarjeta --- */
+
 .tabla-historial tbody tr {
-    border-bottom: 1px solid rgba(0, 60, 100, 0.25);
-    transition: background 0.2s;
+
+    background:
+    rgba(255,255,255,0.018);
+
+    transition:
+    all .2s ease;
+
 }
+
+.tabla-historial tbody tr:nth-child(even) {
+
+    background:
+    rgba(255,255,255,0.028);
+
+}
+
+/* --- Hover elegante --- */
 
 .tabla-historial tbody tr:hover {
-    background: rgba(0, 90, 150, 0.18);
+
+    background:
+    rgba(255,255,255,0.04);
+
+    transform:
+    translateY(-1px);
+
+    box-shadow:
+    0 2px 8px rgba(0,0,0,0.25);
+
 }
 
 /* --- Celdas --- */
+
 .tabla-historial td {
-    padding: 8px 10px;
-    color: #d4eeff;
-    font-size: 13px;
+
+    padding: 12px 10px;
+
+    color:
+    #d4eeff;
+
+    font-size:
+    13px;
+
+    border-top:
+    1px solid rgba(255,255,255,0.05);
+
+    border-bottom:
+    1px solid rgba(255,255,255,0.05);
+
+}
+
+/* --- Bordes laterales --- */
+
+.tabla-historial tbody td:first-child {
+
+    border-left:
+    1px solid rgba(255,255,255,0.05);
+
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+
+}
+
+.tabla-historial tbody td:last-child {
+
+    border-right:
+    1px solid rgba(255,255,255,0.05);
+
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+
 }
 
 /* ============================================================
@@ -142,11 +203,27 @@
 
 /* --- Activo (azul eléctrico) --- */
 .hist-activo {
-    color: #5cc7ff;
-    font-weight: 600;
-    text-shadow: 0 0 4px #1aaaff;
-}
 
+    display: inline-block;
+
+    padding: 4px 10px;
+
+    border-radius: 8px;
+
+    background:
+    rgba(255,255,255,0.04);
+
+    border:
+    1px solid rgba(255,255,255,0.08);
+
+    color:
+    #dbeaff;
+
+    font-weight: 600;
+
+    text-shadow: none;
+
+}
 /* --- Estrategia (morado Ultron) --- */
 .hist-estrategia {
     color: #c29bff;
@@ -204,13 +281,32 @@
 }
 
 .hist-metrica-card {
-    background: rgba(0, 15, 30, 0.7);
-    border: 1px solid rgba(0, 150, 255, 0.15);
-    border-radius: 8px;
-    padding: 10px 14px;
+
+    background:
+    rgba(255,255,255,0.02);
+
+    border:
+    1px solid rgba(255,255,255,0.08);
+
+    border-radius: 10px;
+
+    padding: 12px 14px;
+
     display: flex;
+
     flex-direction: column;
+
     gap: 5px;
+
+    transition: all .2s ease;
+
+}
+
+.hist-metrica-card:hover {
+
+    border-color:
+    rgba(255,255,255,0.15);
+
 }
 
 .hist-metrica-label {
@@ -265,8 +361,29 @@
    ============================================================ */
 
 .hist-res-badge {
-    display: inline-block;
-    padding: 2px 8px;
+    .hist-res-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 70px;
+
+    padding: 5px 12px;
+
+    border-radius: 10px;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.03em;
+
+    white-space: nowrap;
+
+}
     border-radius: 4px;
     font-size: 11px;
     font-weight: 700;
