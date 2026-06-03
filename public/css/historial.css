@@ -6,7 +6,7 @@
 /* ── PANEL PRINCIPAL ── */
 #historial-panel {
     margin-top: 20px;
-    padding: 24px;
+    padding: 20px;
     background: #111317;
     border-radius: 18px;
     border: 1px solid rgba(255,255,255,.06);
@@ -14,24 +14,24 @@
 
 .titulo-historial {
     color: #f3f4f6;
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 700;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
 }
 
 /* ── MÉTRICAS (4 cards superiores) ── */
 .hist-metricas-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    margin-bottom: 22px;
+    gap: 14px;
+    margin-bottom: 18px;
 }
 
 .hist-metrica-card {
     background: #1a1d23;
     border: 1px solid rgba(255,255,255,.07);
     border-radius: 14px;
-    padding: 18px 20px;
+    padding: 16px 18px;
     position: relative;
     overflow: hidden;
 }
@@ -43,16 +43,15 @@
     text-transform: uppercase;
     letter-spacing: .07em;
     display: block;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
 .hist-metrica-valor {
     display: block;
-    font-size: 32px;
+    font-size: 30px;
     font-weight: 700;
     color: #f3f4f6;
     line-height: 1;
-    font-family: 'Segoe UI', sans-serif;
 }
 
 .hm-verde   { color: #4ade80 !important; }
@@ -63,10 +62,10 @@
 .historial-filtros {
     display: flex;
     align-items: flex-end;
-    gap: 10px;
+    gap: 8px;
     flex-wrap: wrap;
-    margin-bottom: 20px;
-    padding: 14px 16px;
+    margin-bottom: 18px;
+    padding: 12px 14px;
     background: #171a20;
     border-radius: 12px;
     border: 1px solid rgba(255,255,255,.05);
@@ -75,12 +74,12 @@
 .filtro-bloque {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 4px;
 }
 
 .filtro-bloque label {
     color: #8a909b;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: .06em;
@@ -93,8 +92,8 @@
     color: #e4e8ef;
     border: 1px solid rgba(255,255,255,.09);
     border-radius: 8px;
-    padding: 7px 10px;
-    font-size: 13px;
+    padding: 6px 8px;
+    font-size: 12px;
     outline: none;
     transition: border-color .15s;
 }
@@ -108,8 +107,8 @@
 .btn-sem-actual {
     border: none;
     border-radius: 8px;
-    padding: 8px 14px;
-    font-size: 13px;
+    padding: 7px 13px;
+    font-size: 12px;
     font-weight: 600;
     color: #fff;
     cursor: pointer;
@@ -128,8 +127,9 @@
 .tabla-historial {
     width: 100%;
     border-collapse: separate;
-    border-spacing: 0 10px;
+    border-spacing: 0 8px;
     background: transparent;
+    table-layout: auto;
 }
 
 /* Encabezados */
@@ -137,9 +137,9 @@
 
 .tabla-historial th {
     color: #6b7280;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 500;
-    padding: 0 14px 10px;
+    padding: 0 10px 8px;
     text-align: left;
     white-space: nowrap;
 }
@@ -157,8 +157,8 @@
 
 /* Celdas */
 .tabla-historial td {
-    padding: 14px 14px;
-    font-size: 13px;
+    padding: 12px 10px;
+    font-size: 12px;
     color: #d1d5db;
     border-top: 1px solid rgba(255,255,255,.04);
     border-bottom: 1px solid rgba(255,255,255,.04);
@@ -166,10 +166,10 @@
 }
 
 .tabla-historial td:first-child {
-    border-left: 3px solid transparent;   /* base — color override abajo */
+    border-left: 3px solid transparent;
     border-top-left-radius: 12px;
     border-bottom-left-radius: 12px;
-    padding-left: 12px;
+    padding-left: 10px;
 }
 
 .tabla-historial td:last-child {
@@ -178,40 +178,40 @@
     border-bottom-right-radius: 12px;
 }
 
-/* Borde izquierdo por tipo de operación
-   — se aplica con la clase en el <tr> desde el JS existente usando biasFinal */
+/* Borde izquierdo automático según bias en la fila */
 .tabla-historial tbody tr:has(.hist-buy) td:first-child  { border-left-color: #4ade80; }
 .tabla-historial tbody tr:has(.hist-sell) td:first-child  { border-left-color: #f87171; }
-/* fallback neutral (en curso, pendiente) */
 .tabla-historial tbody tr:has(.hist-res-activa) td:first-child { border-left-color: #8b5cf6; }
 
 /* ── CELDA: FECHA ── */
 .hist-fecha {
     color: #8a909b;
-    font-size: 12px;
+    font-size: 11px;
     line-height: 1.6;
 }
 
-/* ── CELDA: ACTIVO — cápsula oscura borde sutil ── */
+/* ── CELDA: ACTIVO — cápsula, mismo tamaño que badge resultado ── */
 .hist-activo {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    justify-content: center;
     background: #252930;
     border: 1px solid rgba(255,255,255,.10);
-    border-radius: 8px;
-    padding: 4px 10px;
+    border-radius: 10px;
+    padding: 0 12px;
+    height: 32px;
+    min-width: 72px;
     color: #f0f2f5;
     font-weight: 600;
-    font-size: 13px;
+    font-size: 12px;
     white-space: nowrap;
 }
 
-/* ── CELDA: ESTRATEGIA ── */
+/* ── CELDA: ESTRATEGIA — morada, sin cápsula ── */
 .hist-estrategia {
     color: #a78bfa;
     font-weight: 600;
-    font-size: 13px;
+    font-size: 12px;
 }
 
 /* ── CELDA: BIAS — cápsula COMPRA (verde) / VENTA (roja) ── */
@@ -219,63 +219,63 @@
 .hist-sell {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
-    padding: 4px 11px;
+    gap: 4px;
+    padding: 0 10px;
+    height: 28px;
     border-radius: 7px;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 700;
     letter-spacing: .03em;
     white-space: nowrap;
 }
 
-/* COMPRA */
 .hist-buy {
     background: rgba(74,222,128,.10);
     color: #4ade80;
     border: 1px solid rgba(74,222,128,.30);
 }
+.hist-buy::after  { content: " ↑"; font-size: 10px; }
 
-/* Flecha ↑ después del texto COMPRA */
-.hist-buy::after  { content: " ↑"; font-size: 11px; }
-
-/* VENTA */
 .hist-sell {
     background: rgba(248,113,113,.10);
     color: #f87171;
     border: 1px solid rgba(248,113,113,.30);
 }
+.hist-sell::after { content: " ↓"; font-size: 10px; }
 
-/* Flecha ↓ después del texto VENTA */
-.hist-sell::after { content: " ↓"; font-size: 11px; }
+/* ── PRECIOS: colores por columna ── */
+/* Entry (col 5) — blanco */
+td.hist-entry { color: #e8eaee; font-weight: 500; font-size: 12px; }
 
-/* ── CELDA: PRECIOS ── */
-/* Entry — blanco neutro */
-td:nth-child(5) { color: #e8eaee; font-weight: 500; }
+/* SL (col 6) — rojo */
+td.hist-sl { color: #f87171 !important; font-weight: 500; font-size: 12px; }
 
-/* SL — rojo */
-td:nth-child(6) { color: #f87171 !important; font-weight: 500; }
+/* TP1, TP2 (cols 7-8) — verde */
+td.hist-tp1,
+td.hist-tp2 { color: #4ade80 !important; font-weight: 500; font-size: 12px; }
 
-/* TP1 — verde */
-td:nth-child(7) { color: #4ade80 !important; font-weight: 500; }
+/* TP3 (col 9) — verde suave */
+td.hist-tp3 { color: #86efac; font-weight: 500; font-size: 12px; }
 
-/* TP2 — verde */
-td:nth-child(8) { color: #4ade80 !important; font-weight: 500; }
+/* Fallback nth-child por si las clases no están en el HTML */
+.tabla-historial td:nth-child(5) { color: #e8eaee; font-weight: 500; }
+.tabla-historial td:nth-child(6) { color: #f87171; font-weight: 500; }
+.tabla-historial td:nth-child(7) { color: #4ade80; font-weight: 500; }
+.tabla-historial td:nth-child(8) { color: #4ade80; font-weight: 500; }
+.tabla-historial td:nth-child(9) { color: #86efac; font-weight: 500; }
 
-/* TP3 — verde más suave (o —) */
-td:nth-child(9) { color: #86efac; font-weight: 500; }
-
-/* ── CELDA: BADGES DE RESULTADO ── */
+/* ── BADGES DE RESULTADO — tamaño igual a cápsula activo ── */
 .hist-res-badge {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
-    min-width: 80px;
-    height: 34px;
+    gap: 5px;
+    height: 32px;
+    min-width: 72px;
     border-radius: 10px;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 700;
-    padding: 0 14px;
+    padding: 0 12px;
     white-space: nowrap;
 }
 
@@ -316,17 +316,17 @@ td:nth-child(9) { color: #86efac; font-weight: 500; }
     to   { opacity: 1;   }
 }
 
-/* ── CELDA: R:R ── */
+/* ── R:R ── */
 .hist-rr {
     font-weight: 700;
-    font-size: 13px;
+    font-size: 12px;
     color: #fbbf24;
 }
 
-/* ── CELDA: RIESGO ── */
-.hist-riesgo-alto  { color: #f87171; font-weight: 600; font-size: 13px; }
-.hist-riesgo-medio { color: #fbbf24; font-weight: 600; font-size: 13px; }
-.hist-riesgo-bajo  { color: #4ade80; font-weight: 600; font-size: 13px; }
+/* ── RIESGO ── */
+.hist-riesgo-alto  { color: #f87171; font-weight: 600; font-size: 12px; }
+.hist-riesgo-medio { color: #fbbf24; font-weight: 600; font-size: 12px; }
+.hist-riesgo-bajo  { color: #4ade80; font-weight: 600; font-size: 12px; }
 
 /* ── ESTADO VACÍO ── */
 .historial-vacio {
@@ -334,7 +334,7 @@ td:nth-child(9) { color: #86efac; font-weight: 500; }
     color: #4b5563;
     padding: 32px;
     font-style: italic;
-    font-size: 14px;
+    font-size: 13px;
 }
 
 /* ── RESPONSIVE ── */
