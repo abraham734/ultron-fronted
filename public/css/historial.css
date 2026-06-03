@@ -1,311 +1,328 @@
 /* ============================================================
-   🔱 ULTRON TERMINAL — ENGINE DESIGN (HYBRID COMPACT PRO)
-   Optimizado para Monitoreo Cuantitativo de Alta Densidad
+   🔱 ULTRON — HISTORIAL MODO C (Estilo B – Dark Crystal)
+   Diseño profesional con neones y alto contraste
    ============================================================ */
 
-/* --- Contenedor Principal (Panel) --- */
+/* --- Panel Principal --- */
 #historial-panel {
-    margin-top: 15px;
-    padding: 16px;
-    background: linear-gradient(135deg, rgba(10, 14, 22, 0.95) 0%, rgba(6, 8, 12, 0.98) 100%);
-    border-radius: 8px;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(0, 255, 255, 0.1);
-    border: 1px solid rgba(0, 255, 255, 0.15);
-    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    margin-top: 20px;
+    padding: 20px;
+    background: rgba(10, 10, 15, 0.85);
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.08);
+    border: 1px solid rgba(0, 255, 255, 0.12);
 }
 
-/* --- Encabezado --- */
+/* --- Título --- */
 .titulo-historial {
-    color: #e2f7ff;
-    text-shadow: 0 0 8px rgba(0, 160, 255, 0.4);
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    margin-bottom: 14px;
-    text-transform: uppercase;
-    border-left: 3px solid #00d2ff;
-    padding-left: 8px;
+    color: #9be8ff;
+    text-shadow: 0 0 6px #0099ff;
+    font-size: 20px;
+    margin-bottom: 12px;
 }
 
-/* --- Contenedor de Filtros --- */
+/* --- Contenedor de filtros --- */
 .historial-filtros {
     display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 8px;
+    justify-content: start;
+    gap: 12px;
     flex-wrap: wrap;
-    margin-bottom: 14px;
-    padding: 10px 12px;
-    background: rgba(0, 5, 10, 0.5);
+    margin-bottom: 18px;
+    padding: 12px;
+    background: rgba(0, 10, 20, 0.45);
+    border-radius: 10px;
+    border: 1px solid rgba(0, 150, 255, 0.12);
+}
+
+.filtro-bloque {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.filtro-bloque label {
+    color: #c8e6ff;
+    font-size: 12px;
+}
+
+.filtro-bloque select,
+.filtro-bloque input {
+    background: #0e1822;
+    color: #d3efff;
+    border: 1px solid #1a3a55;
     border-radius: 6px;
-    border: 1px solid rgba(255, 255, 255, 0.04);
-}
-
-.historial-filtros label {
-    color: #8fa0b5;
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
-}
-
-/* --- Controles de Filtro (Inputs/Selects) --- */
-.historial-filtros select,
-.historial-filtros input[type="date"] {
-    background: rgba(12, 18, 28, 0.85);
-    color: #ffffff;
-    border: 1px solid rgba(0, 212, 255, 0.25);
-    padding: 4px 8px;
-    font-size: 11px;
-    border-radius: 4px;
+    padding: 6px 8px;
+    font-size: 13px;
     outline: none;
-    transition: all 0.2s ease;
-    min-height: 26px;
-    font-family: inherit;
 }
 
-.historial-filtros select:focus,
-.historial-filtros input[type="date"]:focus {
-    border-color: #00d2ff;
-    box-shadow: 0 0 6px rgba(0, 210, 255, 0.3);
-    background: rgba(16, 26, 40, 0.95);
+.filtro-bloque select:hover,
+.filtro-bloque input:hover {
+    border-color: #2992ff;
 }
 
-/* --- Botones de Control --- */
+/* --- Botones --- */
 .btn-filtrar,
-#btn-semana-actual {
-    background: linear-gradient(180deg, rgba(0, 140, 200, 0.3) 0%, rgba(0, 90, 150, 0.4) 100%);
-    color: #00d2ff;
-    border: 1px solid rgba(0, 210, 255, 0.4);
-    padding: 4px 12px;
-    font-size: 11px;
-    font-weight: 600;
-    border-radius: 4px;
+.btn-sem-actual {
+    background: #003355;
+    border: 1px solid #1177cc;
+    color: #c8e6ff;
+    padding: 8px 12px;
+    border-radius: 6px;
     cursor: pointer;
-    transition: all 0.2s ease;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    min-height: 26px;
+    transition: 0.2s;
 }
 
 .btn-filtrar:hover,
-#btn-semana-actual:hover {
-    background: linear-gradient(180deg, rgba(0, 190, 255, 0.4) 0%, rgba(0, 120, 200, 0.5) 100%);
-    color: #ffffff;
-    border-color: #00d2ff;
-    box-shadow: 0 0 8px rgba(0, 210, 255, 0.25);
+.btn-sem-actual:hover {
+    background: #005088;
+    border-color: #33aaff;
+}
+
+.btn-sem-actual {
+    background: #5522aa;
+    border-color: #8844ff;
+}
+
+.btn-sem-actual:hover {
+    background: #6b33cc;
 }
 
 /* ============================================================
-   📊 Sección de Métricas / KPI Cards
+   🔵 Tabla de historial
    ============================================================ */
-.historial-metricas {
+
+.tabla-contenedor {
+    overflow-x: auto;
+}
+
+.tabla-historial {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    overflow: hidden;
+    border-radius: 8px;
+    background: rgba(5, 10, 15, 0.75);
+    box-shadow: 0 0 12px rgba(0, 255, 255, 0.05);
+}
+
+.tabla-historial thead {
+    background: #0d2030;
+    border-bottom: 1px solid #113d55;
+}
+
+.tabla-historial th {
+    color: #8ed9ff;
+    padding: 10px;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* --- Filas --- */
+.tabla-historial tbody tr {
+    border-bottom: 1px solid rgba(0, 60, 100, 0.25);
+    transition: background 0.2s;
+}
+
+.tabla-historial tbody tr:hover {
+    background: rgba(0, 90, 150, 0.18);
+}
+
+/* --- Celdas --- */
+.tabla-historial td {
+    padding: 8px 10px;
+    color: #d4eeff;
+    font-size: 13px;
+}
+
+/* ============================================================
+   🎨 Colores especiales del contenido
+   ============================================================ */
+
+/* --- Activo (azul eléctrico) --- */
+.hist-activo {
+    color: #5cc7ff;
+    font-weight: 600;
+    text-shadow: 0 0 4px #1aaaff;
+}
+
+/* --- Estrategia (morado Ultron) --- */
+.hist-estrategia {
+    color: #c29bff;
+    font-weight: 600;
+    text-shadow: 0 0 4px #bb77ff;
+}
+
+/* --- BUY (verde neón) --- */
+.hist-buy {
+    color: #00ff99;
+    font-weight: 700;
+    text-shadow: 0 0 6px #00ff99;
+}
+
+/* --- SELL (rojo neón) --- */
+.hist-sell {
+    color: #ff5577;
+    font-weight: 700;
+    text-shadow: 0 0 6px #ff3344;
+}
+
+/* --- Riesgo (etiquetas) --- */
+.hist-riesgo-alto {
+    color: #ff4444;
+    font-weight: 600;
+}
+
+.hist-riesgo-medio {
+    color: #ffbb33;
+    font-weight: 600;
+}
+
+.hist-riesgo-bajo {
+    color: #44ff88;
+    font-weight: 600;
+}
+
+/* --- Fecha pequeña --- */
+.hist-fecha {
+    color: #b6d1e8;
+    font-size: 12px;
+}
+
+/* ============================================================
+   🔱 ULTRON v5.0 — ADICIONES: Métricas, Resultado, R:R
+   Se agrega al final del CSS existente, sin modificar nada.
+   ============================================================ */
+
+/* --- Fila de métricas --- */
+.hist-metricas-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
     gap: 10px;
-    margin-bottom: 14px;
+    margin-bottom: 18px;
 }
 
-.card-metrica {
-    background: rgba(12, 20, 32, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 6px;
-    padding: 10px;
-    text-align: left;
-    position: relative;
-    overflow: hidden;
-    transition: transform 0.2s ease;
+.hist-metrica-card {
+    background: rgba(0, 15, 30, 0.7);
+    border: 1px solid rgba(0, 150, 255, 0.15);
+    border-radius: 8px;
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
 
-.card-metrica::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 2px;
-    height: 100%;
-    background: #00a2ff;
-}
-
-/* Colores dinámicos basados en estado para las métricas */
-.card-metrica:nth-child(2)::before { background: #00ff88; } /* Win Rate */
-.card-metrica:nth-child(3)::before { background: #ffaa00; } /* R:R Promedio */
-.card-metrica:nth-child(4)::before { background: #00ffaa; } /* P&L Neto */
-
-.card-metrica h4 {
-    margin: 0 0 4px 0;
-    color: #6c7d93;
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    font-weight: 600;
-}
-
-.card-metrica p {
-    margin: 0;
-    font-size: 16px;
-    font-weight: 700;
-    color: #ffffff;
-    font-family: Monaco, 'Courier New', Courier, monospace;
-}
-
-/* ============================================================
-   📦 Contenedor de la Tabla y Scroll
-   ============================================================ */
-.table-responsive {
-    max-height: 480px;
-    overflow-y: auto;
-    border-radius: 6px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    background: rgba(4, 6, 10, 0.4);
-}
-
-/* Scrollbar ultrafina estilo Cyber-Terminal */
-.table-responsive::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-}
-.table-responsive::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.3);
-}
-.table-responsive::-webkit-scrollbar-thumb {
-    background: rgba(0, 210, 255, 0.2);
-    border-radius: 3px;
-}
-.table-responsive::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 210, 255, 0.4);
-}
-
-/* ============================================================
-   🧮 Estructura de la Tabla (Compacta)
-   ============================================================ */
-.historial-tabla {
-    width: 100%;
-    border-collapse: collapse;
+.hist-metrica-label {
     font-size: 11px;
-    text-align: left;
-    color: #b5c4d6;
-}
-
-/* Encabezados Fijos */
-.historial-tabla th {
-    position: sticky;
-    top: 0;
-    background: #0d131f;
-    color: #8096ad;
-    font-weight: 600;
+    color: #5a8aaa;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
-    padding: 8px 10px;
-    border-bottom: 2px solid rgba(0, 212, 255, 0.2);
-    z-index: 10;
-    font-size: 10px;
+    letter-spacing: 0.06em;
 }
 
-/* Celdas del Cuerpo */
-.historial-tabla td {
-    padding: 6px 10px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-    white-space: nowrap;
-    vertical-align: middle;
-    font-family: inherit;
-}
-
-/* Filas Intercaladas Estilo Consola */
-.historial-tabla tbody tr {
-    background: rgba(8, 12, 18, 0.4);
-    transition: background 0.15s ease;
-}
-
-.historial-tabla tbody tr:nth-child(even) {
-    background: rgba(12, 18, 26, 0.6);
-}
-
-/* Efecto Hover Focalizado */
-.historial-tabla tbody tr:hover {
-    background: rgba(0, 212, 255, 0.06) !important;
-    color: #ffffff;
-}
-
-/* Identificadores y Datos Monocromáticos de Control */
-.historial-tabla td:first-child {
-    font-family: Monaco, 'Courier New', monospace;
-    color: #52667d;
-    font-weight: 600;
-}
-
-/* Resaltado para el Activo */
-.historial-tabla td:nth-child(2) {
+.hist-metrica-valor {
+    font-size: 20px;
     font-weight: 700;
-    color: #e2f3ff;
+    color: #d4eeff;
+    font-family: 'Consolas', monospace;
+}
+
+.hist-metrica-valor.hm-verde   { color: #00ff99; text-shadow: 0 0 6px #00ff9966; }
+.hist-metrica-valor.hm-rojo    { color: #ff5577; text-shadow: 0 0 6px #ff335566; }
+.hist-metrica-valor.hm-amarillo { color: #f4c542; text-shadow: 0 0 4px #f4c54266; }
+
+/* --- Selector de activo (nuevo) --- */
+#selector-activo {
+    background: #0e1822;
+    color: #d3efff;
+    border: 1px solid #1a3a55;
+    border-radius: 6px;
+    padding: 6px 8px;
+    font-size: 13px;
+    outline: none;
+}
+
+#selector-activo:hover {
+    border-color: #2992ff;
+}
+
+/* --- Celdas mono (precios) --- */
+.hist-mono {
+    font-family: 'Consolas', monospace;
+    font-size: 12px;
+    color: #c8dff0;
+}
+
+/* --- R:R --- */
+.hist-rr {
+    font-family: 'Consolas', monospace;
+    font-size: 12px;
+    color: #f4c542;
 }
 
 /* ============================================================
-   🟢 Dirección de la Orden (Buy/Sell)
+   🎨 Badges de resultado
    ============================================================ */
-.order-buy {
-    color: #00ffaa;
-    font-weight: 700;
-}
 
-.order-sell {
-    color: #ff4a6b;
-    font-weight: 700;
-}
-
-/* ============================================================
-   🎨 Badges de Resultado (Alineados con la Imagen de Referencia)
-   ============================================================ */
 .hist-res-badge {
     display: inline-block;
-    padding: 2px 6px;
-    border-radius: 3px;
-    font-size: 10px;
-    font-weight: 800;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    text-align: center;
-    min-width: 65px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
 }
 
-/* TP1 — Verde Esmeralda Suave */
 .hist-res-tp {
-    background: rgba(0, 255, 120, 0.08);
+    background: rgba(0, 255, 100, 0.1);
     color: #00ff99;
-    border: 1px solid rgba(0, 255, 120, 0.25);
+    border: 1px solid rgba(0, 255, 100, 0.3);
 }
 
-/* TP2 — Verde Eléctrico */
+/* TP2 — verde más intenso */
 .hist-res-tp2 {
-    background: rgba(0, 255, 170, 0.12);
-    color: #00ffcc;
-    border: 1px solid rgba(0, 255, 170, 0.3);
+    background: rgba(0, 220, 80, 0.15);
+    color: #00ee88;
+    border: 1px solid rgba(0, 220, 80, 0.4);
 }
 
-/* TP3 — Oro/Dorado */
+/* TP3 — dorado */
 .hist-res-tp3 {
-    background: rgba(255, 180, 0, 0.08);
-    color: #ffcc00;
-    border: 1px solid rgba(255, 180, 0, 0.25);
+    background: rgba(244, 197, 66, 0.12);
+    color: #f4c542;
+    border: 1px solid rgba(244, 197, 66, 0.35);
+    text-shadow: 0 0 4px #f4c54244;
 }
 
-/* Stop Loss (SL) — Crimson Neon */
 .hist-res-sl {
-    background: rgba(255, 60, 100, 0.08);
-    color: #ff4a6b;
-    border: 1px solid rgba(255, 60, 100, 0.25);
+    background: rgba(255, 60, 60, 0.1);
+    color: #ff5577;
+    border: 1px solid rgba(255, 60, 60, 0.3);
 }
 
-/* En Curso — Azul Terminal */
-.hist-res-encurso {
-    background: rgba(0, 170, 255, 0.08);
-    color: #00b2ff;
-    border: 1px solid rgba(0, 170, 255, 0.25);
+.hist-res-pendiente {
+    background: rgba(0, 120, 200, 0.1);
+    color: #7ca8ff;
+    border: 1px solid rgba(0, 120, 200, 0.25);
 }
 
-/* Estilos de Fallback Numérico por si acaso */
-.text-success { color: #00ffaa !important; font-weight: 600; }
-.text-danger  { color: #ff4a6b !important; font-weight: 600; }
-.text-warning { color: #ffcc00 !important; font-weight: 600; }
-.text-info    { color: #00b2ff !important; font-weight: 600; }
+.hist-res-activa {
+    background: rgba(130, 80, 255, 0.1);
+    color: #c29bff;
+    border: 1px solid rgba(130, 80, 255, 0.3);
+    animation: parpadeoSuave 2s infinite alternate;
+}
+
+@keyframes parpadeoSuave {
+    0%   { opacity: 0.75; }
+    100% { opacity: 1; }
+}
+
+/* Vacío */
+.historial-vacio {
+    text-align: center;
+    color: #3a5a7a;
+    padding: 24px;
+    font-style: italic;
+}
