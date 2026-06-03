@@ -1,328 +1,223 @@
 /* ============================================================
-   🔱 ULTRON — HISTORIAL MODO C (Estilo B – Dark Crystal)
-   Diseño profesional con neones y alto contraste
+   🔱 ULTRON — HISTORIAL DASHBOARD EDITION
+   Inspirado en la referencia visual enviada
    ============================================================ */
 
-/* --- Panel Principal --- */
-#historial-panel {
-    margin-top: 20px;
-    padding: 20px;
-    background: rgba(10, 10, 15, 0.85);
-    border-radius: 12px;
-    box-shadow: 0 0 10px rgba(0, 255, 255, 0.08);
-    border: 1px solid rgba(0, 255, 255, 0.12);
+/* PANEL */
+#historial-panel{
+    margin-top:20px;
+    padding:24px;
+    background:#111317;
+    border-radius:18px;
+    border:1px solid rgba(255,255,255,.06);
+    box-shadow:0 20px 40px rgba(0,0,0,.35);
 }
 
-/* --- Título --- */
-.titulo-historial {
-    color: #9be8ff;
-    text-shadow: 0 0 6px #0099ff;
-    font-size: 20px;
-    margin-bottom: 12px;
+.titulo-historial{
+    color:#f3f4f6;
+    font-size:22px;
+    font-weight:700;
+    margin-bottom:18px;
 }
 
-/* --- Contenedor de filtros --- */
-.historial-filtros {
-    display: flex;
-    justify-content: start;
-    gap: 12px;
-    flex-wrap: wrap;
-    margin-bottom: 18px;
-    padding: 12px;
-    background: rgba(0, 10, 20, 0.45);
-    border-radius: 10px;
-    border: 1px solid rgba(0, 150, 255, 0.12);
+/* MÉTRICAS */
+.hist-metricas-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:20px;
+    margin-bottom:25px;
 }
 
-.filtro-bloque {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+.hist-metrica-card{
+    background:#1a1d23;
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:18px;
+    padding:22px;
 }
 
-.filtro-bloque label {
-    color: #c8e6ff;
-    font-size: 12px;
+.hist-metrica-label{
+    color:#9ea4af;
+    font-size:13px;
+    text-transform:uppercase;
+}
+
+.hist-metrica-valor{
+    display:block;
+    margin-top:10px;
+    font-size:42px;
+    font-weight:700;
+    color:#fff;
+}
+
+.hm-verde{color:#72d254!important;}
+.hm-rojo{color:#ff6257!important;}
+.hm-amarillo{color:#f2b63f!important;}
+
+/* FILTROS */
+.historial-filtros{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-bottom:22px;
+    padding:16px;
+    background:#171a20;
+    border-radius:16px;
+    border:1px solid rgba(255,255,255,.06);
+}
+
+.filtro-bloque{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.filtro-bloque label{
+    color:#b7bec8;
+    font-size:12px;
 }
 
 .filtro-bloque select,
-.filtro-bloque input {
-    background: #0e1822;
-    color: #d3efff;
-    border: 1px solid #1a3a55;
-    border-radius: 6px;
-    padding: 6px 8px;
-    font-size: 13px;
-    outline: none;
+.filtro-bloque input,
+#selector-activo{
+    background:#232831;
+    color:#eceff4;
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:10px;
+    padding:8px 10px;
 }
 
-.filtro-bloque select:hover,
-.filtro-bloque input:hover {
-    border-color: #2992ff;
-}
-
-/* --- Botones --- */
 .btn-filtrar,
-.btn-sem-actual {
-    background: #003355;
-    border: 1px solid #1177cc;
-    color: #c8e6ff;
-    padding: 8px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: 0.2s;
+.btn-sem-actual{
+    border:none;
+    border-radius:10px;
+    padding:10px 16px;
+    color:#fff;
+    cursor:pointer;
 }
 
-.btn-filtrar:hover,
-.btn-sem-actual:hover {
-    background: #005088;
-    border-color: #33aaff;
+.btn-filtrar{background:#2f6df6;}
+.btn-sem-actual{background:#7c5cff;}
+
+/* TABLA */
+.tabla-contenedor{
+    overflow-x:auto;
 }
 
-.btn-sem-actual {
-    background: #5522aa;
-    border-color: #8844ff;
+.tabla-historial{
+    width:100%;
+    border-collapse:separate;
+    border-spacing:0 14px;
+    background:transparent;
 }
 
-.btn-sem-actual:hover {
-    background: #6b33cc;
+.tabla-historial thead{
+    background:transparent;
 }
 
-/* ============================================================
-   🔵 Tabla de historial
-   ============================================================ */
-
-.tabla-contenedor {
-    overflow-x: auto;
+.tabla-historial th{
+    color:#aeb4be;
+    font-size:14px;
+    font-weight:500;
+    padding:0 16px 14px;
+    text-align:left;
 }
 
-.tabla-historial {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-    overflow: hidden;
-    border-radius: 8px;
-    background: rgba(5, 10, 15, 0.75);
-    box-shadow: 0 0 12px rgba(0, 255, 255, 0.05);
+.tabla-historial tbody tr{
+    background:#1a1d23;
+    box-shadow:0 10px 30px rgba(0,0,0,.25);
+    transition:.25s;
 }
 
-.tabla-historial thead {
-    background: #0d2030;
-    border-bottom: 1px solid #113d55;
+.tabla-historial tbody tr:hover{
+    transform:translateY(-2px);
 }
 
-.tabla-historial th {
-    color: #8ed9ff;
-    padding: 10px;
-    text-align: left;
-    font-size: 13px;
-    font-weight: 600;
+.tabla-historial td{
+    padding:20px 16px;
+    color:#e8eaee;
+    font-size:14px;
+    border-top:1px solid rgba(255,255,255,.05);
+    border-bottom:1px solid rgba(255,255,255,.05);
 }
 
-/* --- Filas --- */
-.tabla-historial tbody tr {
-    border-bottom: 1px solid rgba(0, 60, 100, 0.25);
-    transition: background 0.2s;
+.tabla-historial td:first-child{
+    border-left:1px solid rgba(255,255,255,.05);
+    border-top-left-radius:16px;
+    border-bottom-left-radius:16px;
 }
 
-.tabla-historial tbody tr:hover {
-    background: rgba(0, 90, 150, 0.18);
+.tabla-historial td:last-child{
+    border-right:1px solid rgba(255,255,255,.05);
+    border-top-right-radius:16px;
+    border-bottom-right-radius:16px;
 }
 
-/* --- Celdas --- */
-.tabla-historial td {
-    padding: 8px 10px;
-    color: #d4eeff;
-    font-size: 13px;
+/* DATOS */
+.hist-fecha{color:#aab2bc;font-size:13px;}
+.hist-activo{color:#f3f4f6;font-weight:600;}
+.hist-estrategia{color:#b89cff;font-weight:600;}
+.hist-buy{color:#72d254;font-weight:700;}
+.hist-sell{color:#ff6257;font-weight:700;}
+.hist-mono{font-family:'Segoe UI',sans-serif;color:#ececec;}
+.hist-rr{color:#72d254;font-weight:700;}
+
+.hist-riesgo-alto{color:#ff6257;font-weight:600;}
+.hist-riesgo-medio{color:#f2b63f;font-weight:600;}
+.hist-riesgo-bajo{color:#72d254;font-weight:600;}
+
+/* RESULTADOS */
+.hist-res-badge{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:90px;
+    height:40px;
+    border-radius:12px;
+    font-size:14px;
+    font-weight:700;
+    padding:0 16px;
 }
 
-/* ============================================================
-   🎨 Colores especiales del contenido
-   ============================================================ */
-
-/* --- Activo (azul eléctrico) --- */
-.hist-activo {
-    color: #5cc7ff;
-    font-weight: 600;
-    text-shadow: 0 0 4px #1aaaff;
+.hist-res-tp,
+.hist-res-tp2{
+    color:#72d254;
+    background:rgba(114,210,84,.08);
+    border:1px solid rgba(114,210,84,.35);
 }
 
-/* --- Estrategia (morado Ultron) --- */
-.hist-estrategia {
-    color: #c29bff;
-    font-weight: 600;
-    text-shadow: 0 0 4px #bb77ff;
+.hist-res-tp3{
+    color:#f2b63f;
+    background:rgba(242,182,63,.08);
+    border:1px solid rgba(242,182,63,.35);
 }
 
-/* --- BUY (verde neón) --- */
-.hist-buy {
-    color: #00ff99;
-    font-weight: 700;
-    text-shadow: 0 0 6px #00ff99;
+.hist-res-sl{
+    color:#ff6257;
+    background:rgba(255,98,87,.08);
+    border:1px solid rgba(255,98,87,.35);
 }
 
-/* --- SELL (rojo neón) --- */
-.hist-sell {
-    color: #ff5577;
-    font-weight: 700;
-    text-shadow: 0 0 6px #ff3344;
+.hist-res-pendiente,
+.hist-res-activa{
+    color:#b57cff;
+    background:rgba(181,124,255,.08);
+    border:1px solid rgba(181,124,255,.35);
 }
 
-/* --- Riesgo (etiquetas) --- */
-.hist-riesgo-alto {
-    color: #ff4444;
-    font-weight: 600;
+.historial-vacio{
+    text-align:center;
+    color:#7f8792;
+    padding:24px;
 }
 
-.hist-riesgo-medio {
-    color: #ffbb33;
-    font-weight: 600;
+@media(max-width:1100px){
+    .hist-metricas-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
 }
 
-.hist-riesgo-bajo {
-    color: #44ff88;
-    font-weight: 600;
-}
-
-/* --- Fecha pequeña --- */
-.hist-fecha {
-    color: #b6d1e8;
-    font-size: 12px;
-}
-
-/* ============================================================
-   🔱 ULTRON v5.0 — ADICIONES: Métricas, Resultado, R:R
-   Se agrega al final del CSS existente, sin modificar nada.
-   ============================================================ */
-
-/* --- Fila de métricas --- */
-.hist-metricas-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-    gap: 10px;
-    margin-bottom: 18px;
-}
-
-.hist-metrica-card {
-    background: rgba(0, 15, 30, 0.7);
-    border: 1px solid rgba(0, 150, 255, 0.15);
-    border-radius: 8px;
-    padding: 10px 14px;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.hist-metrica-label {
-    font-size: 11px;
-    color: #5a8aaa;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-}
-
-.hist-metrica-valor {
-    font-size: 20px;
-    font-weight: 700;
-    color: #d4eeff;
-    font-family: 'Consolas', monospace;
-}
-
-.hist-metrica-valor.hm-verde   { color: #00ff99; text-shadow: 0 0 6px #00ff9966; }
-.hist-metrica-valor.hm-rojo    { color: #ff5577; text-shadow: 0 0 6px #ff335566; }
-.hist-metrica-valor.hm-amarillo { color: #f4c542; text-shadow: 0 0 4px #f4c54266; }
-
-/* --- Selector de activo (nuevo) --- */
-#selector-activo {
-    background: #0e1822;
-    color: #d3efff;
-    border: 1px solid #1a3a55;
-    border-radius: 6px;
-    padding: 6px 8px;
-    font-size: 13px;
-    outline: none;
-}
-
-#selector-activo:hover {
-    border-color: #2992ff;
-}
-
-/* --- Celdas mono (precios) --- */
-.hist-mono {
-    font-family: 'Consolas', monospace;
-    font-size: 12px;
-    color: #c8dff0;
-}
-
-/* --- R:R --- */
-.hist-rr {
-    font-family: 'Consolas', monospace;
-    font-size: 12px;
-    color: #f4c542;
-}
-
-/* ============================================================
-   🎨 Badges de resultado
-   ============================================================ */
-
-.hist-res-badge {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.03em;
-    white-space: nowrap;
-}
-
-.hist-res-tp {
-    background: rgba(0, 255, 100, 0.1);
-    color: #00ff99;
-    border: 1px solid rgba(0, 255, 100, 0.3);
-}
-
-/* TP2 — verde más intenso */
-.hist-res-tp2 {
-    background: rgba(0, 220, 80, 0.15);
-    color: #00ee88;
-    border: 1px solid rgba(0, 220, 80, 0.4);
-}
-
-/* TP3 — dorado */
-.hist-res-tp3 {
-    background: rgba(244, 197, 66, 0.12);
-    color: #f4c542;
-    border: 1px solid rgba(244, 197, 66, 0.35);
-    text-shadow: 0 0 4px #f4c54244;
-}
-
-.hist-res-sl {
-    background: rgba(255, 60, 60, 0.1);
-    color: #ff5577;
-    border: 1px solid rgba(255, 60, 60, 0.3);
-}
-
-.hist-res-pendiente {
-    background: rgba(0, 120, 200, 0.1);
-    color: #7ca8ff;
-    border: 1px solid rgba(0, 120, 200, 0.25);
-}
-
-.hist-res-activa {
-    background: rgba(130, 80, 255, 0.1);
-    color: #c29bff;
-    border: 1px solid rgba(130, 80, 255, 0.3);
-    animation: parpadeoSuave 2s infinite alternate;
-}
-
-@keyframes parpadeoSuave {
-    0%   { opacity: 0.75; }
-    100% { opacity: 1; }
-}
-
-/* Vacío */
-.historial-vacio {
-    text-align: center;
-    color: #3a5a7a;
-    padding: 24px;
-    font-style: italic;
+@media(max-width:700px){
+    .hist-metricas-grid{
+        grid-template-columns:1fr;
+    }
 }
