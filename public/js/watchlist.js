@@ -1,44 +1,39 @@
 // === watchlist.js ===
 // Panel lateral de activos (tipo TradingView) con conexión directa al flujo de análisis principal
-// Versión táctica 02/feb/2026 – optimizada para plan gratuito TwelveData
-// Lista alineada con backend activos.js (sin símbolos removidos)
+// Sincronizado con activos.js (backend) y data.js (frontend)
+// Actualización: junio 2026
 
 import { realizarAnalisis } from "./ultron.js"; // ✅ usa el mismo flujo POST oficial
 
 // === Categorías y activos ===
 export const activosPorCategoria = {
   Forex: [
-    { nombre: "Euro / Dólar", simbolo: "EUR/USD" },
-    { nombre: "Oro / Dólar", simbolo: "XAU/USD" },
-    { nombre: "Dólar / Yen Japonés", simbolo: "USD/JPY" },
-    { nombre: "Dólar / Peso Mexicano", simbolo: "USD/MXN" }
+    { nombre: "Euro / Dólar",         simbolo: "EUR/USD" },
+    { nombre: "Libra / Dólar",        simbolo: "GBP/USD" },
+    { nombre: "Dólar / Yen Japonés",  simbolo: "USD/JPY" },
+    { nombre: "Dólar / Franco Suizo", simbolo: "USD/CHF" },
+    { nombre: "Dólar Australiano",    simbolo: "AUD/USD" },
+    { nombre: "Dólar Neozelandés",    simbolo: "NZD/USD" },
+    { nombre: "Oro / Dólar",          simbolo: "XAU/USD" },
   ],
 
   Acciones: [
-    // Core estructuradas
-    { nombre: "Apple", simbolo: "AAPL" },
-    { nombre: "Google", simbolo: "GOOG" },
-    { nombre: "Meta Platforms", simbolo: "META" },
-
-    // Defensivas (cabras)
-    { nombre: "Procter & Gamble", simbolo: "PG" },
-    { nombre: "Johnson & Johnson", simbolo: "JNJ" },
-    { nombre: "McDonald's", simbolo: "MCD" },
-    { nombre: "Coca-Cola", simbolo: "KO" },
-    { nombre: "PepsiCo", simbolo: "PEP" }
+    { nombre: "Nvidia", simbolo: "NVDA" },
+    { nombre: "AMD",    simbolo: "AMD"  },
+    { nombre: "Ford",   simbolo: "F"    },
   ],
 
   Índices: [
-    { nombre: "Financiero (XLF)", simbolo: "XLF" },
-    { nombre: "Consumo Básico (XLP)", simbolo: "XLP" },
-    { nombre: "Russell 2000 (IWM)", simbolo: "IWM" },
-    { nombre: "DAX (DAX)", simbolo: "DAX" }
+    { nombre: "Dow Jones (DIA)",  simbolo: "DIA" },  // proxy US30  en Pepperstone
+    { nombre: "Nasdaq 100 (QQQ)", simbolo: "QQQ" },  // proxy NAS100 en Pepperstone
+    { nombre: "S&P 500 (SPY)",    simbolo: "SPY" },  // proxy US500  en Pepperstone
   ],
 
   Criptomonedas: [
-    { nombre: "Bitcoin", simbolo: "BTC/USD" },
+    { nombre: "Bitcoin",  simbolo: "BTC/USD" },
     { nombre: "Ethereum", simbolo: "ETH/USD" },
-    { nombre: "Solana", simbolo: "SOL/USD" }
+    { nombre: "Solana",   simbolo: "SOL/USD" },
+    { nombre: "XRP",      simbolo: "XRP/USD" },
   ]
 };
 
