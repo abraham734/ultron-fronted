@@ -345,3 +345,40 @@ td.hist-tp3 { color: #86efac; font-weight: 500; font-size: 12px; }
 @media (max-width: 700px) {
     .hist-metricas-grid { grid-template-columns: 1fr; }
 }
+
+
+/* ── FIX ALINEACIÓN: cápsulas Activo y Bias en tabla ── */
+td.hist-activo,
+td.hist-buy,
+td.hist-sell {
+    display: table-cell !important;
+    vertical-align: middle;
+    padding: 12px 10px;
+}
+
+td.hist-activo {
+    /* Cápsula aplicada al contenido de la celda */
+}
+
+/* Reaplica estilo cápsula mediante pseudo-wrapper visual */
+td.hist-activo {
+    /* El texto hereda el estilo directamente en la celda */
+    background: #252930;
+    border: 1px solid rgba(255,255,255,.10);
+    border-radius: 10px;
+    min-width: 72px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 12px;
+    color: #f0f2f5;
+}
+
+/* ── FIX ALINEACIÓN VERTICAL — cápsulas Activo y Bias ── */
+td.hist-activo,
+td.hist-buy,
+td.hist-sell {
+    display: table-cell !important;
+    vertical-align: middle !important;
+    padding: 12px 10px !important;
+    white-space: nowrap;
+}
