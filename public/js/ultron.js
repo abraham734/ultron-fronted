@@ -5,7 +5,6 @@
 import { activos } from "./data.js";
 import { renderSwitches, obtenerEstadoEstrategias } from "./switches.js";
 import { obtenerIntervaloActivo, guardarIntervaloActivo } from "./intervalosporactivo.js";
-import { cargarDiagnosticoMotor } from "./diagnostico_motor.js";
 //import { registrarEntradaUltron } from "./historial.js";//
 
 
@@ -118,9 +117,6 @@ async function realizarAnalisis(simbolo) {
 
     // Render de tarjeta principal
     cont.innerHTML = renderPanelDiagnostico(resultado);
-
-    // Diagnóstico motor original
-    await cargarDiagnosticoMotor(resultado.simbolo, resultado.intervalo);
 
     // Registrar señal válida
     if (resultado.decision === "OPERAR" && resultado.entry && resultado.stop) {
