@@ -346,3 +346,25 @@
   100% { background-color: rgba(255,80,80,0.12); }
 }
 
+/* === RESPONSIVE — celular: tarjetas más densas === */
+@media (max-width: 768px) {
+  .tarjeta-analisis {
+    padding: 0.8rem 1rem;
+    margin-top: 0.6rem;
+  }
+
+  .linea-principal,
+  .linea-contexto,
+  .linea-niveles,
+  .linea-lectura,
+  .linea-razones {
+    padding: 0.3rem 0.5rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .diagnostico-panel {
+    padding: 0.7rem 1rem;
+    margin-top: 0.8rem;
+  }
+}
+

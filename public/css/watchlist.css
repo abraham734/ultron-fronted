@@ -48,7 +48,20 @@
   color: #ffffff;
 }
 
-/* === ADAPTACIÓN MÓVIL === */
+/* === ADAPTACIÓN MÓVIL (apilado general, ver ultron.css) === */
+@media (max-width: 768px) {
+  .watchlist-panel {
+    border-top: 1px solid #30363d;
+    border-left: none;
+    margin-top: 10px;
+  }
+
+  .watchlist-seccion {
+    margin-bottom: 6px;
+  }
+}
+
+/* === ADAPTACIÓN MÓVIL — pantallas muy angostas === */
 @media (max-width: 500px) {
   .watchlist-panel {
     position: relative;
@@ -59,7 +72,7 @@
     border-left: none;
     border-top: 1px solid #30363d;
     padding: 10px;
-    margin-top: 20px;
+    margin-top: 10px;
     z-index: 1;
   }
 

@@ -346,6 +346,36 @@ td.hist-tp3 { color: #86efac; font-weight: 500; font-size: 12px; }
     .hist-metricas-grid { grid-template-columns: 1fr; }
 }
 
+@media (max-width: 768px) {
+    #historial-panel {
+        margin-top: 10px;
+        padding: 12px;
+    }
+
+    .titulo-historial {
+        margin-bottom: 10px;
+    }
+
+    .hist-metricas-grid {
+        gap: 8px;
+        margin-bottom: 10px;
+    }
+
+    .hist-metrica-card {
+        padding: 10px 12px;
+    }
+
+    .hist-metrica-valor {
+        font-size: 22px;
+    }
+
+    .historial-filtros {
+        gap: 6px;
+        padding: 8px 10px;
+        margin-bottom: 10px;
+    }
+}
+
 
 /* ── FIX ALINEACIÓN: cápsulas Activo y Bias en tabla ── */
 td.hist-activo,

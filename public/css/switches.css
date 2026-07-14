@@ -85,3 +85,16 @@
   z-index: 10;
   opacity: 0.9;
 }
+
+/* === RESPONSIVE — celular: barra de estrategias más densa === */
+@media (max-width: 768px) {
+  #barra-estrategias {
+    gap: 8px 14px;
+    padding: 8px 6px;
+  }
+
+  .estrategia-toggle {
+    gap: 5px;
+    font-size: 12px;
+  }
+}
