@@ -118,22 +118,8 @@ async function realizarAnalisis(simbolo) {
     // Render de tarjeta principal
     cont.innerHTML = renderPanelDiagnostico(resultado);
 
-    // Registrar señal válida
+    // Señal válida — el registro en historial lo hace el backend (motor.js)
     if (resultado.decision === "OPERAR" && resultado.entry && resultado.stop) {
-      registrarEntradaUltron({
-        activo: resultado.simbolo,
-        tipoEntrada: resultado.tipoEntrada,
-        sentido: resultado.sentido || "-",
-        entry: resultado.entry,
-        sl: resultado.stop,
-        tp1: resultado.tp1,
-        tp2: resultado.tp2,
-        tp3: resultado.tp3,
-        fechaHora: new Date().toLocaleString("es-MX", {
-          timeZone: "America/Mexico_City",
-        }),
-      });
-
       activarParpadeo(resultado.sentido);
     }
   } catch (e) {
