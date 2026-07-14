@@ -349,30 +349,51 @@ td.hist-tp3 { color: #86efac; font-weight: 500; font-size: 12px; }
 @media (max-width: 768px) {
     #historial-panel {
         margin-top: 10px;
-        padding: 12px;
+        padding: 10px;
     }
 
     .titulo-historial {
-        margin-bottom: 10px;
+        margin-bottom: 8px;
+        font-size: 14px;
     }
 
+    /* 2 columnas en vez de 1: 4 numeros no necesitan 4 tarjetas full-width */
     .hist-metricas-grid {
-        gap: 8px;
-        margin-bottom: 10px;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+        margin-bottom: 8px;
     }
 
     .hist-metrica-card {
-        padding: 10px 12px;
+        padding: 6px 10px;
+    }
+
+    .hist-metrica-label {
+        font-size: 10px;
+        margin-bottom: 2px;
     }
 
     .hist-metrica-valor {
-        font-size: 22px;
+        font-size: 18px;
     }
 
     .historial-filtros {
         gap: 6px;
-        padding: 8px 10px;
-        margin-bottom: 10px;
+        padding: 6px 8px;
+        margin-bottom: 8px;
+    }
+
+    .filtro-bloque select,
+    .filtro-bloque input,
+    #selector-activo {
+        padding: 4px 6px;
+        font-size: 11px;
+    }
+
+    .btn-filtrar,
+    .btn-sem-actual {
+        padding: 5px 10px;
+        font-size: 11px;
     }
 }
 
