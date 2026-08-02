@@ -10,8 +10,6 @@ import { realizarAnalisis } from "./ultron.js";
 // 🧩 Unifica todos los activos en orden secuencial
 const activosSecuenciales = [
   ...(activosPorCategoria.Forex || []),
-  ...(activosPorCategoria.Acciones || []),
-  ...(activosPorCategoria.Índices || []),
   ...(activosPorCategoria.Criptomonedas || []),
 ];
 

@@ -5,25 +5,15 @@
 
 export const activos = {
   Forex: [
-    { nombre: "Euro / Dólar",          simbolo: "EUR/USD" },
-    { nombre: "Libra / Dólar",         simbolo: "GBP/USD" },
-    { nombre: "Dólar / Yen Japonés",   simbolo: "USD/JPY" },
-    { nombre: "Dólar / Franco Suizo",  simbolo: "USD/CHF" },
-    { nombre: "Dólar Australiano",     simbolo: "AUD/USD" },
-    { nombre: "Dólar Neozelandés",     simbolo: "NZD/USD" },
-    { nombre: "Oro / Dólar",           simbolo: "XAU/USD" },
-  ],
-
-  Acciones: [
-    { nombre: "Nvidia",  simbolo: "NVDA" },
-    { nombre: "AMD",     simbolo: "AMD"  },
-    { nombre: "Ford",    simbolo: "F"    },
-  ],
-
-  Índices: [
-    { nombre: "Dow Jones (DIA)",  simbolo: "DIA" },  // proxy US30
-    { nombre: "Nasdaq 100 (QQQ)", simbolo: "QQQ" },  // proxy NAS100
-    { nombre: "S&P 500 (SPY)",    simbolo: "SPY" },  // proxy US500
+    { nombre: "Euro / Dólar",             simbolo: "EUR/USD" },
+    { nombre: "Libra / Dólar",            simbolo: "GBP/USD" },
+    { nombre: "Dólar / Yen Japonés",      simbolo: "USD/JPY" },
+    { nombre: "Dólar / Franco Suizo",     simbolo: "USD/CHF" },
+    { nombre: "Dólar Australiano",        simbolo: "AUD/USD" },
+    { nombre: "Dólar Neozelandés",        simbolo: "NZD/USD" },
+    { nombre: "Dólar / Dólar Canadiense", simbolo: "USD/CAD" },
+    { nombre: "Libra / Yen Japonés",      simbolo: "GBP/JPY" },
+    { nombre: "Oro / Dólar",              simbolo: "XAU/USD" },
   ],
 
   Criptomonedas: [
