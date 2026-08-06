@@ -15,6 +15,7 @@ const tablaBody          = document.getElementById("tabla-historial-body");
 const selectorSemana     = document.getElementById("selector-semana");
 const selectorMes        = document.getElementById("selector-mes");
 const selectorActivo     = document.getElementById("selector-activo");
+const selectorEstrategia = document.getElementById("selector-estrategia");
 const selectorDesde      = document.getElementById("fecha-desde");
 const selectorHasta      = document.getElementById("fecha-hasta");
 const btnFiltrarRango    = document.getElementById("btn-filtrar-rango");
@@ -190,13 +191,34 @@ async function inicializarSelectorActivo() {
 }
 
 // ============================================================
+// 🟤 Inicializar selector de estrategias (dinámico)
+// ============================================================
+async function inicializarSelectorEstrategia() {
+  if (!selectorEstrategia) return;
+  const db          = await cargarHistorialCompleto();
+  const estrategias = new Set();
+
+  Object.values(db).forEach(semana => {
+    semana.forEach(ent => { if (ent.tipoEntrada) estrategias.add(ent.tipoEntrada); });
+  });
+
+  selectorEstrategia.innerHTML = `<option value="">Todas las estrategias</option>`;
+  Array.from(estrategias).sort().forEach(e => {
+    const opt = document.createElement("option");
+    opt.value = e;
+    opt.textContent = e;
+    selectorEstrategia.appendChild(opt);
+  });
+}
+
+// ============================================================
 // 🟦 Cargar semana específica
 // ============================================================
 async function cargarSemana(claveSemana) {
   const [año, semana] = claveSemana.split("-W");
   const res    = await fetch(`${API_URL}/semana/${año}/${semana}`);
   const datos  = await res.json();
-  const filtrado = filtrarPorActivo(datos);
+  const filtrado = filtrarPorSeleccion(datos);
   renderTabla(filtrado);
   renderMetricas(filtrado);
 }
@@ -214,7 +236,7 @@ async function cargarMes(mes) {
     });
   });
 
-  const filtrado = filtrarPorActivo(resultados);
+  const filtrado = filtrarPorSeleccion(resultados);
   renderTabla(filtrado);
   renderMetricas(filtrado);
 }
@@ -225,17 +247,23 @@ async function cargarMes(mes) {
 async function cargarRango(desde, hasta) {
   const res    = await fetch(`${API_URL}/rango?desde=${desde}&hasta=${hasta}`);
   const datos  = await res.json();
-  const filtrado = filtrarPorActivo(datos);
+  const filtrado = filtrarPorSeleccion(datos);
   renderTabla(filtrado);
   renderMetricas(filtrado);
 }
 
 // ============================================================
-// 🔍 Filtrar por activo seleccionado
+// 🔍 Filtrar por activo y/o estrategia seleccionados (combinables)
 // ============================================================
-function filtrarPorActivo(lista) {
-  if (!selectorActivo || !selectorActivo.value) return lista;
-  return lista.filter(e => e.simbolo === selectorActivo.value);
+function filtrarPorSeleccion(lista) {
+  let resultado = lista;
+  if (selectorActivo && selectorActivo.value) {
+    resultado = resultado.filter(e => e.simbolo === selectorActivo.value);
+  }
+  if (selectorEstrategia && selectorEstrategia.value) {
+    resultado = resultado.filter(e => e.tipoEntrada === selectorEstrategia.value);
+  }
+  return resultado;
 }
 
 // ============================================================
@@ -358,6 +386,13 @@ if (selectorActivo) {
   });
 }
 
+if (selectorEstrategia) {
+  selectorEstrategia.addEventListener("change", () => {
+    // Re-aplica el filtro sobre la vista activa (semana seleccionada)
+    cargarSemana(selectorSemana.value);
+  });
+}
+
 btnFiltrarRango.addEventListener("click", () => {
   if (!selectorDesde.value || !selectorHasta.value) {
     alert("Selecciona ambas fechas");
@@ -393,6 +428,7 @@ async function iniciarHistorial() {
   await inicializarSelectorSemanas();
   await inicializarSelectorMes();
   await inicializarSelectorActivo();
+  await inicializarSelectorEstrategia();
 
   try {
     const res  = await fetch(`${API_URL}/nueva`);
