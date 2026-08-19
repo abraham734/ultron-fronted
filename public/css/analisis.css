@@ -346,6 +346,117 @@
   100% { background-color: rgba(255,80,80,0.12); }
 }
 
+/* ==========================================================
+   🏦 ENCABEZADO UNIFICADO — activo/precio + sesión/intervalo/velas
+   ========================================================== */
+.diag-header-top {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem 1rem;
+  background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(0,0,0,0.05));
+  border: 1px solid rgba(210,180,80,0.1);
+  border-radius: 8px;
+  padding: 0.55rem 0.8rem;
+  margin-bottom: 0.6rem;
+  box-shadow:
+    inset 0 0 6px rgba(0,0,0,0.15),
+    0 6px 10px rgba(0,0,0,0.15);
+}
+
+.diag-activo-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+}
+
+.diag-activo-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  background: linear-gradient(180deg, rgba(210,180,80,0.14), rgba(210,180,80,0.05));
+  border: 1px solid rgba(210,180,80,0.25);
+  font-size: 0.95rem;
+}
+
+.diag-contexto-top {
+  display: flex;
+  gap: 1.1rem;
+  flex-wrap: wrap;
+  color: #9ea4b0;
+  font-size: 0.86rem;
+}
+
+.diag-contexto-top strong {
+  color: #fff;
+}
+
+/* ==========================================================
+   🎯 GRILLA DE DIAGNÓSTICO — Dirección / Estructura / Fuerza
+   ========================================================== */
+.diag-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.7rem;
+  margin-bottom: 0.5rem;
+}
+
+.diag-card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.08));
+  border: 1px solid rgba(210,180,80,0.14);
+  border-radius: 10px;
+  padding: 0.7rem 0.85rem;
+  box-shadow:
+    inset 0 0 6px rgba(0,0,0,0.15),
+    0 6px 10px rgba(0,0,0,0.15);
+}
+
+.diag-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #f0d27a;
+  text-shadow: 0 0 4px rgba(240,210,122,0.2);
+  border-bottom: 1px solid rgba(210,180,80,0.15);
+  padding-bottom: 0.4rem;
+  margin-bottom: 0.45rem;
+}
+
+.diag-card-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.18rem 0;
+  font-size: 0.85rem;
+}
+
+.diag-label {
+  color: #9ea4b0;
+}
+
+.diag-value {
+  color: #e8ebf0;
+  font-weight: 600;
+  text-align: right;
+}
+
+@media (max-width: 900px) {
+  .diag-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* === RESPONSIVE — celular: tarjetas más densas === */
 @media (max-width: 768px) {
   .tarjeta-analisis {
@@ -376,6 +487,17 @@
   .diagnostico-panel {
     padding: 0.6rem 0.8rem;
     margin-top: 0.6rem;
+  }
+
+  .diag-header-top {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0.5rem 0.6rem;
+  }
+
+  .diag-contexto-top {
+    gap: 0.5rem 0.9rem;
+    font-size: 0.8rem;
   }
 }
 

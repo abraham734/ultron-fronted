@@ -128,22 +128,33 @@ async function realizarAnalisis(simbolo) {
 }
 
 // ============================================================
+// 🔵 Ayuda visual: clase de color + flecha según tendencia
+// ============================================================
+function lecturaTendencia(trend) {
+  if (trend === "ALCISTA" || trend === "Alcista") return { cls: "valor-alcista", flecha: "▲" };
+  if (trend === "BAJISTA" || trend === "Bajista") return { cls: "valor-bajista", flecha: "▼" };
+  return { cls: "valor-neutral", flecha: "" };
+}
+
+// ============================================================
 // 🔵 PANEL DIAGNÓSTICO — CORREGIDO COMPLETO
 // ============================================================
 function renderPanelDiagnostico(resultado) {
   const diag = resultado.diagnostico || {};
 
   // 🔥 Normalización fuerte
-// 🔥 Diagnóstico extendido REAL desde el backend
+// 🔥 Diagnóstico extendido REAL desde el backend — lectura de tendencia
+// independiente (Donchian, Gann High/Low, Pivot Supertrend, Supertrend),
+// siempre presente exista o no señal de entrada.
 const dx = resultado.diagnosticoExtendido || {};
 
 // Normalización fuerte para evitar valores vacíos
-dx.supertrendRapido = dx.supertrendRapido ?? "—";
-dx.supertrendLento  = dx.supertrendLento  ?? "—";
-dx.swing            = dx.swing            ?? "—";
-dx.ruptura          = dx.ruptura          ?? "—";
-dx.adx              = dx.adx              ?? "—";
-dx.bias             = dx.bias             ?? "—";
+dx.donchian   = dx.donchian   ?? { trend: "—" };
+dx.gann       = dx.gann       ?? { trend: "—", valor: null };
+dx.pivot      = dx.pivot      ?? { trend: "—", valor: null };
+dx.supertrend = dx.supertrend ?? { trend: "—", valor: null };
+dx.adx        = dx.adx        ?? "—";
+dx.bias       = dx.bias       ?? "—";
 
 // Momentum y volatilidad toman primero diagnóstico extendido,
 // luego diagnóstico base, luego fallback.
@@ -173,15 +184,7 @@ dx.modo        = dx.modo ?? "—";
 dx.velasUsadas = dx.velasUsadas ?? resultado.diagnostico?.velas ?? "—";
 
 
-  const sq = resultado.squeeze || {};
   const razones = resultado.razones || [];
-
-  const tendenciaClass =
-    diag.tendencia === "Alcista"
-      ? "valor-alcista"
-      : diag.tendencia === "Bajista"
-      ? "valor-bajista"
-      : "valor-neutral";
 
   const biasClass =
     dx.bias?.toLowerCase() === "buy"
@@ -190,63 +193,101 @@ dx.velasUsadas = dx.velasUsadas ?? resultado.diagnostico?.velas ?? "—";
       ? "etiqueta-sell"
       : "valor-neutral";
 
+  const lecTendencia  = lecturaTendencia(diag.tendencia);
+  const lecDonchian   = lecturaTendencia(dx.donchian.trend);
+  const lecGann       = lecturaTendencia(dx.gann.trend);
+  const lecPivot      = lecturaTendencia(dx.pivot.trend);
+  const lecSupertrend = lecturaTendencia(dx.supertrend.trend);
+
   return `
   <section class="tarjeta-analisis">
 
-    <!-- LÍNEA PRINCIPAL -->
-    <div class="linea-principal">
-      <span class="activo-bloque">${resultado.simbolo}</span>
-      <span class="activo-precio">${resultado.precioActual}</span>
-      <span class="estrategia-bloque estado ${
-        resultado.tipoEntrada?.includes("Sell")
-          ? "rojo"
-          : resultado.tipoEntrada?.includes("Buy")
-          ? "verde"
-          : "gris"
-      }">
-        ${resultado.tipoEntrada || "—"}
-      </span>
+    <!-- ENCABEZADO — activo/precio + sesión/intervalo/velas en una sola fila -->
+    <div class="diag-header-top">
+      <div class="diag-activo-wrap">
+        <span class="diag-activo-icon">🏦</span>
+        <span class="activo-bloque">${resultado.simbolo}</span>
+        <span class="activo-precio">${resultado.precioActual}</span>
+        <span class="estrategia-bloque estado ${
+          resultado.tipoEntrada?.includes("Sell")
+            ? "rojo"
+            : resultado.tipoEntrada?.includes("Buy")
+            ? "verde"
+            : "gris"
+        }">
+          ${resultado.tipoEntrada || "—"}
+        </span>
+      </div>
+      <div class="diag-contexto-top">
+        <span class="ctx-item">🌐 <strong>Sesión:</strong> ${resultado.session || "—"}</span>
+        <span class="ctx-item">⏱ <strong>Intervalo:</strong> ${resultado.intervalo || "—"}</span>
+        <span class="ctx-item">🕯 <strong>Velas:</strong> ${diag.velas || dx.velasUsadas}</span>
+      </div>
     </div>
 
-    <!-- CONTEXTO -->
-    <div class="linea-contexto">
-      🌐 <strong>Sesión:</strong> ${resultado.session || "—"} &nbsp; | &nbsp;
-      ⏱ <strong>Intervalo:</strong> ${resultado.intervalo || "—"} &nbsp; | &nbsp;
-      🕯 <strong>Velas:</strong> ${diag.velas || resultado?.diagnosticoExtendido?.velasUsadas}
-    </div>
+    <!-- DIAGNÓSTICO TÉCNICO — tarjetas -->
+    <div class="diag-grid">
 
-    <!-- DIAGNÓSTICO TÉCNICO -->
-<div class="linea-lectura">
-  🧭 Tendencia: <strong class="${tendenciaClass}">
-    ${diag.tendencia ?? "—"}
-  </strong> &nbsp; | &nbsp;
+      <div class="diag-card">
+        <div class="diag-card-header">🎯 <span>Dirección del mercado</span></div>
+        <div class="diag-card-row">
+          <span class="diag-label">Tendencia</span>
+          <span class="diag-value ${lecTendencia.cls}">${diag.tendencia ?? "—"} ${lecTendencia.flecha}</span>
+        </div>
+        <div class="diag-card-row">
+          <span class="diag-label">Bias</span>
+          <span class="diag-value ${biasClass}">${dx.bias}</span>
+        </div>
+        <div class="diag-card-row">
+          <span class="diag-label">Donchian</span>
+          <span class="diag-value ${lecDonchian.cls}">${dx.donchian.trend} ${lecDonchian.flecha}</span>
+        </div>
+        <div class="diag-card-row">
+          <span class="diag-label">Gann H/L</span>
+          <span class="diag-value ${lecGann.cls}">${dx.gann.trend} ${lecGann.flecha}</span>
+        </div>
+      </div>
 
-  ⚡ Momentum: <strong>
-    ${dx.momentum ?? diag.momentum ?? "—"}
-  </strong> &nbsp; | &nbsp;
+      <div class="diag-card">
+        <div class="diag-card-header">📈 <span>Estructura técnica</span></div>
+        <div class="diag-card-row">
+          <span class="diag-label">Línea Gann</span>
+          <span class="diag-value">${dx.gann.valor ?? "—"}</span>
+        </div>
+        <div class="diag-card-row">
+          <span class="diag-label">Pivot Supertrend</span>
+          <span class="diag-value ${lecPivot.cls}">${dx.pivot.trend} ${lecPivot.flecha}</span>
+        </div>
+        <div class="diag-card-row">
+          <span class="diag-label">Línea Pivot</span>
+          <span class="diag-value">${dx.pivot.valor ?? "—"}</span>
+        </div>
+        <div class="diag-card-row">
+          <span class="diag-label">Supertrend</span>
+          <span class="diag-value ${lecSupertrend.cls}">${dx.supertrend.trend} ${lecSupertrend.flecha}</span>
+        </div>
+        <div class="diag-card-row">
+          <span class="diag-label">Línea Supertrend</span>
+          <span class="diag-value">${dx.supertrend.valor ?? "—"}</span>
+        </div>
+      </div>
 
-  🌪 ATR: <strong>
-    ${dx.volatilidad ?? diag.volatilidad ?? "—"}
-  </strong> &nbsp; | &nbsp;
+      <div class="diag-card">
+        <div class="diag-card-header">⚡ <span>Fuerza y volatilidad</span></div>
+        <div class="diag-card-row">
+          <span class="diag-label">ADX</span>
+          <span class="diag-value">${dx.adx}</span>
+        </div>
+        <div class="diag-card-row">
+          <span class="diag-label">Momentum</span>
+          <span class="diag-value">${dx.momentum ?? diag.momentum ?? "—"}</span>
+        </div>
+        <div class="diag-card-row">
+          <span class="diag-label">ATR</span>
+          <span class="diag-value">${dx.volatilidad ?? diag.volatilidad ?? "—"}</span>
+        </div>
+      </div>
 
-  🟣 Squeeze: <span class="etiqueta-sq">
-    ${sq.squeezeOn ? "ON" : "OFF"}
-  </span>
-</div>
-
-
-    <!-- DIAGNÓSTICO INSTITUCIONAL -->
-    <div class="linea-lectura">
-      📈 ST Rápido: <strong>${dx.supertrendRapido}</strong> &nbsp; | &nbsp;
-      📉 ST Lento: <strong>${dx.supertrendLento}</strong> &nbsp; | &nbsp;
-      🎯 SWING: <strong>${dx.swing}</strong> &nbsp; | &nbsp;
-      🚨 Ruptura: <strong>${dx.ruptura}</strong>
-    </div>
-
-    <div class="linea-lectura">
-      📡 ADX: <strong>${dx.adx}</strong> &nbsp; | &nbsp;
-      🌀 Bias: <span class="${biasClass}">${dx.bias}</span> &nbsp; | &nbsp;
-      📊 Mom. Squeeze: <strong>${sq.momentum ?? "—"}</strong>
     </div>
 
         <!-- RAZONES -->
