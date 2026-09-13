@@ -13,8 +13,8 @@ export function renderSwitches() {
     { id: "modo-cajaDarvas", nombre: "📦 Caja Darvas + SQZEE" },
     { id: "modo-cambioCiclo", nombre: "🧠 Cambio de Ciclo" },
     { id: "modo-tendencia", nombre: "📈 Tendencia" },
-    { id: "modo-supertrendDoble", nombre: "💎 Supertrend Doble" },
-    { id: "modo-emaTriple", nombre: "📊 Triple EMA + SQZEE" },
+    { id: "modo-supertrendDoble", nombre: "💎 Gann" },
+    { id: "modo-emaTriple", nombre: "📈 Pullback Tendencia 4H" },
   ];
 
   // === Render dinámico ===

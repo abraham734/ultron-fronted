@@ -41,8 +41,8 @@ function obtenerEstrategiasActivas() {
         case "cajaDarvas": return `Caja Darvas (${modo})`;
         case "cambioCiclo": return `Reversión Institucional (${modo})`;
         case "tendencia": return `Continuación de Tendencia (${modo})`;
-        case "supertrendDoble": return `Supertrend Doble (${modo})`;
-        case "emaTriple": return `Triple EMA + ADX (${modo})`;
+        case "supertrendDoble": return modo === "RIESGO" ? `Supertrend Doble (${modo})` : `Gann (${modo})`;
+        case "emaTriple": return `Pullback Tendencia 4H (${modo})`;
         default: return `${nombre} (${modo})`;
       }
     });
