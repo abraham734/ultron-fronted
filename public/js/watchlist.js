@@ -1,16 +1,22 @@
 // === watchlist.js ===
 // Panel lateral de activos (tipo TradingView) con conexión directa al flujo de análisis principal
 // Sincronizado con activos.js (backend) y data.js (frontend)
-// Actualización: septiembre 2026 — watchlist reducida a 5 activos
+// Actualización: septiembre 2026 — watchlist de 8 activos
 
 import { realizarAnalisis } from "./ultron.js"; // ✅ usa el mismo flujo POST oficial
 
 // === Categorías y activos ===
 export const activosPorCategoria = {
   Forex: [
+    { nombre: "Euro / Dólar",              simbolo: "EUR/USD" },
     { nombre: "Dólar / Yen Japonés",      simbolo: "USD/JPY" },
     { nombre: "Dólar / Dólar Canadiense", simbolo: "USD/CAD" },
     { nombre: "Oro / Dólar",              simbolo: "XAU/USD" },
+  ],
+
+  Índices: [
+    { nombre: "Índice del Dólar",          simbolo: "UUP" },
+    { nombre: "Nasdaq 100",                simbolo: "QQQ" },
   ],
 
   Criptomonedas: [
